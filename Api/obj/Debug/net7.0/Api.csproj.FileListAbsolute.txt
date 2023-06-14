@@ -1,0 +1,260 @@
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/appsettings.Development.json
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/appsettings.json
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Api.exe
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Api.deps.json
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Api.runtimeconfig.json
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Api.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Api.pdb
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Dapper.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.AspNetCore.OpenApi.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.OpenApi.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.Swagger.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/System.Data.SqlClient.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/runtimes/win-arm64/native/sni.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/runtimes/win-x64/native/sni.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/runtimes/win-x86/native/sni.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/runtimes/unix/lib/netcoreapp2.1/System.Data.SqlClient.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/DAL.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/SqlDatabase.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/DAL.pdb
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/SqlDatabase.pdb
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.AssemblyReference.cache
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.GeneratedMSBuildEditorConfig.editorconfig
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.AssemblyInfoInputs.cache
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.AssemblyInfo.cs
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.CoreCompileInputs.cache
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cs
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cache
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.Api.Microsoft.AspNetCore.StaticWebAssets.props
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.build.Api.props
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.buildMultiTargeting.Api.props
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.buildTransitive.Api.props
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets.pack.json
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets.build.json
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets.development.json
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/scopedcss/bundle/Api.styles.css
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.CopyComplete
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/refint/Api.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.pdb
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.genruntimeconfig.cache
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/ref/Api.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Abstractions.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.JsonWebTokens.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Logging.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Tokens.dll
+D:/Projects/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/System.IdentityModel.Tokens.Jwt.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/appsettings.Development.json
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/appsettings.json
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Api.exe
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Api.deps.json
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Api.runtimeconfig.json
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Api.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Api.pdb
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Dapper.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.AspNetCore.OpenApi.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Abstractions.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.JsonWebTokens.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Logging.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Tokens.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.OpenApi.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.Swagger.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/System.Data.SqlClient.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/System.IdentityModel.Tokens.Jwt.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/runtimes/win-arm64/native/sni.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/runtimes/win-x64/native/sni.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/runtimes/win-x86/native/sni.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/runtimes/unix/lib/netcoreapp2.1/System.Data.SqlClient.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/DAL.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/SqlDatabase.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/DAL.pdb
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/bin/Debug/net7.0/SqlDatabase.pdb
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.AssemblyReference.cache
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.AssemblyInfoInputs.cache
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.AssemblyInfo.cs
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.CoreCompileInputs.cache
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cs
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cache
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.Api.Microsoft.AspNetCore.StaticWebAssets.props
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.build.Api.props
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.buildMultiTargeting.Api.props
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.buildTransitive.Api.props
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets.pack.json
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets.build.json
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets.development.json
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/scopedcss/bundle/Api.styles.css
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.CopyComplete
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/refint/Api.dll
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.pdb
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/Api.genruntimeconfig.cache
+C:/Users/tditl/OneDrive/Рабочий стол/MovieDapperApp/MovieApiDapper/Api/obj/Debug/net7.0/ref/Api.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/appsettings.Development.json
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/appsettings.json
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Api
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Api.deps.json
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Api.runtimeconfig.json
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Api.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Api.pdb
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Dapper.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.AspNetCore.OpenApi.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Abstractions.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Logging.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Tokens.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.OpenApi.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.Swagger.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/System.IdentityModel.Tokens.Jwt.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/DAL.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/DAL.pdb
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.AssemblyReference.cache
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.GeneratedMSBuildEditorConfig.editorconfig
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.AssemblyInfoInputs.cache
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.AssemblyInfo.cs
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.CoreCompileInputs.cache
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cs
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cache
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.Api.Microsoft.AspNetCore.StaticWebAssets.props
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.build.Api.props
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.buildMultiTargeting.Api.props
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.buildTransitive.Api.props
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets.pack.json
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets.build.json
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets.development.json
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/scopedcss/bundle/Api.styles.css
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.CopyComplete
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/refint/Api.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.pdb
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.genruntimeconfig.cache
+/Volumes/Mac/Projects/MovieApiDapper/Api/obj/Debug/net7.0/ref/Api.dll
+/Volumes/Mac/Projects/MovieApiDapper/Api/bin/Debug/net7.0/Npgsql.dll
+U:/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.AssemblyReference.cache
+U:/MovieApiDapper/Api/obj/Debug/net7.0/Api.GeneratedMSBuildEditorConfig.editorconfig
+U:/MovieApiDapper/Api/obj/Debug/net7.0/Api.AssemblyInfoInputs.cache
+U:/MovieApiDapper/Api/obj/Debug/net7.0/Api.AssemblyInfo.cs
+U:/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.CoreCompileInputs.cache
+U:/MovieApiDapper/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cs
+U:/MovieApiDapper/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cache
+U:/MovieApiDapper/Api/obj/Debug/net7.0/Api.dll
+U:/MovieApiDapper/Api/obj/Debug/net7.0/refint/Api.dll
+U:/MovieApiDapper/Api/obj/Debug/net7.0/Api.pdb
+S:/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.AssemblyReference.cache
+S:/MovieApiDapper/Api/obj/Debug/net7.0/Api.GeneratedMSBuildEditorConfig.editorconfig
+S:/MovieApiDapper/Api/obj/Debug/net7.0/Api.AssemblyInfoInputs.cache
+S:/MovieApiDapper/Api/obj/Debug/net7.0/Api.AssemblyInfo.cs
+S:/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.CoreCompileInputs.cache
+S:/MovieApiDapper/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cs
+S:/MovieApiDapper/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cache
+S:/MovieApiDapper/Api/obj/Debug/net7.0/Api.dll
+S:/MovieApiDapper/Api/obj/Debug/net7.0/refint/Api.dll
+S:/MovieApiDapper/Api/obj/Debug/net7.0/Api.pdb
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.dll
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/refint/Api.dll
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.pdb
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/appsettings.Development.json
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/appsettings.json
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Properties/._launchSettings.json
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Api.exe
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Api.deps.json
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Api.runtimeconfig.json
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Api.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Api.pdb
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Dapper.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.AspNetCore.OpenApi.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Abstractions.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.JsonWebTokens.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Logging.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Tokens.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Microsoft.OpenApi.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Npgsql.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.Swagger.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/System.IdentityModel.Tokens.Jwt.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/DAL.dll
+D:/projects/MovieApiDapper/Api/bin/Debug/net7.0/DAL.pdb
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.AssemblyReference.cache
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.GeneratedMSBuildEditorConfig.editorconfig
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.AssemblyInfoInputs.cache
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.AssemblyInfo.cs
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.CoreCompileInputs.cache
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cs
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cache
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.Api.Microsoft.AspNetCore.StaticWebAssets.props
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.build.Api.props
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.buildMultiTargeting.Api.props
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets/msbuild.buildTransitive.Api.props
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets.pack.json
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets.build.json
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/staticwebassets.development.json
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/scopedcss/bundle/Api.styles.css
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.csproj.CopyComplete
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/Api.genruntimeconfig.cache
+D:/projects/MovieApiDapper/Api/obj/Debug/net7.0/ref/Api.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/appsettings.Development.json
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/appsettings.json
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Api
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Api.deps.json
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Api.runtimeconfig.json
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Api.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Api.pdb
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Dapper.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Microsoft.AspNetCore.OpenApi.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Abstractions.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Logging.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Microsoft.IdentityModel.Tokens.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Microsoft.OpenApi.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Npgsql.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.Swagger.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/System.IdentityModel.Tokens.Jwt.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/DAL.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/bin/Debug/net7.0/DAL.pdb
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/Api.csproj.AssemblyReference.cache
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/Api.GeneratedMSBuildEditorConfig.editorconfig
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/Api.AssemblyInfoInputs.cache
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/Api.AssemblyInfo.cs
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/Api.csproj.CoreCompileInputs.cache
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cs
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/Api.MvcApplicationPartsAssemblyInfo.cache
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/staticwebassets/msbuild.Api.Microsoft.AspNetCore.StaticWebAssets.props
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/staticwebassets/msbuild.build.Api.props
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/staticwebassets/msbuild.buildMultiTargeting.Api.props
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/staticwebassets/msbuild.buildTransitive.Api.props
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/staticwebassets.pack.json
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/staticwebassets.build.json
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/staticwebassets.development.json
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/scopedcss/bundle/Api.styles.css
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/Api.csproj.CopyComplete
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/Api.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/refint/Api.dll
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/Api.pdb
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/Api.genruntimeconfig.cache
+/Volumes/Mac/Projects/BudgetPlanner/Api/obj/Debug/net7.0/ref/Api.dll
