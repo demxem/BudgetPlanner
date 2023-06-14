@@ -3,8 +3,8 @@
 public class IncomeModel
 {
     public int IncomeId { get; set; }
-    public string? Employments { get; set; }
-    public string? SideHustle { get; set; } // paritial empoyment
-    public string? Dividends { get; set; }
+    public float Employment { get; set; }
+    public float SideHustle { get; set; } // paritial empoyment
+    public float Dividends { get; set; }
 }
 

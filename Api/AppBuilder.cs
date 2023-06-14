@@ -16,6 +16,7 @@ public static class AppBuilder
         builder.Services.AddTransient<IPgsqlAccess, PgsqlAccess>();
         builder.Services.AddTransient<ISavings, Savings>();
         builder.Services.AddTransient<IExpenses, Expenses>();
+        builder.Services.AddTransient<IIncome, Income>();
         builder.Services.AddCors();
         builder.Services.AddSwaggerGen();
 
@@ -24,9 +25,11 @@ public static class AppBuilder
         app.UseSwagger();
         app.UseSwaggerUI();
         app.UseHttpsRedirection();
-        //individual Module configuration
+        //Endpoints
         app.RegisterSavingsEndpoints();
         app.RegisterExpensesEndpoints();
+        app.RegisterIncomeEndpoints();
+
 
         app.UseCors(builder => builder
                    .AllowAnyOrigin()
