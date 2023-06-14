@@ -7,4 +7,5 @@ public class MonthsModel
     public SavingsModel? Savings { get; set; }
     public ExpensesModel? Expanses { get; set; }
     public IncomeModel? Income { get; set; }
+    public DateTime Date { get; set; }
 }

@@ -7,5 +7,6 @@ public class SavingsModel
     public float RetirementAccount { get; set; }
     public float Vacation { get; set; }
     public float HealthNeeds { get; set; }
+    public DateTime Date { get; set; }
 }
 

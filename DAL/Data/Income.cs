@@ -14,7 +14,7 @@ public class Income : IIncome
 
     public Task<IEnumerable<IncomeModel>> GetIncome()
     {
-        string sql = @"select incomeId,employment, sidehustle, dividends
+        string sql = @"select incomeId,employment, sidehustle, dividends, date
                        from income;";
 
         return _dataAccess.LoadData<IncomeModel, dynamic>(sql, new { });
@@ -22,7 +22,7 @@ public class Income : IIncome
 
     public async Task<IncomeModel?> GetIncomeById(int id)
     {
-        string sql = @"select incomeId,employment, sidehustle, dividends
+        string sql = @"select incomeId,employment, sidehustle, dividends, date
                        from income where incomeId = @IncomeId;";
 
         var result = await _dataAccess.LoadData<IncomeModel, dynamic>(sql, new { IncomeId = id });
@@ -31,10 +31,10 @@ public class Income : IIncome
 
     public Task InsertIncome(IncomeModel income)
     {
-        string sql = @"insert into income (employment, sidehustle, dividends)
-                           values (@Employment, @SideHustle, @Dividends);";
+        string sql = @"insert into income (employment, sidehustle, dividends,date)
+                           values (@Employment, @SideHustle, @Dividends, @Date);";
 
-        return _dataAccess.SafeData(sql, new { income.Employment, income.SideHustle, income.Dividends });
+        return _dataAccess.SafeData(sql, new { income.Employment, income.SideHustle, income.Dividends, Date = DateTime.Now });
     }
 
     public async Task UpdateIncome(IncomeModel income)
@@ -42,10 +42,11 @@ public class Income : IIncome
         string sql = @"update income
                        set employment = @Employment, 
                             sidehustle = @SideHustle,
-                            dividends = @Dividends
+                            dividends = @Dividends, 
+                            date = @Date
                         where incomeId = @IncomeId;";
 
-        await _dataAccess.SafeData(sql, income);
+        await _dataAccess.SafeData(sql, new { income.Employment, income.SideHustle, income.Dividends, Date = DateTime.Now });
     }
 
     public async Task DeleteIncome(int id)

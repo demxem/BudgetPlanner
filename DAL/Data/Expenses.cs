@@ -16,7 +16,7 @@ public class Expenses : IExpenses
     {
         string sql = @"SELECT expensesid,housing, groceries,utilities,
                                 vacation,transportation,medicine,
-                                clothing,media,insurances
+                                clothing,media,insurances, date
                     from expenses;";
 
         return _dataAccess.LoadData<ExpensesModel, dynamic>(sql, new { });
@@ -26,7 +26,7 @@ public class Expenses : IExpenses
     {
         string sql = @"SELECT expensesid,housing, groceries,utilities,
                                 vacation,transportation,medicine,
-                                clothing,media,insurances
+                                clothing,media,insurances, date
                     from expenses
                     where expensesid = @ExpensesId;";
 
@@ -38,8 +38,8 @@ public class Expenses : IExpenses
     {
         string sql = @"insert into expenses (housing, groceries,utilities,
                                             vacation,transportation,medicine,
-                                            clothing,media,insurances)
-                           values (@Housing, @Groceries, @Utilities, @Vacation,@Transportation,@Medicine,@Clothing,@Media,@Insuranses);";
+                                            clothing,media,insurances, date)
+                           values (@Housing, @Groceries, @Utilities, @Vacation,@Transportation,@Medicine,@Clothing,@Media,@Insuranses, @Date);";
 
         return _dataAccess.SafeData(sql, new
         {
@@ -51,7 +51,8 @@ public class Expenses : IExpenses
             expenses.Medicine,
             expenses.Clothing,
             expenses.Media,
-            expenses.Insuranses
+            expenses.Insuranses,
+            Date = DateTime.Now,
         });
     }
 
@@ -66,10 +67,23 @@ public class Expenses : IExpenses
                             medicine = @Medicine,
                             clothing = @Clothing,
                             media = @Media,
-                            insurances = @Insurances
+                            insurances = @Insurances,
+                            date = @Date
                         where expensesId = @ExpensesId;";
 
-        await _dataAccess.SafeData(sql, expenses);
+        await _dataAccess.SafeData(sql, new
+        {
+            expenses.Housing,
+            expenses.Groceries,
+            expenses.Utilities,
+            expenses.Vacation,
+            expenses.Transportation,
+            expenses.Medicine,
+            expenses.Clothing,
+            expenses.Media,
+            expenses.Insuranses,
+            Date = DateTime.Now,
+        });
     }
 
     public async Task DeleteExpenses(int id)

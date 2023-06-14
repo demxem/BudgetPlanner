@@ -19,5 +19,6 @@ public class ExpensesModel
     public float Clothing { get; set; }
     public float Media { get; set; }
     public float Insuranses { get; set; }
+    public DateTime Date { get; set; }
 }
 

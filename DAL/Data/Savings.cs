@@ -30,7 +30,8 @@ public class Savings : ISavings
                               emergencyfund , 
                               retirementaccount , 
                               vacation,
-                              healthneeds
+                              healthneeds, 
+                              date
                        from savings where savingsId = @SavingsId;";
 
         var result = await _dataAccess.LoadData<SavingsModel, dynamic>(sql, new { SavingsId = id });
@@ -39,10 +40,10 @@ public class Savings : ISavings
 
     public Task InsertSavings(SavingsModel savings)
     {
-        string sql = @"insert into savings (emergencyfund, retirementaccount, vacation, healthneeds)
-                           values (@EmergencyFund, @RetirementAccount, @Vacation, @HealthNeeds);";
+        string sql = @"insert into savings (emergencyfund, retirementaccount, vacation, healthneeds, date)
+                           values (@EmergencyFund, @RetirementAccount, @Vacation, @HealthNeeds, @Date);";
 
-        return _dataAccess.SafeData(sql, new { savings.EmergencyFund, savings.RetirementAccount, savings.Vacation, savings.HealthNeeds });
+        return _dataAccess.SafeData(sql, new { savings.EmergencyFund, savings.RetirementAccount, savings.Vacation, savings.HealthNeeds, Date = DateTime.Now });
     }
 
     public async Task UpdateSavings(SavingsModel savings)
@@ -51,10 +52,11 @@ public class Savings : ISavings
                        set emergencyfund = @EmergencyFund, 
                             retirementaccount = @RetirementAccount, 
                             vacation = @Vacation,
-                            healthneeds = @HealthNeeds
+                            healthneeds = @HealthNeeds, 
+                            date = @Date
                         where savingsid = @SavingsId;";
 
-        await _dataAccess.SafeData(sql, savings);
+        await _dataAccess.SafeData(sql, new { savings.EmergencyFund, savings.RetirementAccount, savings.Vacation, savings.HealthNeeds, Date = DateTime.Now });
     }
 
     public async Task DeleteSavings(int id)
