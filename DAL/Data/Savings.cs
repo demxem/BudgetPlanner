@@ -14,7 +14,7 @@ public class Savings : ISavings
 
     public Task<IEnumerable<SavingsModel>> GetSavings()
     {
-        string sql = @"select savingsid,
+        string sql = @"select d,
                               emergencyfund, 
                               retirementaccount, 
                               vacation,
@@ -26,15 +26,15 @@ public class Savings : ISavings
 
     public async Task<SavingsModel?> GetSavingsById(int id)
     {
-        string sql = @"select savingsid,
+        string sql = @"select id,
                               emergencyfund , 
                               retirementaccount , 
                               vacation,
                               healthneeds, 
                               date
-                       from savings where savingsId = @SavingsId;";
+                       from savings where Id = @Id;";
 
-        var result = await _dataAccess.LoadData<SavingsModel, dynamic>(sql, new { SavingsId = id });
+        var result = await _dataAccess.LoadData<SavingsModel, dynamic>(sql, new { Id = id });
         return result.FirstOrDefault();
     }
 
@@ -54,7 +54,7 @@ public class Savings : ISavings
                             vacation = @Vacation,
                             healthneeds = @HealthNeeds, 
                             date = @Date
-                        where savingsid = @SavingsId;";
+                        where Id = @Id;";
 
         await _dataAccess.SafeData(sql, new { savings.EmergencyFund, savings.RetirementAccount, savings.Vacation, savings.HealthNeeds, Date = DateTime.Now });
     }
@@ -63,9 +63,9 @@ public class Savings : ISavings
     {
         string sql = @"delete 
                        from savings
-                       where savingsId = @SavingsId;";
+                       where Id = @Id;";
 
-        await _dataAccess.SafeData(sql, new { SavingsId = id });
+        await _dataAccess.SafeData(sql, new { Id = id });
     }
 }
 
