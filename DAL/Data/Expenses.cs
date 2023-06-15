@@ -14,7 +14,7 @@ public class Expenses : IExpenses
 
     public Task<IEnumerable<ExpensesModel>> GetExpenses()
     {
-        string sql = @"SELECT expensesid,housing, groceries,utilities,
+        string sql = @"SELECT id,housing, groceries,utilities,
                                 vacation,transportation,medicine,
                                 clothing,media,insurances, date
                     from expenses;";
@@ -24,13 +24,13 @@ public class Expenses : IExpenses
 
     public async Task<ExpensesModel?> GetExpensesById(int id)
     {
-        string sql = @"SELECT expensesid,housing, groceries,utilities,
+        string sql = @"SELECT id,housing, groceries,utilities,
                                 vacation,transportation,medicine,
                                 clothing,media,insurances, date
                     from expenses
-                    where expensesid = @ExpensesId;";
+                    where id = @id;";
 
-        var result = await _dataAccess.LoadData<ExpensesModel, dynamic>(sql, new { expensesId = id });
+        var result = await _dataAccess.LoadData<ExpensesModel, dynamic>(sql, new { id = id });
         return result.FirstOrDefault();
     }
 
@@ -69,7 +69,7 @@ public class Expenses : IExpenses
                             media = @Media,
                             insurances = @Insurances,
                             date = @Date
-                        where expensesId = @ExpensesId;";
+                        where id = @id;";
 
         await _dataAccess.SafeData(sql, new
         {
@@ -90,8 +90,8 @@ public class Expenses : IExpenses
     {
         string sql = @"delete 
                        from expenses
-                       where expensesId = @ExpensesId;";
+                       where id = @id;";
 
-        await _dataAccess.SafeData(sql, new { ExpensesId = id });
+        await _dataAccess.SafeData(sql, new { id = id });
     }
 }

@@ -9,7 +9,7 @@ namespace DAL.Models;
 
 public class ExpensesModel
 {
-    public int ExpensesId { get; set; }
+    public int Id { get; set; }
     public float Housing { get; set; }
     public float Groceries { get; set; }
     public float Utilities { get; set; }

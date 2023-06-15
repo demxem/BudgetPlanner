@@ -14,7 +14,7 @@ public class Income : IIncome
 
     public Task<IEnumerable<IncomeModel>> GetIncome()
     {
-        string sql = @"select incomeId,employment, sidehustle, dividends, date
+        string sql = @"select id,employment, sidehustle, dividends, date
                        from income;";
 
         return _dataAccess.LoadData<IncomeModel, dynamic>(sql, new { });
@@ -22,10 +22,10 @@ public class Income : IIncome
 
     public async Task<IncomeModel?> GetIncomeById(int id)
     {
-        string sql = @"select incomeId,employment, sidehustle, dividends, date
-                       from income where incomeId = @IncomeId;";
+        string sql = @"select id,employment, sidehustle, dividends, date
+                       from income where id = @id;";
 
-        var result = await _dataAccess.LoadData<IncomeModel, dynamic>(sql, new { IncomeId = id });
+        var result = await _dataAccess.LoadData<IncomeModel, dynamic>(sql, new { id = id });
         return result.FirstOrDefault();
     }
 
@@ -44,7 +44,7 @@ public class Income : IIncome
                             sidehustle = @SideHustle,
                             dividends = @Dividends, 
                             date = @Date
-                        where incomeId = @IncomeId;";
+                        where id = @id;";
 
         await _dataAccess.SafeData(sql, new { income.Employment, income.SideHustle, income.Dividends, Date = DateTime.Now });
     }
@@ -53,8 +53,8 @@ public class Income : IIncome
     {
         string sql = @"delete 
                        from income
-                       where incomeId = @IncomeId;";
+                       where id = @id;";
 
-        await _dataAccess.SafeData(sql, new { IncomeId = id });
+        await _dataAccess.SafeData(sql, new { id = id });
     }
 }

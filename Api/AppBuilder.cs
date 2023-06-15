@@ -1,6 +1,8 @@
 using DAL.Data;
 using DAL.DbAccess;
+using DAL.ComplexData;
 using Api.Modules;
+
 
 namespace Api.Api;
 
@@ -17,6 +19,7 @@ public static class AppBuilder
         builder.Services.AddTransient<ISavings, Savings>();
         builder.Services.AddTransient<IExpenses, Expenses>();
         builder.Services.AddTransient<IIncome, Income>();
+        builder.Services.AddTransient<IMonth, Month>();
         builder.Services.AddCors();
         builder.Services.AddSwaggerGen();
 
@@ -29,6 +32,7 @@ public static class AppBuilder
         app.RegisterSavingsEndpoints();
         app.RegisterExpensesEndpoints();
         app.RegisterIncomeEndpoints();
+        app.RegisterMonthsEndpoints();
 
 
         app.UseCors(builder => builder

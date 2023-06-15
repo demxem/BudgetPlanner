@@ -2,7 +2,7 @@
 
 public class SavingsModel
 {
-    public int SavingsId { get; set; }
+    public int Id { get; set; }
     public float EmergencyFund { get; set; }
     public float RetirementAccount { get; set; }
     public float Vacation { get; set; }

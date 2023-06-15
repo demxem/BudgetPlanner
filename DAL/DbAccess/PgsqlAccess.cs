@@ -22,6 +22,7 @@ namespace DAL.DbAccess
             return await cnn.QueryAsync<T>(sql, parameters);
 
         }
+
         public async Task SafeData<U>(string sql, U parameters, string connectionId = "Default")
         {
             using var cnn = new NpgsqlConnection(_config.GetConnectionString(connectionId));
