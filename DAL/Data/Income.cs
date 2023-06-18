@@ -14,7 +14,7 @@ public class Income : IIncome
 
     public Task<IEnumerable<IncomeModel>> GetIncome()
     {
-        string sql = @"select id,employment, sidehustle, dividends, date
+        string sql = @"select id,employment, sidehustle, dividends, date, monthid
                        from income;";
 
         return _dataAccess.LoadData<IncomeModel, dynamic>(sql, new { });
@@ -22,7 +22,7 @@ public class Income : IIncome
 
     public async Task<IncomeModel?> GetIncomeById(int id)
     {
-        string sql = @"select id,employment, sidehustle, dividends, date
+        string sql = @"select id,employment, sidehustle, dividends, date, monthid
                        from income where id = @id;";
 
         var result = await _dataAccess.LoadData<IncomeModel, dynamic>(sql, new { id = id });
@@ -31,10 +31,10 @@ public class Income : IIncome
 
     public Task InsertIncome(IncomeModel income)
     {
-        string sql = @"insert into income (employment, sidehustle, dividends,date)
-                           values (@Employment, @SideHustle, @Dividends, @Date);";
+        string sql = @"insert into income (employment, sidehustle, dividends, date, monthid)
+                           values (@Employment, @SideHustle, @Dividends, @Date, (select id from months where id = (select max(id) from months)));";
 
-        return _dataAccess.SafeData(sql, new { income.Employment, income.SideHustle, income.Dividends, Date = DateTime.Now });
+        return _dataAccess.SafeData(sql, new { income.Employment, income.SideHustle, income.Dividends, Date = DateTime.Now, income.MonthId });
     }
 
     public async Task UpdateIncome(IncomeModel income)
@@ -43,7 +43,8 @@ public class Income : IIncome
                        set employment = @Employment, 
                             sidehustle = @SideHustle,
                             dividends = @Dividends, 
-                            date = @Date
+                            date = @Date,
+                            monthid = @MonthId
                         where id = @id;";
 
         await _dataAccess.SafeData(sql, new { income.Employment, income.SideHustle, income.Dividends, Date = DateTime.Now });

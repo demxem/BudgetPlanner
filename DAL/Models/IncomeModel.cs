@@ -7,5 +7,6 @@ public class IncomeModel
     public float SideHustle { get; set; } // paritial empoyment
     public float Dividends { get; set; }
     public DateTime Date { get; set; }
+    public int MonthId { get; set; }
 }
 

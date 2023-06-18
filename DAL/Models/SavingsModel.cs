@@ -8,5 +8,6 @@ public class SavingsModel
     public float Vacation { get; set; }
     public float HealthNeeds { get; set; }
     public DateTime Date { get; set; }
+    public int MonthId { get; set; }
 }
 

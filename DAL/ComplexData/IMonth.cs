@@ -11,6 +11,7 @@ public interface IMonth
     Task<IEnumerable<MonthModel>> GetTotalIncomeByMonthId(int id);
     Task<IEnumerable<MonthModel>> GetTotalSavingsByMonthId(int id);
     Task<IEnumerable<MonthModel>> GetTotalExpensesByMonthId(int id);
+    Task InsertMonth(MonthModel month);
 
 }
 

@@ -14,21 +14,21 @@ public class Expenses : IExpenses
 
     public Task<IEnumerable<ExpensesModel>> GetExpenses()
     {
-        string sql = @"SELECT id,housing, groceries,utilities,
-                                vacation,transportation,medicine,
-                                clothing,media,insurances, date
-                    from expenses;";
+        string sql = @"select id,housing, groceries,utilities,
+                              vacation,transportation,medicine,
+                              clothing,media,insuranses, date, monthid
+                       from expenses;";
 
         return _dataAccess.LoadData<ExpensesModel, dynamic>(sql, new { });
     }
 
     public async Task<ExpensesModel?> GetExpensesById(int id)
     {
-        string sql = @"SELECT id,housing, groceries,utilities,
+        string sql = @"select id,housing, groceries,utilities,
                                 vacation,transportation,medicine,
-                                clothing,media,insurances, date
-                    from expenses
-                    where id = @id;";
+                                clothing,media,insuranses, date, monthid
+                       from expenses
+                       where id = @id;";
 
         var result = await _dataAccess.LoadData<ExpensesModel, dynamic>(sql, new { id = id });
         return result.FirstOrDefault();
@@ -38,8 +38,8 @@ public class Expenses : IExpenses
     {
         string sql = @"insert into expenses (housing, groceries,utilities,
                                             vacation,transportation,medicine,
-                                            clothing,media,insurances, date)
-                           values (@Housing, @Groceries, @Utilities, @Vacation,@Transportation,@Medicine,@Clothing,@Media,@Insuranses, @Date);";
+                                            clothing,media,insuranses, date, monthid)
+                           values (@Housing, @Groceries, @Utilities, @Vacation,@Transportation,@Medicine,@Clothing,@Media,@Insuranses, @Date, (select id from months where id = (select max(id) from months)));";
 
         return _dataAccess.SafeData(sql, new
         {
@@ -53,6 +53,7 @@ public class Expenses : IExpenses
             expenses.Media,
             expenses.Insuranses,
             Date = DateTime.Now,
+            expenses.MonthId
         });
     }
 
@@ -67,8 +68,9 @@ public class Expenses : IExpenses
                             medicine = @Medicine,
                             clothing = @Clothing,
                             media = @Media,
-                            insurances = @Insurances,
-                            date = @Date
+                            insurances = @insuranses,
+                            date = @Date,
+                            monthid = @MonthId
                         where id = @id;";
 
         await _dataAccess.SafeData(sql, new
@@ -83,6 +85,7 @@ public class Expenses : IExpenses
             expenses.Media,
             expenses.Insuranses,
             Date = DateTime.Now,
+            expenses.MonthId
         });
     }
 

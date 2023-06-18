@@ -8,15 +8,15 @@ namespace Api.Modules
         public static void RegisterExpensesEndpoints(this IEndpointRouteBuilder endpoints)
         {
             //endpoints
-            endpoints.MapGet("/expenses", Getexpenses);
-            endpoints.MapGet("/expenses/{id}", GetexpensesById);
-            endpoints.MapPost("/expenses/", Insertexpenses);
-            endpoints.MapPut("/expenses", Updateexpenses);
+            endpoints.MapGet("/expenses", GetExpenses);
+            endpoints.MapGet("/expenses/{id}", GetExpensesById);
+            endpoints.MapPost("/expenses/", InsertExpenses);
+            endpoints.MapPut("/expenses", UpdateExpenses);
             endpoints.MapDelete("/expenses", DeleteExpenses);
         }
 
 
-        private static async Task<IResult> Getexpenses(IExpenses data)
+        private static async Task<IResult> GetExpenses(IExpenses data)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace Api.Modules
         }
 
 
-        private static async Task<IResult> GetexpensesById(int id, IExpenses data)
+        private static async Task<IResult> GetExpensesById(int id, IExpenses data)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace Api.Modules
         }
 
 
-        private static async Task<IResult> Insertexpenses(ExpensesModel expenses, IExpenses data)
+        private static async Task<IResult> InsertExpenses(ExpensesModel expenses, IExpenses data)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> Updateexpenses(ExpensesModel expenses, IExpenses data)
+        private static async Task<IResult> UpdateExpenses(ExpensesModel expenses, IExpenses data)
         {
             try
             {

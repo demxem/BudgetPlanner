@@ -15,7 +15,6 @@ public static class IncomeModule
         endpoints.MapDelete("/income", DeleteIncome);
     }
 
-
     private static async Task<IResult> GetIncome(IIncome data)
     {
         try

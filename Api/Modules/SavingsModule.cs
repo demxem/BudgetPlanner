@@ -15,7 +15,6 @@ public static class SavingsModule
         endpoints.MapDelete("/savings", DeleteSavings);
     }
 
-
     private static async Task<IResult> GetSavings(ISavings data)
     {
         try
@@ -27,7 +26,6 @@ public static class SavingsModule
             return Results.Problem(ex.Message);
         }
     }
-
 
     private static async Task<IResult> GetSavingsById(int id, ISavings data)
     {
