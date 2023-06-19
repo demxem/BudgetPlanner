@@ -8,11 +8,11 @@ public static class SavingsModule
     public static void RegisterSavingsEndpoints(this IEndpointRouteBuilder endpoints)
     {
         //endpoints
-        endpoints.MapGet("/savings", GetSavings);
-        endpoints.MapGet("/savings/{id}", GetSavingsById);
-        endpoints.MapPost("/savings/", InsertSavings);
-        endpoints.MapPut("/savings", UpdateSavings);
-        endpoints.MapDelete("/savings", DeleteSavings);
+        endpoints.MapGet("/years/months/savings", GetSavings);
+        endpoints.MapGet("/years/months/savings/{id}", GetSavingsById);
+        endpoints.MapPost("/years/months/savings/", InsertSavings);
+        endpoints.MapPut("/years/months/savings/{id}", UpdateSavings);
+        endpoints.MapDelete("/years/months/savings/{id}", DeleteSavings);
     }
 
     private static async Task<IResult> GetSavings(ISavings data)

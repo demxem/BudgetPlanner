@@ -8,11 +8,11 @@ public static class IncomeModule
     public static void RegisterIncomeEndpoints(this IEndpointRouteBuilder endpoints)
     {
         //endpoints
-        endpoints.MapGet("/income", GetIncome);
-        endpoints.MapGet("/income/{id}", GetIncomeById);
-        endpoints.MapPost("/income/", InsertIncome);
-        endpoints.MapPut("/income", UpdateIncome);
-        endpoints.MapDelete("/income", DeleteIncome);
+        endpoints.MapGet("/years/months/income", GetIncome);
+        endpoints.MapGet("/years/months/income/{id}", GetIncomeById);
+        endpoints.MapPost("/years/months/income/", InsertIncome);
+        endpoints.MapPut("/years/months/income/{id}", UpdateIncome);
+        endpoints.MapDelete("/years/months/income/{id}", DeleteIncome);
     }
 
     private static async Task<IResult> GetIncome(IIncome data)

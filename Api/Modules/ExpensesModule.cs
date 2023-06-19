@@ -8,13 +8,12 @@ namespace Api.Modules
         public static void RegisterExpensesEndpoints(this IEndpointRouteBuilder endpoints)
         {
             //endpoints
-            endpoints.MapGet("/expenses", GetExpenses);
-            endpoints.MapGet("/expenses/{id}", GetExpensesById);
-            endpoints.MapPost("/expenses/", InsertExpenses);
-            endpoints.MapPut("/expenses", UpdateExpenses);
-            endpoints.MapDelete("/expenses", DeleteExpenses);
+            endpoints.MapGet("/years/months/expenses", GetExpenses);
+            endpoints.MapGet("/years/months/expenses/{id}", GetExpensesById);
+            endpoints.MapPost("/years/months/expenses/", InsertExpenses);
+            endpoints.MapPut("/years/months/expenses/{id}", UpdateExpenses);
+            endpoints.MapDelete("/years/months/expenses/{id}", DeleteExpenses);
         }
-
 
         private static async Task<IResult> GetExpenses(IExpenses data)
         {

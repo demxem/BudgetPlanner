@@ -4,6 +4,6 @@ namespace DAL.ComplexData;
 
 public interface IYears
 {
-    Task<IEnumerable<YearModel>> GetAll();
+    Task<IEnumerable<YearModel>> Get();
     Task<YearModel?> GetYearById(int id);
 }

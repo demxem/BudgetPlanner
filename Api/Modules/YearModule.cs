@@ -7,8 +7,8 @@ namespace Api.Modules
         public static void RegisterYearsEndpoints(this IEndpointRouteBuilder endpoints)
         {
             //endpoints
-            endpoints.MapGet("/getYearById/{id}", GetYearById);
-            endpoints.MapGet("/getAll", GetAll);
+            endpoints.MapGet("/years/{id}", GetYearById);
+            endpoints.MapGet("/years", Get);
 
         }
 
@@ -24,11 +24,11 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> GetAll(IYears data)
+        private static async Task<IResult> Get(IYears data)
         {
             try
             {
-                return Results.Ok(await data.GetAll());
+                return Results.Ok(await data.Get());
             }
             catch (Exception ex)
             {
