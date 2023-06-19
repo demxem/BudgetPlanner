@@ -9,7 +9,6 @@ namespace Api.Modules
             //endpoints
             endpoints.MapGet("/years/{id}", GetYearById);
             endpoints.MapGet("/years", Get);
-
         }
 
         private static async Task<IResult> GetYearById(IYears data, int id)

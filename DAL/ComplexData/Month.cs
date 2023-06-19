@@ -101,7 +101,7 @@ public class Month : IMonth
         {
             string sql = @"select sum (e.housing + e.groceries + e.utilities + e.vacation 
                                         + e.transportation + e.medicine + e.clothing + e.media 
-                                        + e.insurances) as monthlyExpenses
+                                        + e.insuranses) as monthlyExpenses
                             from expenses as e 
                             join months as m on m.expensesid = e.id
                             where m.id = @Id;";
