@@ -8,5 +8,6 @@ public class IncomeModel
     public float Dividends { get; set; }
     public DateTime Date { get; set; }
     public int MonthId { get; set; }
+
 }
 

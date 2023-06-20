@@ -8,13 +8,41 @@ namespace Api.Modules
         public static void RegisterMonthsEndpoints(this IEndpointRouteBuilder endpoints)
         {
             //endpoints
-            endpoints.MapGet("/years/months/{id}/savings", GetSavingsByMonthId);
-            endpoints.MapGet("/years/months/{id}/total", GetAllByMonthId);
-            endpoints.MapGet("/years/months/{id}/totalincome", GetTotalIncomeByMonthId);
-            endpoints.MapGet("/years/months/{id}/totalsavings", GetTotalSavingsByMonthId);
-            endpoints.MapGet("/years/months/{id}/totalexpenses", GetTotalExpensesByMonthId);
-            endpoints.MapPost("/years/month/{id}", InsertMonth);
+            // endpoints.MapGet("/years/months/savings/{id}", GetSavingsByMonthId);
+            endpoints.MapGet("/years/months/total/{id}", GetAllByMonthId);
+            endpoints.MapGet("/years/months/totalincome/{id}", GetTotalIncomeByMonthId);
+            endpoints.MapGet("/years/months/totalsavings/{id}", GetTotalSavingsByMonthId);
+            endpoints.MapGet("/years/months/totalexpenses/{id}", GetTotalExpensesByMonthId);
+            endpoints.MapPost("/years/months", InsertMonth);
+            endpoints.MapGet("/years/months/{id}", GetMonthById);
+            endpoints.MapGet("/years/months", GetMonths);
 
+
+
+        }
+
+        private static async Task<IResult> GetMonthById(IMonth data, int id)
+        {
+            try
+            {
+                return Results.Ok(await data.GetMonthById(id));
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        }
+
+        private static async Task<IResult> GetMonths(IMonth data)
+        {
+            try
+            {
+                return Results.Ok(await data.GetAllMonths());
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
         }
 
         private static async Task<IResult> GetSavingsByMonthId(IMonth data, int id)

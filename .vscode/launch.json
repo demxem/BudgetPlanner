@@ -27,9 +27,10 @@
             }
         },
         {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
+            "name": "Launch and Debug Standalone Blazor WebAssembly App",
+            "type": "blazorwasm",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/Client"
         }
     ]
 }

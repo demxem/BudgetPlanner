@@ -11,5 +11,4 @@ public class MonthModel
     public ExpensesModel? Expenses { get; set; }
     public IncomeModel? Income { get; set; }
     public int YearId { get; set; }
-
 }

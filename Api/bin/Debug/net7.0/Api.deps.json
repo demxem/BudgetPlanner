@@ -10,8 +10,8 @@
         "dependencies": {
           "DAL": "1.0.0",
           "Dapper": "2.0.138",
-          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.5",
-          "Microsoft.AspNetCore.OpenApi": "7.0.5",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.7",
+          "Microsoft.AspNetCore.OpenApi": "7.0.7",
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
           "Microsoft.IdentityModel.Tokens": "6.31.0",
           "Npgsql": "7.0.4",
@@ -30,25 +30,25 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.5": {
+      "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.7": {
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.15.1"
         },
         "runtime": {
           "lib/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {
-            "assemblyVersion": "7.0.5.0",
-            "fileVersion": "7.0.523.17410"
+            "assemblyVersion": "7.0.7.0",
+            "fileVersion": "7.0.723.27408"
           }
         }
       },
-      "Microsoft.AspNetCore.OpenApi/7.0.5": {
+      "Microsoft.AspNetCore.OpenApi/7.0.7": {
         "dependencies": {
           "Microsoft.OpenApi": "1.4.3"
         },
         "runtime": {
           "lib/net7.0/Microsoft.AspNetCore.OpenApi.dll": {
-            "assemblyVersion": "7.0.5.0",
-            "fileVersion": "7.0.523.17410"
+            "assemblyVersion": "7.0.7.0",
+            "fileVersion": "7.0.723.27408"
           }
         }
       },
@@ -221,7 +221,7 @@
       "DAL/1.0.0": {
         "dependencies": {
           "Dapper": "2.0.138",
-          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.5",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.7",
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
           "Microsoft.IdentityModel.Tokens": "6.31.0",
           "Npgsql": "7.0.4",
@@ -246,19 +246,19 @@
       "path": "dapper/2.0.138",
       "hashPath": "dapper.2.0.138.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.5": {
+    "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-dS6LPC7ZwJUcxcnB7KBh5L7iO9dbzEuVrNv2YrtiUCclcvBCfCJ/UKlvgHedjd4VcB6bzHcj3sEmFZlfH6qH0Q==",
-      "path": "microsoft.aspnetcore.authentication.jwtbearer/7.0.5",
-      "hashPath": "microsoft.aspnetcore.authentication.jwtbearer.7.0.5.nupkg.sha512"
+      "sha512": "sha512-V3ftCQYDWxHogvrZ3XEr3TNCACqoxMuBwnCI5kq+GeuFGh6u0VYDMrRwvXvFKxdFHgFwS9CFxq4/p1csSVPI8g==",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/7.0.7",
+      "hashPath": "microsoft.aspnetcore.authentication.jwtbearer.7.0.7.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.OpenApi/7.0.5": {
+    "Microsoft.AspNetCore.OpenApi/7.0.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-yxFvk9BsgL/eDJVsPp0zbUpL73u9uXLYTnWoMBvnJdm8+970YuhM2XWcDOyetjkp8l8z00MHgfYHCRXOnLx/+Q==",
-      "path": "microsoft.aspnetcore.openapi/7.0.5",
-      "hashPath": "microsoft.aspnetcore.openapi.7.0.5.nupkg.sha512"
+      "sha512": "sha512-6E1I154QELFjQ4RvSWwZAlZrvB2Dy3aOkcYAQ+E4NsyqwKqFbG10HeWp/WJfq+2btUz1dKzmNMwnADf8WBk/0w==",
+      "path": "microsoft.aspnetcore.openapi/7.0.7",
+      "hashPath": "microsoft.aspnetcore.openapi.7.0.7.nupkg.sha512"
     },
     "Microsoft.CSharp/4.5.0": {
       "type": "package",

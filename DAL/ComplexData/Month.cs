@@ -19,7 +19,7 @@ public class Month : IMonth
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
             string sql = @"select * 
-                            from Month;";
+                            from months;";
 
             return await connection.QueryAsync<MonthModel>(sql, new { });
         }
@@ -30,7 +30,7 @@ public class Month : IMonth
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
             string sql = @"select * 
-                            from Month 
+                            from months 
                             where id = @Id;";
 
             var result = await connection.QueryAsync<MonthModel>(sql, new { Id = id });
@@ -132,7 +132,7 @@ public class Month : IMonth
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
             var sql = @"insert into months (id, name, yearid, incomeid, expensesid, savingsid)
-                        values((select max(id) + 1 from months, @Name, @YearId, (select max(incomeid) + 1 from months), 
+                        values((select max(id) + 1 from months), @Name, @YearId, (select max(incomeid) + 1 from months), 
                         (select max(expensesid) + 1 from months), (select max(savingsid) + 1 from months));";
 
             await connection.ExecuteAsync(sql, new
@@ -144,7 +144,8 @@ public class Month : IMonth
                 month.MonthlySavings,
                 month.Expenses,
                 month.Income,
-                month.Savings
+                month.Savings,
+                month.YearId
             });
         }
     }

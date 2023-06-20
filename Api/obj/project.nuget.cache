@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "oJIhLjoaeA+0NMAB1kf+QFnB7tHNANz+DShI2vsPj1KNdHkZV+QhAXU/yfThRSZwMuPco+DcdbB7LUQxJOw+oQ==",
+  "dgSpecHash": "R8+lEesIFbGTdFemYtgbM2+pgFJvm4OqD+ew5XKaaCw1o+6tDp3HG+zr1gXRii+d61fCOVlhCUS4xK3tB9K78w==",
   "success": true,
   "projectFilePath": "/Volumes/Mac/Projects/BudgetPlanner/Api/Api.csproj",
   "expectedPackageFiles": [
     "/Users/dmitryterentyev/.nuget/packages/dapper/2.0.138/dapper.2.0.138.nupkg.sha512",
-    "/Users/dmitryterentyev/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/7.0.5/microsoft.aspnetcore.authentication.jwtbearer.7.0.5.nupkg.sha512",
-    "/Users/dmitryterentyev/.nuget/packages/microsoft.aspnetcore.openapi/7.0.5/microsoft.aspnetcore.openapi.7.0.5.nupkg.sha512",
+    "/Users/dmitryterentyev/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/7.0.7/microsoft.aspnetcore.authentication.jwtbearer.7.0.7.nupkg.sha512",
+    "/Users/dmitryterentyev/.nuget/packages/microsoft.aspnetcore.openapi/7.0.7/microsoft.aspnetcore.openapi.7.0.7.nupkg.sha512",
     "/Users/dmitryterentyev/.nuget/packages/microsoft.csharp/4.5.0/microsoft.csharp.4.5.0.nupkg.sha512",
     "/Users/dmitryterentyev/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "/Users/dmitryterentyev/.nuget/packages/microsoft.extensions.configuration.abstractions/7.0.0/microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
