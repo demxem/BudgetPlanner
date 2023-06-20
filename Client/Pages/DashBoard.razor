@@ -1,0 +1,131 @@
+@page "/dashboard"
+@using Client.Models
+@inject Client.Services.IncomeApiClient apiClient
+
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    <MudGrid>
+        @* <MudItem xs="12" sm="6" md="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+        </MudItem> *@
+        @* <MudItem xs="12" sm="6">
+        <MudGrid>
+        <MudItem xs="12">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;">
+        </MudPaper>
+        </MudItem>
+        <MudItem xs="12">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;">
+        </MudPaper>
+        </MudItem>
+        </MudGrid>
+        </MudItem> *@
+        @* <MudItem xs="10" sm="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+        <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@data"
+        InputLabels="@labels">
+        <CustomGraphics>
+        <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
+        fill="black" font-family="Helvetica" font-size="2">Overhaul Income</text>
+        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle"
+        fill="black" font-family="Helvetica" font-size="5">@data.Sum().ToString()</text>
+        </CustomGraphics>
+        </MudChart>
+        </MudPaper>
+        </MudItem> *@
+        @* <MudItem xs="10" sm="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+        <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@data"
+        InputLabels="@labels">
+        <CustomGraphics>
+        <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
+        fill="black" font-family="Helvetica" font-size="2">Overhaul Income</text>
+        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle"
+        fill="black" font-family="Helvetica" font-size="5">@data.Sum().ToString()</text>
+        </CustomGraphics>
+        </MudChart>
+        </MudPaper>
+        </MudItem> *@
+        <MudItem xs="8" sm="3">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+                <MudChart ChartType="ChartType.Donut" Width="200px" Height="200px" InputData="@data"
+                    InputLabels="@labels">
+                    <CustomGraphics>
+                        <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
+                            fill="black" font-family="Helvetica" font-size="3">Income</text>
+                        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                            fill="black" font-family="Helvetica" font-size="5">@data.Sum().ToString()</text>
+                    </CustomGraphics>
+                </MudChart>
+            </MudPaper>
+        </MudItem>
+        @* <MudItem xs="12" sm="6">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+        <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@data"
+        InputLabels="@labels">
+        <CustomGraphics>
+        <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
+        fill="black" font-family="Helvetica" font-size="2">Total</text>
+        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle"
+        fill="black" font-family="Helvetica" font-size="5">@data.Sum().ToString()</text>
+        </CustomGraphics>
+        </MudChart>
+        </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+        <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@data"
+        InputLabels="@labels">
+        <CustomGraphics>
+        <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
+        fill="black" font-family="Helvetica" font-size="2">Total</text>
+        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle"
+        fill="black" font-family="Helvetica" font-size="5">@data.Sum().ToString()</text>
+        </CustomGraphics>
+        </MudChart>
+        </MudPaper>
+        </MudItem> *@
+        @* <MudItem xs="12" sm="6" md="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+        </MudItem> *@
+        @* <MudItem xs="12" sm="12" md="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
+        </MudItem> *@
+    </MudGrid>
+</MudContainer>
+
+@code {
+    public List<IncomeModel>? set = new List<IncomeModel>();
+    public double[] data = new double[3];
+
+    private double EmploymentSum = 0;
+    private double SideHustleSum = 0;
+    private double DividendsSum = 0;
+
+    public string[] labels = { "sidehustle", "dividends ", "savings" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        set = await apiClient.GetIncomeAsync();
+        GetIncomeData();
+    }
+    public void GetIncomeData()
+    {
+        foreach (var item in set)
+        {
+            data[0] += item.Employment;
+            data[1] += item.SideHustle;
+            data[2] += item.Dividends;
+        }
+    }
+}
+
+
