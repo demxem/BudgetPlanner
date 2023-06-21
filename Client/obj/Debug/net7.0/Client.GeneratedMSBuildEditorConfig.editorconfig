@@ -20,16 +20,8 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ291bnRlci5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
 [/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/DashBoard.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGFzaEJvYXJkLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/FetchData.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRmV0Y2hEYXRhLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/Index.razor]

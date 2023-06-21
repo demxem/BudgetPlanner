@@ -15,5 +15,6 @@ builder.Services.AddMudServices();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 
 builder.Services.AddScoped<IncomeApiClient>();
+builder.Services.AddScoped<YearApiClient>();
 
 await builder.Build().RunAsync();
