@@ -24,8 +24,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGFzaEJvYXJkLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/Income.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5jb21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/SimpleTable.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2ltcGxlVGFibGUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Volumes/Mac/Projects/BudgetPlanner/Client/Shared/MyNavMenu.razor]

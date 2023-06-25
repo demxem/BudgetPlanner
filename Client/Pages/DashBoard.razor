@@ -6,86 +6,88 @@
     <MudGrid>
         <MudItem xs="8" sm="3">
             <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
-                <MudChart ChartType="ChartType.Donut" Width="200px" Height="200px" InputData="@incomeData"
-                    InputLabels="@incomeLabels">
+                <MudChart ChartType="ChartType.Donut" Width="200px" Height="200px" InputData="@IncomeData"
+                    InputLabels="@IncomeLabels">
                     <CustomGraphics>
                         <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
                             fill="black" font-family="Helvetica" font-size="3">Income</text>
                         <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                            fill="black" font-family="Helvetica" font-size="5">@incomeData.Sum().ToString()</text>
+                            fill="black" font-family="Helvetica" font-size="5">@IncomeData.Sum().ToString()</text>
                     </CustomGraphics>
                 </MudChart>
             </MudPaper>
         </MudItem>
         <MudItem xs="8" sm="3">
             <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
-                <MudChart ChartType="ChartType.Donut" Width="200px" Height="200px" InputData="@savingsData"
-                    InputLabels="@savingsLabels">
+                <MudChart ChartType="ChartType.Donut" Width="200px" Height="200px" InputData="@SavingsData"
+                    InputLabels="@SavingsLabels">
                     <CustomGraphics>
                         <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
                             fill="black" font-family="Helvetica" font-size="3">Savings</text>
                         <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                            fill="black" font-family="Helvetica" font-size="5">@savingsData.Sum().ToString()</text>
+                            fill="black" font-family="Helvetica" font-size="5">@SavingsData.Sum().ToString()</text>
                     </CustomGraphics>
                 </MudChart>
             </MudPaper>
         </MudItem>
         <MudItem xs="8" sm="3">
             <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
-                <MudChart ChartType="ChartType.Donut" Width="200px" Height="200px" InputData="@expensesData"
-                    InputLabels="@expensesLabels">
+                <MudChart ChartType="ChartType.Donut" Width="200px" Height="200px" InputData="@ExpensesData"
+                    InputLabels="@ExpensesLabels">
                     <CustomGraphics>
                         <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
                             fill="black" font-family="Helvetica" font-size="3">Expenses</text>
                         <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                            fill="black" font-family="Helvetica" font-size="5">@expensesData.Sum().ToString()</text>
+                            fill="black" font-family="Helvetica" font-size="5">@ExpensesData.Sum().ToString()</text>
                     </CustomGraphics>
                 </MudChart>
             </MudPaper>
         </MudItem>
+
     </MudGrid>
 </MudContainer>
 
 @code {
-    public List<YearModel>? set = new List<YearModel>();
-    public double[] incomeData = new double[3];
-    public double[] savingsData = new double[4];
-    public double[] expensesData = new double[9];
-    public string[] incomeLabels = { "Employment", "Dividends ", "SideHustle"
+    public List<YearModel>? Set = new List<YearModel>();
+    public double[] IncomeData = new double[3];
+    public double[] SavingsData = new double[4];
+    public double[] ExpensesData = new double[9];
+    public string[] IncomeLabels = { "Employment", "Dividends ", "SideHustle"
 };
-    public string[] savingsLabels = { "EmergencyFund", "RetirementAccount", "Vacation", "HealthNeeds" };
-    public string[] expensesLabels = { "Housing", "Groceries", "Utilities", "Vacation", "Transportation", "Medicine",
+    public string[] SavingsLabels = { "EmergencyFund", "RetirementAccount", "Vacation", "HealthNeeds" };
+    public string[] ExpensesLabels = { "Housing", "Groceries", "Utilities", "Vacation", "Transportation", "Medicine",
 "Clothing", "Media", "Insuranses" };
-
 
     protected override async Task OnInitializedAsync()
     {
-        set = await apiClient.GetResultAsync();
+        Set = await apiClient.GetResultAsync();
         SetData();
     }
+
     public void SetData()
     {
-        foreach (var year in set)
+        foreach (var year in Set)
         {
             foreach (var month in year.Months)
             {
-                incomeData[0] += month.Income.Employment;
-                incomeData[1] += month.Income.Dividends;
-                incomeData[2] += month.Income.SideHustle;
-                savingsData[0] += month.Savings.EmergencyFund;
-                savingsData[1] += month.Savings.RetirementAccount;
-                savingsData[2] += month.Savings.Vacation;
-                savingsData[3] += month.Savings.HealthNeeds;
-                expensesData[0] += month.Expenses.Housing;
-                expensesData[1] += month.Expenses.Groceries;
-                expensesData[2] += month.Expenses.Utilities;
-                expensesData[3] += month.Expenses.Vacation;
-                expensesData[4] += month.Expenses.Transportation;
-                expensesData[5] += month.Expenses.Medicine;
-                expensesData[6] += month.Expenses.Clothing;
-                expensesData[7] += month.Expenses.Media;
-                expensesData[8] += month.Expenses.Insuranses;
+                IncomeData[0] += month.Income.Employment;
+                IncomeData[1] += month.Income.Dividends;
+                IncomeData[2] += month.Income.SideHustle;
+                SavingsData[0] += month.Savings.EmergencyFund;
+                SavingsData[1] += month.Savings.RetirementAccount;
+                SavingsData[2] += month.Savings.Vacation;
+                SavingsData[3] += month.Savings.HealthNeeds;
+                ExpensesData[0] += month.Expenses.Housing;
+                ExpensesData[1] += month.Expenses.Groceries;
+                ExpensesData[2] += month.Expenses.Utilities;
+                ExpensesData[3] += month.Expenses.Vacation;
+                ExpensesData[4] += month.Expenses.Transportation;
+                ExpensesData[5] += month.Expenses.Medicine;
+                ExpensesData[6] += month.Expenses.Clothing;
+                ExpensesData[7] += month.Expenses.Media;
+                ExpensesData[8] += month.Expenses.Insuranses;
             }
         }
     }
 }
+

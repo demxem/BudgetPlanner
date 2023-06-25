@@ -8,4 +8,3 @@ public class IncomeModel
     public double Dividends { get; set; }
     public DateTime Date { get; set; }
 }
-

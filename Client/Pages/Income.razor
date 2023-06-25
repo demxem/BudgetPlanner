@@ -1,0 +1,78 @@
+@page "/Income"
+@using Client.Models
+@inject Client.Services.ApiClient apiClient
+
+<MudDataGrid T="IncomeModel" Items="@IncomeData" ReadOnly="@_readOnly"
+    EditMode="@(_isCellEditMode ? DataGridEditMode.Cell : DataGridEditMode.Form)"
+    StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem"
+    CommittedItemChanges="@AddItemAsync" Bordered="true" Dense="true"
+    EditTrigger="@(_editTriggerRowClick ? DataGridEditTrigger.OnRowClick : DataGridEditTrigger.Manual)">
+    <Columns>
+        <PropertyColumn Property="x => x.Id" Title="Id" IsEditable="false" />
+        <PropertyColumn Property="x => x.Dividends" />
+        <PropertyColumn Property="x => x.SideHustle" />
+        <PropertyColumn Property="x => x.Employment" />
+        <PropertyColumn Property="x => x.Date">
+        </PropertyColumn>
+        <TemplateColumn Hidden="@(_isCellEditMode || _readOnly || _editTriggerRowClick)" CellClass="d-flex justify-end">
+            <CellTemplate>
+                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit"
+                    OnClick="@context.Actions.StartEditingItemAsync" />
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+</MudDataGrid>
+
+<div class="d-flex flex-wrap mt-4">
+    <MudSwitch @bind-Checked="@_readOnly" Color="Color.Primary">Read Only</MudSwitch>
+    <div class="d-flex justify-start align-center">
+        <p class="mud-typography mud-typography-body1 mud-inherit-text mr-2">Form</p>
+        <MudSwitch @bind-Checked="@_isCellEditMode">Cell</MudSwitch>
+    </div>
+    <div class="d-flex justify-start align-center">
+        <p class="mud-typography mud-typography-body1 mud-inherit-text mr-2">Manual</p>
+        <MudSwitch @bind-Checked="@_editTriggerRowClick">On Row Click</MudSwitch>
+    </div>
+</div>
+
+@code {
+    private IEnumerable<IncomeModel> IncomeData = new List<IncomeModel>();
+    private IncomeModel? selecedItem;
+    private bool _readOnly;
+    private bool _isCellEditMode;
+    private List<string> _events = new();
+    private bool _editTriggerRowClick;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IncomeData = await apiClient.GetIncomeAsync();
+    }
+
+    // events
+    void StartedEditingItem(IncomeModel item)
+    {
+        _events.Insert(0, $"Event = StartedEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    void CanceledEditingItem(IncomeModel item)
+    {
+        _events.Insert(0, $"Event = CanceledEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    public async Task AddItemAsync(IncomeModel item)
+    {
+        await apiClient.AddItemAsync(item);
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+

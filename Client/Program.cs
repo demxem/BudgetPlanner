@@ -14,7 +14,7 @@ var apiBaseAddress = "http://localhost:5555";
 builder.Services.AddMudServices();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 
-builder.Services.AddScoped<IncomeApiClient>();
+builder.Services.AddScoped<ApiClient>();
 builder.Services.AddScoped<YearApiClient>();
 
 await builder.Build().RunAsync();

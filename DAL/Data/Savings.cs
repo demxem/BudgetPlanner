@@ -63,7 +63,7 @@ public class Savings : ISavings
                             retirementaccount = @RetirementAccount, 
                             vacation = @Vacation,
                             healthneeds = @HealthNeeds, 
-                            date = @Date.
+                            date = @Date,
                             monthid = @MonthId
                         where Id = @Id;";
 

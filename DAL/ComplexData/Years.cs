@@ -22,7 +22,7 @@ public class Years : IYears
                     join months as m on y.id = m.yearid
                     join savings as s on m.savingsid = s.id
                     join income as i on m.incomeid = i.id
-                    join expenses as e on m.expensesid = e.id";
+                    join expenses as e on m.expensesid = e.id;";
 
             //***Alternative SQL => should test if perfomance is better***/
 
@@ -50,6 +50,7 @@ public class Years : IYears
             return result;
         }
     }
+
 
     public async Task<YearModel?> GetYearById(int id)
     {

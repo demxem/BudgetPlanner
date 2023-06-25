@@ -18,10 +18,27 @@ public class Month : IMonth
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            string sql = @"select * 
-                            from months;";
+            string sql = @"select m.*, sum (i.employment + i.sidehustle + i.dividends) as monthlyIncome, 
+                                        sum (s.emergencyfund + s.retirementaccount + s.vacation + s.healthneeds) as monthlySavings, 
+                                        sum (e.housing + e.groceries + e.utilities + e.vacation 
+                                        + e.transportation + e.medicine + e.clothing + e.media 
+                                        + e.insuranses) as monthlyExpenses, i.*, s.*, e.*
+                        from months as m
+                        join income as i on m.incomeid = i.id
+                        join savings as s on m.savingsid = s.id
+                        join expenses as e on m.expensesid = e.id
+                        group by m.id, i.id, s.id, e.id
+                        order by m.id;";
 
-            return await connection.QueryAsync<MonthModel>(sql, new { });
+            var result = await connection.QueryAsync<MonthModel, IncomeModel, SavingsModel, ExpensesModel, MonthModel>(sql, (month, income, savings, expenses) =>
+            {
+                month.Income = income;
+                month.Savings = savings;
+                month.Expenses = expenses;
+                return month;
+            });
+
+            return result;
         }
     }
 

@@ -14,7 +14,6 @@ public static class IncomeModule
         endpoints.MapPut("/years/months/income/{id}", UpdateIncome);
         endpoints.MapDelete("/years/months/income/{id}", DeleteIncome);
     }
-
     private static async Task<IResult> GetIncome(IIncome data)
     {
         try
@@ -55,11 +54,11 @@ public static class IncomeModule
         }
     }
 
-    private static async Task<IResult> UpdateIncome(IncomeModel Income, IIncome data)
+    private static async Task<IResult> UpdateIncome(IncomeModel income, IIncome data)
     {
         try
         {
-            await data.UpdateIncome(Income);
+            await data.UpdateIncome(income);
             return Results.Ok();
         }
         catch (Exception ex)
