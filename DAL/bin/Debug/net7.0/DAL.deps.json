@@ -8,8 +8,8 @@
     ".NETCoreApp,Version=v7.0": {
       "DAL/1.0.0": {
         "dependencies": {
-          "Dapper": "2.0.138",
-          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.7",
+          "Dapper": "2.0.143",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.8",
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
           "Microsoft.IdentityModel.Tokens": "6.31.0",
           "Npgsql": "7.0.4",
@@ -19,22 +19,22 @@
           "DAL.dll": {}
         }
       },
-      "Dapper/2.0.138": {
+      "Dapper/2.0.143": {
         "runtime": {
           "lib/net5.0/Dapper.dll": {
             "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.0.138.25557"
+            "fileVersion": "2.0.143.55328"
           }
         }
       },
-      "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.7": {
+      "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.8": {
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.15.1"
         },
         "runtime": {
           "lib/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {
-            "assemblyVersion": "7.0.7.0",
-            "fileVersion": "7.0.723.27408"
+            "assemblyVersion": "7.0.8.0",
+            "fileVersion": "7.0.823.31807"
           }
         }
       },
@@ -165,19 +165,19 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Dapper/2.0.138": {
+    "Dapper/2.0.143": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-QfnstG3t1hQVKCwVDaMjK72O+B+Ognfcf5fYOFI60ELpxuwE0WGtaOOwqczcuPgU3QEDXq/3TTvOilCvwszRhg==",
-      "path": "dapper/2.0.138",
-      "hashPath": "dapper.2.0.138.nupkg.sha512"
+      "sha512": "sha512-Vh0U+Fins3IpS7APUlrzga3+1mswWngB5fZ0xj4w+FQR5JhJzA5uHV5rSepkahvmshNZUA0YcHtae9vFQpiVTw==",
+      "path": "dapper/2.0.143",
+      "hashPath": "dapper.2.0.143.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.7": {
+    "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.8": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-V3ftCQYDWxHogvrZ3XEr3TNCACqoxMuBwnCI5kq+GeuFGh6u0VYDMrRwvXvFKxdFHgFwS9CFxq4/p1csSVPI8g==",
-      "path": "microsoft.aspnetcore.authentication.jwtbearer/7.0.7",
-      "hashPath": "microsoft.aspnetcore.authentication.jwtbearer.7.0.7.nupkg.sha512"
+      "sha512": "sha512-UWGvF86d2q90e1ync37Yg+yg2GRSeSh9y/Q5YRFw42YfzTDQd0X6somujDFVc9HWn6zVB7osSZnxHMW8BwoRSA==",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/7.0.8",
+      "hashPath": "microsoft.aspnetcore.authentication.jwtbearer.7.0.8.nupkg.sha512"
     },
     "Microsoft.CSharp/4.5.0": {
       "type": "package",

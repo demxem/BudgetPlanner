@@ -5,14 +5,14 @@
 <MudDataGrid T="IncomeModel" Items="@IncomeData" ReadOnly="@_readOnly"
     EditMode="@(_isCellEditMode ? DataGridEditMode.Cell : DataGridEditMode.Form)"
     StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem"
-    CommittedItemChanges="@AddItemAsync" Bordered="true" Dense="true"
+    CommittedItemChanges="@AddIncomeAsync" Bordered="true" Dense="true"
     EditTrigger="@(_editTriggerRowClick ? DataGridEditTrigger.OnRowClick : DataGridEditTrigger.Manual)">
     <Columns>
         <PropertyColumn Property="x => x.Id" Title="Id" IsEditable="false" />
         <PropertyColumn Property="x => x.Dividends" />
         <PropertyColumn Property="x => x.SideHustle" />
         <PropertyColumn Property="x => x.Employment" />
-        <PropertyColumn Property="x => x.Date">
+        <PropertyColumn Property="x => x.Date" Title="DateModified">
         </PropertyColumn>
         <TemplateColumn Hidden="@(_isCellEditMode || _readOnly || _editTriggerRowClick)" CellClass="d-flex justify-end">
             <CellTemplate>
@@ -22,7 +22,6 @@
         </TemplateColumn>
     </Columns>
 </MudDataGrid>
-
 <div class="d-flex flex-wrap mt-4">
     <MudSwitch @bind-Checked="@_readOnly" Color="Color.Primary">Read Only</MudSwitch>
     <div class="d-flex justify-start align-center">
@@ -59,12 +58,10 @@
         _events.Insert(0, $"Event = CanceledEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
     }
 
-    public async Task AddItemAsync(IncomeModel item)
+    public async Task AddIncomeAsync(IncomeModel item)
     {
-        await apiClient.AddItemAsync(item);
+        await apiClient.AddIncomeAsync(item);
     }
-
-
 }
 
 

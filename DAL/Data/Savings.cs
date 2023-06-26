@@ -58,6 +58,8 @@ public class Savings : ISavings
 
     public async Task UpdateSavings(SavingsModel savings)
     {
+        savings.Date = DateTime.Now;
+
         string sql = @"update savings
                        set emergencyfund = @EmergencyFund, 
                             retirementaccount = @RetirementAccount, 
@@ -65,17 +67,9 @@ public class Savings : ISavings
                             healthneeds = @HealthNeeds, 
                             date = @Date,
                             monthid = @MonthId
-                        where Id = @Id;";
+                        where id = @Id;";
 
-        await _dataAccess.SafeData(sql, new
-        {
-            savings.EmergencyFund,
-            savings.RetirementAccount,
-            savings.Vacation,
-            savings.HealthNeeds,
-            Date = DateTime.Now,
-            savings.MonthId
-        });
+        await _dataAccess.SafeData(sql, savings);
     }
 
     public async Task DeleteSavings(int id)

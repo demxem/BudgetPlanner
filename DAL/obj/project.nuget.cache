@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "Dnmu2Y0M20ILFtA8QLfQ6Ne74WSWL5j2UWc37eIvWiI4sItn9CTHqejCv2k0waGTgxxfSz1w3qhobEpNFtBIIg==",
+  "dgSpecHash": "2Ih3EVz60F+WN2B0LtRw1jJwzM8FLZjOeqXzTuPRXgvaK8h4YHniOE/IXtogw9Jl1B/vRJb+3ur47dzrlzxCjg==",
   "success": true,
   "projectFilePath": "/Volumes/Mac/Projects/BudgetPlanner/DAL/DAL.csproj",
   "expectedPackageFiles": [
-    "/Users/dmitryterentyev/.nuget/packages/dapper/2.0.138/dapper.2.0.138.nupkg.sha512",
-    "/Users/dmitryterentyev/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/7.0.7/microsoft.aspnetcore.authentication.jwtbearer.7.0.7.nupkg.sha512",
+    "/Users/dmitryterentyev/.nuget/packages/dapper/2.0.143/dapper.2.0.143.nupkg.sha512",
+    "/Users/dmitryterentyev/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/7.0.8/microsoft.aspnetcore.authentication.jwtbearer.7.0.8.nupkg.sha512",
     "/Users/dmitryterentyev/.nuget/packages/microsoft.csharp/4.5.0/microsoft.csharp.4.5.0.nupkg.sha512",
     "/Users/dmitryterentyev/.nuget/packages/microsoft.extensions.configuration.abstractions/7.0.0/microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
     "/Users/dmitryterentyev/.nuget/packages/microsoft.extensions.logging.abstractions/6.0.0/microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",

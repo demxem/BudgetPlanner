@@ -117,9 +117,13 @@ namespace Client.Services
             return new List<YearModel>();
         }
 
-        public async Task AddItemAsync(IncomeModel item)
+        public async Task AddIncomeAsync(IncomeModel item)
         {
             await httpClient.PutAsJsonAsync($"/years/months/income/{item.Id}", item);
+        }
+        public async Task AddSavingsAsync(SavingsModel item)
+        {
+            await httpClient.PutAsJsonAsync($"/years/months/savings/{item.Id}", item);
         }
     }
 }
