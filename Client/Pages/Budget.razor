@@ -1,0 +1,470 @@
+@page "/Budget"
+@using Client.Models
+@inject Client.Services.ApiClient apiClient
+
+@inject ISnackbar Snackbar
+
+
+<style>
+    #total{
+        background-color: rgb(127, 229, 76);
+        text-align: center;
+        font-style: italic;
+    }
+    th{
+        background-color: rgb(255, 192, 255);
+    }
+</style>
+
+<MudTabs Elevation="1" Rounded="true" PanelClass="pa-6">
+    <MudTabPanel Text="Income" ToolTip="Plan Your Income">
+        <MudText>
+            <MudTable Items="@Data" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
+            Filter="new Func<MonthModel ,bool>(FilterIncome)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
+            CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
+        RowEditCommit="IncomeCommited" 
+        IsEditRowSwitchingBlocked="@blockSwitch" ApplyButtonPosition="@applyButtonPosition"
+        EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Income</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start"
+            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+                    @if (applyButtonPosition.DisplayApplyButtonAtStart() || (editButtonPosition.DisplayEditButtonAtStart() &&
+        editTrigger == TableEditTrigger.EditButton))
+                    {
+                <col style="width:50px;" />
+                    }
+        <col style="width:50px;" />
+        <col style="width:80px;" />
+        <col style="width:50%;" />
+        <col />
+        <col />
+                    @if (applyButtonPosition.DisplayApplyButtonAtEnd() || (editButtonPosition.DisplayEditButtonAtEnd() &&
+        editTrigger == TableEditTrigger.EditButton))
+                    {
+                <col style="width:50px;" />
+                    }
+
+    </ColGroup>
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Name)">Month</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Income.Employment)">Employment</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Income.SideHustle)">
+                SideHustle</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Income.Dividends)">Dividends</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+        </MudTh>
+                <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Income.Date)">DateModified</MudTableSortLabel>
+        </MudTh>
+                <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.MonthlyIncome)">Total</MudTableSortLabel>
+        </MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Month">@context.Name</MudTd>
+        <MudTd DataLabel="Employment">@context.Income.Employment</MudTd>
+        <MudTd DataLabel="SideHustle">@context.Income.SideHustle</MudTd>
+        <MudTd DataLabel="RetirementAccount">@context.Income.Dividends</MudTd>
+        <MudTd DataLabel="Date">@context.Income.Date</MudTd>
+        <MudTd id ="total" DataLabel="Total">@context.MonthlyIncome</MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Employment">
+            <MudNumericField @bind-Value="@context.Income.Employment" Required />
+          </MudTd>
+          <MudTd DataLabel="SideHustle">
+              <MudNumericField @bind-Value="@context.Income.SideHustle" Required />
+          </MudTd>
+          <MudTd DataLabel="RetirementAccount">
+              <MudNumericField @bind-Value="@context.Income.Dividends" Required />
+          </MudTd>
+      </RowEditingTemplate>
+      <PagerContent>
+          <MudTablePager />
+      </PagerContent>
+      <EditButtonContent Context="button">
+          <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0"
+              OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
+      </EditButtonContent>
+  </MudTable>
+         </MudText>
+     </MudTabPanel>
+     <MudTabPanel Text="Savings" ToolTip="Plan Your Savings">
+         <MudText>
+             <MudTable Items="@Data" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
+             Filter="new Func<MonthModel ,bool>(FilterSavings)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
+             CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
+         RowEditCommit="SavingsCommited" 
+         IsEditRowSwitchingBlocked="@blockSwitch" ApplyButtonPosition="@applyButtonPosition"
+         EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
+     <ToolBarContent>
+         <MudText Typo="Typo.h6">Savings</MudText>
+         <MudSpacer />
+         <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start"
+             AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+     </ToolBarContent>
+     <ColGroup>
+                     @if (applyButtonPosition.DisplayApplyButtonAtStart() || (editButtonPosition.DisplayEditButtonAtStart() &&
+        editTrigger == TableEditTrigger.EditButton))
+                    {
+                <col style="width:50px;" />
+                    }
+        <col style="width:50px;" />
+        <col style="width:80px;" />
+        <col style="width:50%;" />
+        <col />
+        <col />
+                    @if (applyButtonPosition.DisplayApplyButtonAtEnd() || (editButtonPosition.DisplayEditButtonAtEnd() &&
+        editTrigger == TableEditTrigger.EditButton))
+                    {
+                <col style="width:50px;" />
+                    }
+
+    </ColGroup>
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Name)">Month</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Savings.EmergencyFund)">EmergencyFund</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Savings.HealthNeeds)">
+                HealthNeeds</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Savings.RetirementAccount)">RetirementAccount</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Savings.Vacation)">Vacation</MudTableSortLabel>
+        </MudTh>
+                <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Savings.Date)">DateModified</MudTableSortLabel>
+        </MudTh>
+                <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.MonthlySavings)">Total</MudTableSortLabel>
+        </MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Month">@context.Name</MudTd>
+        <MudTd DataLabel="EmergencyFund">@context.Savings.EmergencyFund</MudTd>
+        <MudTd DataLabel="HealthNeeds">@context.Savings.HealthNeeds</MudTd>
+        <MudTd DataLabel="RetirementAccount">@context.Savings.RetirementAccount</MudTd>
+        <MudTd DataLabel="Vacation">@context.Savings.Vacation</MudTd>
+        <MudTd DataLabel="Date">@context.Savings.Date</MudTd>
+        <MudTd id ="total" DataLabel="Total">@context.MonthlySavings</MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="EmergencyFund">
+            <MudNumericField @bind-Value="@context.Savings.EmergencyFund" Required />
+          </MudTd>
+          <MudTd DataLabel="HealthNeeds">
+              <MudNumericField @bind-Value="@context.Savings.HealthNeeds" Required />
+          </MudTd>
+          <MudTd DataLabel="RetirementAccount">
+              <MudNumericField @bind-Value="@context.Savings.RetirementAccount" Required />
+          </MudTd>
+          <MudTd DataLabel="Vacation">
+              <MudNumericField @bind-Value="@context.Savings.Vacation" Required />
+          </MudTd>
+      </RowEditingTemplate>
+      <PagerContent>
+          <MudTablePager />
+      </PagerContent>
+      <EditButtonContent Context="button">
+          <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0"
+              OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
+      </EditButtonContent>
+  </MudTable>
+         </MudText>
+     </MudTabPanel>
+     <MudTabPanel Text="Expenses" ToolTip="Plan Your Expenses">
+         <MudText>
+                <MudTable Items="@Data" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
+            Filter="new Func<MonthModel ,bool>(FilterExpenses)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
+            CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
+        RowEditCommit="ExpensesCommited" 
+        IsEditRowSwitchingBlocked="@blockSwitch" ApplyButtonPosition="@applyButtonPosition"
+        EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Expenses</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start"
+            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        @if (applyButtonPosition.DisplayApplyButtonAtStart() || (editButtonPosition.DisplayEditButtonAtStart() &&
+        editTrigger == TableEditTrigger.EditButton))
+                    {
+                <col style="width:50px;" />
+                    }
+        <col style="width:50px;" />
+        <col style="width:80px;" />
+        <col style="width:50%;" />
+        <col />
+        <col />
+                    @if (applyButtonPosition.DisplayApplyButtonAtEnd() || (editButtonPosition.DisplayEditButtonAtEnd() &&
+        editTrigger == TableEditTrigger.EditButton))
+                    {
+                <col style="width:50px;" />
+                    }
+
+    </ColGroup>
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Name)">Month</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Expenses.Clothing)">Clothing</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Expenses.Groceries)">
+                Groceries</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Expenses.Housing)">Housing</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Expenses.Insuranses)">Insuranses</MudTableSortLabel>
+        </MudTh>
+         <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Expenses.Media)">Media</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Expenses.Medicine)">Medicine</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Expenses.Transportation)">Transportation</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Expenses.Utilities)">Utilities</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Expenses.Vacation)">Vacation</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+        </MudTh>
+         <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Expenses.Date)">DateModified</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.MonthlyExpenses)">Total</MudTableSortLabel>
+        </MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Month">@context.Name</MudTd>
+        <MudTd DataLabel="Clothing">@context.Expenses.Clothing</MudTd>
+        <MudTd DataLabel="Groceries">@context.Expenses.Groceries</MudTd>
+        <MudTd DataLabel="Housing">@context.Expenses.Housing</MudTd>
+        <MudTd DataLabel="Insuranses">@context.Expenses.Insuranses</MudTd>
+        <MudTd DataLabel="Media">@context.Expenses.Media</MudTd>
+        <MudTd DataLabel="Medicine">@context.Expenses.Medicine</MudTd>
+        <MudTd DataLabel="Transportation">@context.Expenses.Transportation</MudTd>
+        <MudTd DataLabel="Utilities">@context.Expenses.Utilities</MudTd>
+        <MudTd DataLabel="Vacation">@context.Expenses.Vacation</MudTd>
+        <MudTd DataLabel="Date">@context.Expenses.Date</MudTd>
+        <MudTd id ="total" DataLabel="Total">@context.MonthlyExpenses</MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Clothing">
+            <MudNumericField @bind-Value="@context.Expenses.Clothing" Required />
+          </MudTd>
+          <MudTd DataLabel="Groceries">
+              <MudNumericField @bind-Value="@context.Expenses.Groceries" Required />
+          </MudTd>
+          <MudTd DataLabel="Housing">
+              <MudNumericField @bind-Value="@context.Expenses.Housing" Required />
+          </MudTd>
+            <MudTd DataLabel="Insuranses">
+              <MudNumericField @bind-Value="@context.Expenses.Insuranses" Required />
+          </MudTd>          
+          <MudTd DataLabel="Media">
+              <MudNumericField @bind-Value="@context.Expenses.Media" Required />
+          </MudTd>
+           <MudTd DataLabel="Media">
+              <MudNumericField @bind-Value="@context.Expenses.Media" Required />
+          </MudTd>
+           <MudTd DataLabel="Medicine">
+              <MudNumericField @bind-Value="@context.Expenses.Medicine" Required />
+          </MudTd>
+           <MudTd DataLabel="Transportation">
+              <MudNumericField @bind-Value="@context.Expenses.Transportation" Required />
+          </MudTd>
+           <MudTd DataLabel="Utilities">
+              <MudNumericField @bind-Value="@context.Expenses.Utilities" Required />
+          </MudTd>
+           <MudTd DataLabel="Vacation">
+              <MudNumericField @bind-Value="@context.Expenses.Vacation" Required />
+          </MudTd>
+      </RowEditingTemplate>
+      <PagerContent>
+          <MudTablePager />
+      </PagerContent>
+      <EditButtonContent Context="button">
+          <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0"
+              OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
+      </EditButtonContent>
+  </MudTable>
+         </MudText>
+     </MudTabPanel>
+ </MudTabs>
+
+
+ @code {
+    private List<string> editEvents = new();
+    private bool dense = true;
+    private bool hover = true;
+    private bool ronly = false;
+    private bool canCancelEdit = true;
+    private bool blockSwitch = false;
+    private string searchString = "";
+    private MonthModel selectedItem = null;
+    private HashSet<MonthModel> selectedItems1 = new HashSet<MonthModel>();
+    private TableApplyButtonPosition applyButtonPosition = TableApplyButtonPosition.Start;
+    private TableEditButtonPosition editButtonPosition = TableEditButtonPosition.Start;
+    private TableEditTrigger editTrigger = TableEditTrigger.EditButton;
+    private IEnumerable<MonthModel> Data = new List<MonthModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Data = await apiClient.GetMonthsAsync();
+    }
+
+    public async Task GetDataAsync()
+    {
+        Data = await apiClient.GetMonthsAsync();
+        StateHasChanged();
+    }
+
+    private void ClearEventLog()
+    {
+        editEvents.Clear();
+    }
+
+    private void AddEditionEvent(string message)
+    {
+        editEvents.Add(message);
+        StateHasChanged();
+    }
+
+    private async void SavingsCommited(object item)
+    {
+        await apiClient.AddSavingsAsync(selectedItem.Savings);
+        GetDataAsync();
+        AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)item).Name} committed");
+    }
+    private async void IncomeCommited(object item)
+    {
+        await apiClient.AddIncomeAsync(selectedItem.Income);
+        GetDataAsync();
+        AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)item).Name} committed");
+    }
+    private async void ExpensesCommited(object item)
+    {
+        await apiClient.AddExpensesAsync(selectedItem.Expenses);
+        GetDataAsync();
+        AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)item).Name} committed");
+    }
+    private bool FilterSavings(MonthModel savings)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (savings.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (savings.Savings.EmergencyFund.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (savings.Savings.Vacation.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (savings.Savings.HealthNeeds.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (savings.Savings.RetirementAccount.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (savings.Savings.Date.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (savings.MonthlySavings.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{savings.Name} {savings.MonthlySavings.ToString()} {savings.Savings.EmergencyFund.ToString()} {savings.Savings.Vacation.ToString()} {savings.Savings.HealthNeeds.ToString()} {savings.Savings.Vacation.ToString()}".Contains(searchString))
+            return true;
+        return false;
+    }
+
+    private bool FilterIncome(MonthModel income)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (income.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (income.Income.Employment.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (income.Income.SideHustle.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (income.Income.Dividends.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (income.Income.Date.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (income.MonthlyIncome.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{income.Name} {income.MonthlySavings.ToString()} {income.Income.Employment.ToString()} {income.Income.SideHustle.ToString()} {income.Income.Dividends.ToString()}".Contains(searchString))
+            return true;
+        return false;
+    }
+
+        private bool FilterExpenses(MonthModel expenses)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (expenses.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (expenses.Expenses.Clothing.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (expenses.Expenses.Groceries.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (expenses.Expenses.Housing.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+            if (expenses.Expenses.Insuranses.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+            if (expenses.Expenses.Media.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+            if (expenses.Expenses.Medicine.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+            if (expenses.Expenses.Transportation.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+            if (expenses.Expenses.Utilities.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+             if (expenses.Expenses.Vacation.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (expenses.Expenses.Date.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (expenses.MonthlyIncome.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{expenses.Name} {expenses.MonthlySavings.ToString()} {expenses.Expenses.Clothing.ToString()} {expenses.Expenses.Groceries.ToString()} {expenses.Expenses.Housing.ToString()} {expenses.Expenses.Insuranses.ToString()} {expenses.Expenses.Media.ToString()} {expenses.Expenses.Medicine.ToString()} {expenses.Expenses.Transportation.ToString()} {expenses.Expenses.Utilities.ToString()} {expenses.Expenses.Vacation.ToString()}".Contains(searchString))
+            return true;
+        return false;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

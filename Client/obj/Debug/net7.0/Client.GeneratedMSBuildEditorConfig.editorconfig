@@ -20,12 +20,12 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/DashBoard.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGFzaEJvYXJkLnJhem9y
+[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/Budget.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQnVkZ2V0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/Income.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5jb21lLnJhem9y
+[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/DashBoard.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGFzaEJvYXJkLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/Index.razor]
@@ -34,14 +34,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/Main.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTWFpbi5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/Savings.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2F2aW5ncy5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/SimpleTable.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2ltcGxlVGFibGUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Volumes/Mac/Projects/BudgetPlanner/Client/Shared/MyNavMenu.razor]

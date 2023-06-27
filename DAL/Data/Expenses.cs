@@ -1,3 +1,4 @@
+using System;
 using DAL.DbAccess;
 using DAL.Models;
 
@@ -59,6 +60,7 @@ public class Expenses : IExpenses
 
     public async Task UpdateExpenses(ExpensesModel expenses)
     {
+        expenses.Date = DateTime.Now;
         string sql = @"update expenses
                        set housing = @Housing, 
                             groceries = @Groceries, 
@@ -68,25 +70,12 @@ public class Expenses : IExpenses
                             medicine = @Medicine,
                             clothing = @Clothing,
                             media = @Media,
-                            insurances = @insuranses,
+                            insuranses = @insuranses,
                             date = @Date,
                             monthid = @MonthId
-                        where id = @id;";
+                        where id = @Id;";
 
-        await _dataAccess.SafeData(sql, new
-        {
-            expenses.Housing,
-            expenses.Groceries,
-            expenses.Utilities,
-            expenses.Vacation,
-            expenses.Transportation,
-            expenses.Medicine,
-            expenses.Clothing,
-            expenses.Media,
-            expenses.Insuranses,
-            Date = DateTime.Now,
-            expenses.MonthId
-        });
+        await _dataAccess.SafeData(sql, expenses);
     }
 
     public async Task DeleteExpenses(int id)

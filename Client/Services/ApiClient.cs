@@ -146,6 +146,10 @@ namespace Client.Services
         {
             await httpClient.PutAsJsonAsync($"/years/months/savings/{item.Id}", item);
         }
+        public async Task AddExpensesAsync(ExpensesModel item)
+        {
+            await httpClient.PutAsJsonAsync($"/years/months/expenses/{item.Id}", item);
+        }
     }
 
 }

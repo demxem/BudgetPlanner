@@ -11,9 +11,9 @@
             </MudCardContent>
             <MudCardActions>
                 <MudMenu Label="Plan Your Budget" Variant="Variant.Filled" Color="Color.Primary">
-                    <MudMenuItem href="http://localhost:5095/savings" OnClick="OnClick">Savings</MudMenuItem>
-                    <MudMenuItem OnClick="OnClick">Income</MudMenuItem>
-                    <MudMenuItem OnClick="OnClick">Expenses</MudMenuItem>
+                    <MudMenuItem href="/budget" OnClick="OnClick">Savings</MudMenuItem>
+                    <MudMenuItem href="/budget" OnClick="OnClick">Income</MudMenuItem>
+                    <MudMenuItem href="/budget" OnClick="OnClick">Expenses</MudMenuItem>
                 </MudMenu>
             </MudCardActions>
         </MudCard>
@@ -23,7 +23,7 @@
         <MudCard Outlined="true">
             <MudCardContent>
                 <MudText>Date Of Last Record</MudText>
-                <MudText Typo="Typo.body2">@_latestDate</MudText>
+                <MudText Typo="Typo.body2">@_latestRecordDate</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -32,16 +32,16 @@
 @code {
     private DateTime _date = DateTime.Now;
     private List<DateModel?> Dates = new List<DateModel?>();
-    private DateTime _latestDate;
+    private List<MonthModel?> Months = new List<MonthModel?>();
+    private DateTime _latestRecordDate;
     protected override async Task OnInitializedAsync()
     {
         Dates = await apiClient.GetLatestDateAsync();
-        GetLatestDate();
+        GetLatestRecordDate();
     }
 
     private void OnClick(MouseEventArgs args) => Snackbar.Add("Redirecting");
     private void OnTouch(TouchEventArgs args) => Snackbar.Add("Redirecting");
-    private void GetLatestDate() => _latestDate = Dates.Select(x => x.LatestDate).First();
-
+    private void GetLatestRecordDate() => _latestRecordDate = Dates.Select(x => x.LatestDate).First();
 
 }
