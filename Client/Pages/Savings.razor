@@ -67,7 +67,7 @@
             <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Savings.Date)">DateModified</MudTableSortLabel>
         </MudTh>
                 <MudTh>
-            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.MonthlySavings)">MonthlySavings</MudTableSortLabel>
+            <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.MonthlySavings)">Total</MudTableSortLabel>
         </MudTh>
     </HeaderContent>
     <RowTemplate>
@@ -79,7 +79,7 @@
         <MudTd DataLabel="RetirementAccount">@context.Savings.RetirementAccount</MudTd>
         <MudTd DataLabel="Vacation">@context.Savings.Vacation</MudTd>
         <MudTd DataLabel="Date">@context.Savings.Date</MudTd>
-        <MudTd id ="total" DataLabel="MonthlySavings">@context.MonthlySavings</MudTd>
+        <MudTd id ="total" DataLabel="Total">@context.MonthlySavings</MudTd>
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Nr">@context.Id</MudTd>

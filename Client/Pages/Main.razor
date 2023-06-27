@@ -1,0 +1,47 @@
+@page "/main"
+@inject Client.Services.ApiClient apiClient
+@inject ISnackbar Snackbar
+
+<MudGrid>
+    <MudItem xs="3">
+        <MudCard Outlined="true">
+            <MudCardContent>
+                <MudText>Date Of Today</MudText>
+                <MudText Typo="Typo.body2">@_date</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudMenu Label="Plan Your Budget" Variant="Variant.Filled" Color="Color.Primary">
+                    <MudMenuItem href="http://localhost:5095/savings" OnClick="OnClick">Savings</MudMenuItem>
+                    <MudMenuItem OnClick="OnClick">Income</MudMenuItem>
+                    <MudMenuItem OnClick="OnClick">Expenses</MudMenuItem>
+                </MudMenu>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="3">
+        <MudCard Outlined="true">
+            <MudCardContent>
+                <MudText>Date Of Last Record</MudText>
+                <MudText Typo="Typo.body2">@_latestDate</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private DateTime _date = DateTime.Now;
+    private List<DateModel?> Dates = new List<DateModel?>();
+    private DateTime _latestDate;
+    protected override async Task OnInitializedAsync()
+    {
+        Dates = await apiClient.GetLatestDateAsync();
+        GetLatestDate();
+    }
+
+    private void OnClick(MouseEventArgs args) => Snackbar.Add("Redirecting");
+    private void OnTouch(TouchEventArgs args) => Snackbar.Add("Redirecting");
+    private void GetLatestDate() => _latestDate = Dates.Select(x => x.LatestDate).First();
+
+
+}

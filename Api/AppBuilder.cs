@@ -21,6 +21,7 @@ public static class AppBuilder
         builder.Services.AddTransient<IIncome, Income>();
         builder.Services.AddTransient<IMonth, Month>();
         builder.Services.AddTransient<IYears, Years>();
+        builder.Services.AddTransient<IDate, Date>();
         builder.Services.AddCors();
         builder.Services.AddSwaggerGen();
 
@@ -32,6 +33,7 @@ public static class AppBuilder
         //Endpoints
         app.RegisterSavingsEndpoints();
         app.RegisterExpensesEndpoints();
+        app.RegisterDateEndpoints();
         app.RegisterIncomeEndpoints();
         app.RegisterMonthsEndpoints();
         app.RegisterYearsEndpoints();

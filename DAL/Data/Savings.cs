@@ -61,7 +61,7 @@ public class Savings : ISavings
         savings.Date = DateTime.Now;
 
         string sql = @"update savings
-                       set emergencyfund = @EmergencyFund, 
+                        set emergencyfund = @EmergencyFund, 
                             retirementaccount = @RetirementAccount, 
                             vacation = @Vacation,
                             healthneeds = @HealthNeeds, 

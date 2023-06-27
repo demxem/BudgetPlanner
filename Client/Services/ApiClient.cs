@@ -14,6 +14,27 @@ namespace Client.Services
             this.httpClient = httpClient;
         }
 
+        public async Task<List<DateModel?>> GetLatestDateAsync()
+        {
+            try
+            {
+                var response = await httpClient.GetAsync("/years/months/date");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var date = await response.Content.ReadFromJsonAsync<List<DateModel>>();
+
+                    return date;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return new List<DateModel?>();
+        }
+
         public async Task<List<IncomeModel>?> GetIncomeAsync()
         {
             try
@@ -126,4 +147,5 @@ namespace Client.Services
             await httpClient.PutAsJsonAsync($"/years/months/savings/{item.Id}", item);
         }
     }
+
 }
