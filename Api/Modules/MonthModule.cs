@@ -10,15 +10,15 @@ namespace Api.Modules
             //endpoints
             // endpoints.MapGet("/years/months/savings/{id}", GetSavingsByMonthId);
             endpoints.MapGet("/years/months/total/{id}", GetAllByMonthId);
-            endpoints.MapGet("/years/months/totalincome/{id}", GetTotalIncomeByMonthId);
-            endpoints.MapGet("/years/months/totalsavings/{id}", GetTotalSavingsByMonthId);
-            endpoints.MapGet("/years/months/totalexpenses/{id}", GetTotalExpensesByMonthId);
-            endpoints.MapPost("/years/months", InsertMonth);
+            endpoints.MapGet("/years/months/income", GetIncomeByMonth);
+            endpoints.MapGet("/years/months/savings", GetSavingsByMonth);
+            endpoints.MapGet("/years/months/expenses", GetExpensesByMonth);
+            endpoints.MapGet("/years/months/income/{id}", GetIncomeByYearId);
             endpoints.MapGet("/years/months/{id}", GetMonthById);
             endpoints.MapGet("/years/months", GetMonths);
-
-
-
+            endpoints.MapPost("/years/months", InsertMonth);
+            endpoints.MapPost("/years/months/income/{id}", InsertIncomeByYearId);
+            endpoints.MapDelete("/years/months/{id}", DeleteMonthById);
         }
 
         private static async Task<IResult> GetMonthById(IMonth data, int id)
@@ -45,11 +45,58 @@ namespace Api.Modules
             }
         }
 
+        private static async Task<IResult> GetIncomeByMonth(IMonth data)
+        {
+            try
+            {
+                return Results.Ok(await data.GetIncomeByMonth());
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        }
+
+        private static async Task<IResult> GetSavingsByMonth(IMonth data)
+        {
+            try
+            {
+                return Results.Ok(await data.GetSavingsByMonth());
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        }
+
+        private static async Task<IResult> GetExpensesByMonth(IMonth data)
+        {
+            try
+            {
+                return Results.Ok(await data.GetExpensesByMonth());
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        }
+
         private static async Task<IResult> GetSavingsByMonthId(IMonth data, int id)
         {
             try
             {
                 return Results.Ok(await data.GetSavingsByid(id));
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        }
+        private static async Task<IResult> GetIncomeByYearId(IMonth data, int id)
+        {
+            try
+            {
+                return Results.Ok(await data.GetIncomeByYearId(id));
             }
             catch (Exception ex)
             {
@@ -69,40 +116,6 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> GetTotalIncomeByMonthId(IMonth data, int id)
-        {
-            try
-            {
-                return Results.Ok(await data.GetTotalIncomeByMonthId(id));
-            }
-            catch (Exception ex)
-            {
-                return Results.Problem(ex.Message);
-            }
-        }
-        private static async Task<IResult> GetTotalSavingsByMonthId(IMonth data, int id)
-        {
-            try
-            {
-                return Results.Ok(await data.GetTotalSavingsByMonthId(id));
-            }
-            catch (Exception ex)
-            {
-                return Results.Problem(ex.Message);
-            }
-        }
-        private static async Task<IResult> GetTotalExpensesByMonthId(IMonth data, int id)
-        {
-            try
-            {
-                return Results.Ok(await data.GetTotalExpensesByMonthId(id));
-            }
-            catch (Exception ex)
-            {
-                return Results.Problem(ex.Message);
-            }
-        }
-
         private static async Task<IResult> InsertMonth(IMonth data, MonthModel monthModel)
         {
             try
@@ -115,6 +128,32 @@ namespace Api.Modules
                 return Results.Problem(ex.Message);
             }
         }
+        private static async Task<IResult> InsertIncomeByYearId(IMonth data, MonthModel monthModel, int yearId)
+        {
+            try
+            {
+                await data.InsertIncomeByYearId(monthModel, yearId);
+                return Results.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        }
+
+        private static async Task<IResult> DeleteMonthById(IMonth data, int id)
+        {
+            try
+            {
+                await data.DeleteMonthById(id);
+                return Results.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        }
     }
+
 
 }

@@ -1,0 +1,97 @@
+﻿<MudTabPanel Text="Income" ToolTip="Plan Your Income">
+    <MudText>
+        <MudTable Items="@IncomeData" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
+            Filter="new Func<MonthModel ,bool>(FilterIncome)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
+            CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
+            RowEditCommit="IncomeCommited" IsEditRowSwitchingBlocked="@blockSwitch"
+            ApplyButtonPosition="@applyButtonPosition" EditButtonPosition="@editButtonPosition"
+            EditTrigger="@editTrigger">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Income</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start"
+                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                </MudTextField>
+            </ToolBarContent>
+            <ColGroup>
+                @if (applyButtonPosition.DisplayApplyButtonAtStart() ||
+                (editButtonPosition.DisplayEditButtonAtStart()
+                &&
+                editTrigger == TableEditTrigger.EditButton))
+                {
+                    <col style="width:50px;" />
+                }
+                <col style="width:50px;" />
+                <col style="width:80px;" />
+                <col style="width:50%;" />
+                <col />
+                <col />
+                @if (applyButtonPosition.DisplayApplyButtonAtEnd() || (editButtonPosition.DisplayEditButtonAtEnd()
+                &&
+                editTrigger == TableEditTrigger.EditButton))
+                {
+                    <col style="width:50px;" />
+                }
+
+            </ColGroup>
+            <HeaderContent>
+                <MudTh>
+                    <MudIconButton Icon="@Icons.Material.Outlined.Add" />
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Name)">Month</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Income.Employment)">Employment
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Income.SideHustle)">
+                        SideHustle</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Income.Dividends)">Dividends
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Income.Date)">DateModified
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.MonthlyIncome)">Total
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>Delete</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Month">@context.Name</MudTd>
+                <MudTd DataLabel="Employment">@context.Income.Employment</MudTd>
+                <MudTd DataLabel="SideHustle">@context.Income.SideHustle</MudTd>
+                <MudTd DataLabel="RetirementAccount">@context.Income.Dividends</MudTd>
+                <MudTd DataLabel="Date">@context.Income.Date</MudTd>
+                <MudTd id="total" DataLabel="Total">@context.MonthlyIncome</MudTd>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete"
+                    OnClick="() => DeleteIncomeItem(context.Income.Id)"></MudIconButton>
+            </RowTemplate>
+            <RowEditingTemplate>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Employment">
+                    <MudNumericField @bind-Value="@context.Income.Employment" Required />
+                </MudTd>
+                <MudTd DataLabel="SideHustle">
+                    <MudNumericField @bind-Value="@context.Income.SideHustle" Required />
+                </MudTd>
+                <MudTd DataLabel="RetirementAccount">
+                    <MudNumericField @bind-Value="@context.Income.Dividends" Required />
+                </MudTd>
+            </RowEditingTemplate>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+            <EditButtonContent Context="button">
+                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0"
+                    OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
+            </EditButtonContent>
+        </MudTable>
+    </MudText>
+</MudTabPanel>

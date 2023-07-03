@@ -28,6 +28,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGFzaEJvYXJkLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/DialogKeyboardNavigation.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGlhbG9nS2V5Ym9hcmROYXZpZ2F0aW9uLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/DialogNavMonths.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGlhbG9nTmF2TW9udGhzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/Main.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTWFpbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 

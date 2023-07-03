@@ -8,8 +8,8 @@ public static class IncomeModule
     public static void RegisterIncomeEndpoints(this IEndpointRouteBuilder endpoints)
     {
         //endpoints
-        endpoints.MapGet("/years/months/income", GetIncome);
-        endpoints.MapGet("/years/months/income/{id}", GetIncomeById);
+        // endpoints.MapGet("/years/months/income", GetIncome);
+        // endpoints.MapGet("/years/months/income/{id}", GetIncomeById);
         endpoints.MapPost("/years/months/income/", InsertIncome);
         endpoints.MapPut("/years/months/income/{id}", UpdateIncome);
         endpoints.MapDelete("/years/months/income/{id}", DeleteIncome);
@@ -26,20 +26,20 @@ public static class IncomeModule
         }
     }
 
-    private static async Task<IResult> GetIncomeById(int id, IIncome data)
-    {
-        try
-        {
-            var results = await data.GetIncomeById(id);
-            if (results == null) return Results.NotFound();
-            return Results.Ok(results);
-        }
+    // private static async Task<IResult> GetIncomeById(int id, IIncome data)
+    // {
+    //     try
+    //     {
+    //         var results = await data.GetIncomeById(id);
+    //         if (results == null) return Results.NotFound();
+    //         return Results.Ok(results);
+    //     }
 
-        catch (Exception ex)
-        {
-            return Results.Problem(ex.Message);
-        }
-    }
+    //     catch (Exception ex)
+    //     {
+    //         return Results.Problem(ex.Message);
+    //     }
+    // }
 
     private static async Task<IResult> InsertIncome(IncomeModel Income, IIncome data)
     {
@@ -58,7 +58,7 @@ public static class IncomeModule
     {
         try
         {
-            await data.UpdateIncome(income);
+            await data.UpdateIncomeById(income);
             return Results.Ok();
         }
         catch (Exception ex)
@@ -71,7 +71,7 @@ public static class IncomeModule
     {
         try
         {
-            await data.DeleteIncome(id);
+            await data.DeleteIncomeById(id);
             return Results.Ok();
         }
         catch (Exception ex)

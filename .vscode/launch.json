@@ -36,6 +36,17 @@
                 "action": "openExternally",
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
             }
+        },
+        {
+            "name": "Launch and Debug api App",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "cwd": "${workspaceFolder}/Api",
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            }
         }
     ]
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Data;
 using DAL.Models;
 using Dapper;
 using Microsoft.Extensions.Configuration;
@@ -18,25 +20,109 @@ public class Month : IMonth
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            string sql = @"select m.*, sum (i.employment + i.sidehustle + i.dividends) as monthlyIncome, 
-                                        sum (s.emergencyfund + s.retirementaccount + s.vacation + s.healthneeds) as monthlySavings, 
-                                        sum (e.housing + e.groceries + e.utilities + e.vacation 
-                                        + e.transportation + e.medicine + e.clothing + e.media 
-                                        + e.insuranses) as monthlyExpenses, i.*, s.*, e.*
-                        from months as m
-                        join income as i on m.incomeid = i.id
-                        join savings as s on m.savingsid = s.id
-                        join expenses as e on m.expensesid = e.id
-                        group by m.id, i.id, s.id, e.id
-                        order by m.id;";
+            string sql = @"select id, name, yearid from months order by id;";
 
-            var result = await connection.QueryAsync<MonthModel, IncomeModel, SavingsModel, ExpensesModel, MonthModel>(sql, (month, income, savings, expenses) =>
+            var result = await connection.QueryAsync<MonthModel>(sql);
+            return result;
+        }
+    }
+
+    public async Task<IEnumerable<MonthModel>> GetIncomeByMonth()
+    {
+        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
+        {
+            string sql = @"select m.*, sum (i.employment + i.sidehustle + i.dividends) as monthlyIncome, i.* 
+                            from months as m
+                            join income as i on m.incomeid = i.id
+                            group by m.id, i.id
+                            order by m.id;";
+
+            var result = await connection.QueryAsync<MonthModel, IncomeModel, MonthModel>(sql, (month, income) =>
             {
                 month.Income = income;
+                return month;
+            });
+
+            return result;
+        }
+    }
+    public async Task<IEnumerable<MonthModel>> GetSavingsByMonth()
+    {
+        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
+        {
+            string sql = @"select m.*, sum (s.emergencyfund + s.retirementaccount + s.vacation + s.healthneeds) as monthlySavings, s.* 
+                            from months as m
+                            join savings as s on m.savingsid = s.id
+                            group by m.id, s.id
+                            order by m.id;";
+
+            var result = await connection.QueryAsync<MonthModel, SavingsModel, MonthModel>(sql, (month, savings) =>
+            {
                 month.Savings = savings;
+                return month;
+            });
+
+            return result;
+        }
+    }
+
+    public async Task InsertIncomeByYearId(MonthModel month, int yearId)
+    {
+        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
+        {
+            string sql = @"With insert As (
+                            insert into months(id, name, yearid)
+                            values((select max(id) + 1 from months), @Name, @yearId)
+                            )
+                            insert into income (id, monthid)
+                            values ((select max(id) + 1 from income), (select max(id) from months)
+                            );
+                            update months
+                            set incomeid = (select max(id) from income)
+                            where id = (select max(id) from months);";
+
+            await connection.ExecuteAsync(sql, new { month.Id, month.Name, month.YearId });
+        }
+    }
+
+
+    public async Task<IEnumerable<MonthModel>> GetExpensesByMonth()
+    {
+        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
+        {
+            string sql = @"select m.*, sum (e.housing + e.groceries + e.utilities + e.vacation 
+                                        + e.transportation + e.medicine + e.clothing + e.media 
+                                        + e.insuranses) as monthlyExpenses, e.* 
+                            from months as m
+                            join expenses as e on m.expensesid = e.id
+                            group by m.id, e.id
+                            order by m.id;";
+
+            var result = await connection.QueryAsync<MonthModel, ExpensesModel, MonthModel>(sql, (month, expenses) =>
+            {
                 month.Expenses = expenses;
                 return month;
             });
+
+            return result;
+        }
+    }
+    public async Task<IEnumerable<MonthModel?>> GetIncomeByYearId(int id)
+    {
+        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
+        {
+            string sql = @"select m.*, sum (i.employment + i.sidehustle + i.dividends) as monthlyIncome, i.* 
+                            from months as m
+                            join income as i on m.incomeid = i.id
+                            where m.yearid = @YearId
+                            group by m.id, i.id
+                            order by m.id;";
+
+            var result = await connection.QueryAsync<MonthModel, IncomeModel, MonthModel>(sql, (month, income) =>
+            {
+                month.Income = income;
+                return month;
+            }, new { YearId = id });
 
             return result;
         }
@@ -97,73 +183,26 @@ public class Month : IMonth
         }
     }
 
-    public async Task<IEnumerable<MonthModel>> GetTotalIncomeByMonthId(int id)
-    {
-        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
-        {
-            string sql = @"select sum (i.employment + i.sidehustle + i.dividends) as monthlyIncome
-                            from income as i 
-                            join months as m on m.incomeid = i.id
-                            where m.id = @Id;";
-
-            var result = await connection.QueryAsync<MonthModel>(sql, new { Id = id });
-
-            return result;
-        }
-    }
-
-    public async Task<IEnumerable<MonthModel>> GetTotalExpensesByMonthId(int id)
-    {
-        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
-        {
-            string sql = @"select sum (e.housing + e.groceries + e.utilities + e.vacation 
-                                        + e.transportation + e.medicine + e.clothing + e.media 
-                                        + e.insuranses) as monthlyExpenses
-                            from expenses as e 
-                            join months as m on m.expensesid = e.id
-                            where m.id = @Id;";
-
-            var result = await connection.QueryAsync<MonthModel>(sql, new { Id = id });
-
-            return result;
-        }
-    }
-
-    public async Task<IEnumerable<MonthModel>> GetTotalSavingsByMonthId(int id)
-    {
-        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
-        {
-            string sql = @"select sum (s.emergencyfund + s.retirementaccount + s.vacation + s.healthneeds) as monthlySavings
-                            from savings as s
-                            join months as m on m.savingsid = s.id
-                            where m.id = @Id;";
-
-            var result = await connection.QueryAsync<MonthModel>(sql, new { Id = id });
-
-            return result;
-        }
-    }
-
     public async Task InsertMonth(MonthModel month)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            var sql = @"insert into months (id, name, yearid, incomeid, expensesid, savingsid)
-                        values((select max(id) + 1 from months), @Name, @YearId, (select max(incomeid) + 1 from months), 
-                        (select max(expensesid) + 1 from months), (select max(savingsid) + 1 from months));";
+            string sql = @"insert into months(id, name, yearid)
+                            values((select max(id) + 1 from months), @Name, (select max(id) from years));";
 
-            await connection.ExecuteAsync(sql, new
-            {
-                month.Id,
-                month.Name,
-                month.MonthlyExpenses,
-                month.MonthlyIncome,
-                month.MonthlySavings,
-                month.Expenses,
-                month.Income,
-                month.Savings,
-                month.YearId
-            });
+            await connection.ExecuteAsync(sql, new { month.Id, month.Name, month.YearId });
+        }
+    }
+
+    public async Task DeleteMonthById(int id)
+    {
+        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
+        {
+            string sql = @"delete from months
+                            where id = @Id";
+
+            await connection.ExecuteAsync(sql, new { Id = id });
         }
     }
 }
+

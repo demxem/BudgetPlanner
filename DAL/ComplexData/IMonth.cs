@@ -8,10 +8,12 @@ public interface IMonth
     Task<IEnumerable<MonthModel>> GetAllMonths();
     Task<MonthModel?> GetMonthById(int id);
     Task<IEnumerable<MonthModel>> GetSavingsByid(int id);
-    Task<IEnumerable<MonthModel>> GetTotalIncomeByMonthId(int id);
-    Task<IEnumerable<MonthModel>> GetTotalSavingsByMonthId(int id);
-    Task<IEnumerable<MonthModel>> GetTotalExpensesByMonthId(int id);
+    Task<IEnumerable<MonthModel>> GetIncomeByMonth();
+    Task<IEnumerable<MonthModel>> GetSavingsByMonth();
+    Task<IEnumerable<MonthModel>> GetExpensesByMonth();
+    Task DeleteMonthById(int id);
     Task InsertMonth(MonthModel month);
-
+    Task InsertIncomeByYearId(MonthModel month, int yearId);
+    Task<IEnumerable<MonthModel?>> GetIncomeByYearId(int id);
 }
 

@@ -1,0 +1,61 @@
+@inject Client.Services.ApiClient apiClient
+@using Client.Models
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField T="string" Label="Year" @bind-Value="@_inputYear"></MudTextField>
+        <MudSelect T="string" Label="Months" @bind-Value="@_selectedMonth" AnchorOrigin="Origin.BottomCenter">
+            <MudSelectItem Value="@("January")" />
+            <MudSelectItem Value="@("February")" />
+            <MudSelectItem Value="@("March")" />
+            <MudSelectItem Value="@("April")" />
+            <MudSelectItem Value="@("May")" />
+            <MudSelectItem Value="@("June")" />
+            <MudSelectItem Value="@("July")" />
+            <MudSelectItem Value="@("August")" />
+            <MudSelectItem Value="@("September")" />
+            <MudSelectItem Value="@("October")" />
+            <MudSelectItem Value="@("November")" />
+            <MudSelectItem Value="@("Descember")" />
+        </MudSelect>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick=" Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    private string _selectedMonth = "";
+    private string _inputYear = "";
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+
+    public async Task AddYear()
+    {
+        YearModel yearModel = new YearModel { Name = _inputYear };
+        await apiClient.PostYearAsync(yearModel);
+    }
+    public async Task AddMonth()
+    {
+        MonthModel monthModel = new MonthModel { Name = _selectedMonth };
+        await apiClient.PostMonthAsync(monthModel);
+    }
+
+    void Submit()
+    {
+        AddYear();
+        AddMonth();
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+    void Cancel() => MudDialog.Cancel();
+}
+
+
+
+
+
+
+

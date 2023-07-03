@@ -38,7 +38,7 @@ public class Income : IIncome
         return _dataAccess.SafeData(sql, new { income.Employment, income.SideHustle, income.Dividends, Date = DateTime.Now, income.MonthId });
     }
 
-    public async Task UpdateIncome(IncomeModel income)
+    public async Task UpdateIncomeById(IncomeModel income)
     {
         income.Date = DateTime.Now;
 
@@ -52,11 +52,15 @@ public class Income : IIncome
         await _dataAccess.SafeData(sql, income);
     }
 
-    public async Task DeleteIncome(int id)
+    public async Task DeleteIncomeById(int id)
     {
         string sql = @"delete 
                        from income
-                       where id = @id;";
+                       where id = @id;
+
+                       update months
+                        set incomeid = 0
+                        where id = @id;";
 
         await _dataAccess.SafeData(sql, new { id = id });
     }

@@ -1,7 +1,7 @@
 @page "/Budget"
 @using Client.Models
 @inject Client.Services.ApiClient apiClient
-
+@inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
 
@@ -14,14 +14,24 @@
     th{
         background-color: rgb(255, 192, 255);
     }
+
 </style>
 
 <MudTabs Elevation="1" Rounded="true" PanelClass="pa-6">
     <MudTabPanel Text="Income" ToolTip="Plan Your Income">
-        <MudText>
-            <MudTable Items="@Data" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
-            Filter="new Func<MonthModel ,bool>(FilterIncome)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
-            CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
+    <MudText>
+    <MudButton @onclick="OpenDialog" ToolTip="Add Year to your budget plan" Variant="Variant.Filled" Color="Color.Primary">
+        Add Year 
+    </MudButton>
+       <MudSelect T="YearModel" HelperText="Year" @Value="@_inputYear" ValueChanged="year => SetSelected(year)" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var year in YearsData)
+            {
+                <MudSelectItem Value="@year">@year.Name</MudSelectItem>
+            }
+        </MudSelect>
+    <MudTable Items="@IncomeData" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
+        Filter="new Func<MonthModel ,bool>(FilterIncome)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
+        CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
         RowEditCommit="IncomeCommited" 
         IsEditRowSwitchingBlocked="@blockSwitch" ApplyButtonPosition="@applyButtonPosition"
         EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
@@ -51,6 +61,9 @@
     </ColGroup>
     <HeaderContent>
         <MudTh>
+            <MudIconButton Icon="@Icons.Material.Outlined.Add" />
+        </MudTh>
+        <MudTh>
             <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Name)">Month</MudTableSortLabel>
         </MudTh>
         <MudTh>
@@ -69,6 +82,7 @@
                 <MudTh>
             <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.MonthlyIncome)">Total</MudTableSortLabel>
         </MudTh>
+        <MudTh>Delete</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Month">@context.Name</MudTd>
@@ -77,6 +91,7 @@
         <MudTd DataLabel="RetirementAccount">@context.Income.Dividends</MudTd>
         <MudTd DataLabel="Date">@context.Income.Date</MudTd>
         <MudTd id ="total" DataLabel="Total">@context.MonthlyIncome</MudTd>
+        <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="() => DeleteIncomeItem(context.Income.Id)"></MudIconButton>
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
@@ -101,13 +116,13 @@
          </MudText>
      </MudTabPanel>
      <MudTabPanel Text="Savings" ToolTip="Plan Your Savings">
-         <MudText>
-             <MudTable Items="@Data" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
-             Filter="new Func<MonthModel ,bool>(FilterSavings)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
-             CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
-         RowEditCommit="SavingsCommited" 
-         IsEditRowSwitchingBlocked="@blockSwitch" ApplyButtonPosition="@applyButtonPosition"
-         EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
+        <MudText>
+        <MudTable Items="@SavingsData" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
+            Filter="new Func<MonthModel ,bool>(FilterSavings)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
+            CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
+            RowEditCommit="SavingsCommited" 
+            IsEditRowSwitchingBlocked="@blockSwitch" ApplyButtonPosition="@applyButtonPosition"
+            EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
      <ToolBarContent>
          <MudText Typo="Typo.h6">Savings</MudText>
          <MudSpacer />
@@ -155,6 +170,7 @@
         <MudTh>
             <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.MonthlySavings)">Total</MudTableSortLabel>
         </MudTh>
+        <MudTh>Delete</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Month">@context.Name</MudTd>
@@ -164,6 +180,7 @@
         <MudTd DataLabel="Vacation">@context.Savings.Vacation</MudTd>
         <MudTd DataLabel="Date">@context.Savings.Date</MudTd>
         <MudTd id ="total" DataLabel="Total">@context.MonthlySavings</MudTd>
+        <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="() => DeleteSavingsItem(context.Savings.Id)"></MudIconButton>
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
@@ -192,7 +209,7 @@
      </MudTabPanel>
      <MudTabPanel Text="Expenses" ToolTip="Plan Your Expenses">
          <MudText>
-                <MudTable Items="@Data" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
+    <MudTable Items="@ExpensesData" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
             Filter="new Func<MonthModel ,bool>(FilterExpenses)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
             CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
         RowEditCommit="ExpensesCommited" 
@@ -260,6 +277,7 @@
         <MudTh>
             <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.MonthlyExpenses)">Total</MudTableSortLabel>
         </MudTh>
+        <MudTh>Delete</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Month">@context.Name</MudTd>
@@ -274,6 +292,7 @@
         <MudTd DataLabel="Vacation">@context.Expenses.Vacation</MudTd>
         <MudTd DataLabel="Date">@context.Expenses.Date</MudTd>
         <MudTd id ="total" DataLabel="Total">@context.MonthlyExpenses</MudTd>
+        <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="() => DeleteExpensesItem(context.Expenses.Id)"></MudIconButton>
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
@@ -330,21 +349,67 @@
     private bool blockSwitch = false;
     private string searchString = "";
     private MonthModel selectedItem = null;
+    private YearModel _inputYear = null;
     private HashSet<MonthModel> selectedItems1 = new HashSet<MonthModel>();
     private TableApplyButtonPosition applyButtonPosition = TableApplyButtonPosition.Start;
     private TableEditButtonPosition editButtonPosition = TableEditButtonPosition.Start;
     private TableEditTrigger editTrigger = TableEditTrigger.EditButton;
-    private IEnumerable<MonthModel> Data = new List<MonthModel>();
+    private IEnumerable<MonthModel> ExpensesData = new List<MonthModel>();
+    private IEnumerable<MonthModel> SavingsData = new List<MonthModel>();
+    private IEnumerable<MonthModel> IncomeData = new List<MonthModel>();
+    private IEnumerable<YearModel> YearsData = new List<YearModel>();
+    public int selectedYearId;
 
     protected override async Task OnInitializedAsync()
     {
-        Data = await apiClient.GetMonthsAsync();
+        ExpensesData = await apiClient.GetExpensesByMonthAsync();
+        SavingsData = await apiClient.GetSavingByMonthAsync();
+        IncomeData = await apiClient.GetIncomeByMonthAsync();
+        YearsData = await apiClient.GetYears();
     }
 
-    public async Task GetDataAsync()
+    public async Task GetExpensesDataAsync()
     {
-        Data = await apiClient.GetMonthsAsync();
+        ExpensesData = await apiClient.GetExpensesByMonthAsync();
         StateHasChanged();
+    }
+    public async Task GetSavingsDataAsync()
+    {
+        SavingsData = await apiClient.GetSavingByMonthAsync();
+        StateHasChanged();
+    }
+    public async Task GetIncomeDataAsync()
+    {
+        IncomeData = await apiClient.GetIncomeByMonthAsync();
+        StateHasChanged();
+    }
+    public async Task GetIncomeByYearId(int yearId)
+    {
+        IncomeData = await apiClient.GetIncomeByYearId(yearId);
+        StateHasChanged(); 
+    }
+@* 
+    public async Task PostIncome()
+    {
+        var monthModel = new MonthModel { Name = _selectedMonth };
+        await apiClient.PostIncomeByYearIdAsync(monthModel, selectedYearId);
+        GetIncomeByYearId(selectedYearId);
+    } *@
+
+    public async Task DeleteIncomeItem(int id)
+    {
+        await apiClient.DeleteIncomeAsync(id);
+        GetIncomeDataAsync(); 
+    }
+    public async Task DeleteSavingsItem(int id)
+    {
+        await apiClient.DeleteSavingsAsync(id);
+        GetSavingsDataAsync(); 
+    }
+    public async Task DeleteExpensesItem(int id)
+    {
+        await apiClient.DeleteExpensesAsync(id);
+        GetExpensesDataAsync(); 
     }
 
     private void ClearEventLog()
@@ -358,24 +423,40 @@
         StateHasChanged();
     }
 
+    //Methods update income, savings and expenses//
+
     private async void SavingsCommited(object item)
     {
-        await apiClient.AddSavingsAsync(selectedItem.Savings);
-        GetDataAsync();
+        await apiClient.UpdateSavingsAsync(selectedItem.Savings);
+        GetSavingsDataAsync();
         AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)item).Name} committed");
     }
     private async void IncomeCommited(object item)
     {
-        await apiClient.AddIncomeAsync(selectedItem.Income);
-        GetDataAsync();
+        await apiClient.UpdateIncomeAsync(selectedItem.Income);
+        GetIncomeDataAsync();
         AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)item).Name} committed");
     }
     private async void ExpensesCommited(object item)
     {
-        await apiClient.AddExpensesAsync(selectedItem.Expenses);
-        GetDataAsync();
+        await apiClient.UpdateExpensesAsync(selectedItem.Expenses);
+        GetExpensesDataAsync();
         AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)item).Name} committed");
     }
+
+    private void OpenDialog()
+    {    
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        DialogService.Show<DialogKeyboardNavigation>("Add New Year", closeOnEscapeKey);
+    }
+    
+   //Method for button selector//
+    public void SetSelected(YearModel selectedYear)
+    {
+        selectedYearId = selectedYear.Id;
+        GetIncomeByYearId(selectedYearId);
+    }
+
     private bool FilterSavings(MonthModel savings)
     {
         if (string.IsNullOrWhiteSpace(searchString))
@@ -396,7 +477,7 @@
             return true;
         if ($"{savings.Name} {savings.MonthlySavings.ToString()} {savings.Savings.EmergencyFund.ToString()} {savings.Savings.Vacation.ToString()} {savings.Savings.HealthNeeds.ToString()} {savings.Savings.Vacation.ToString()}".Contains(searchString))
             return true;
-        return false;
+        return false; 
     }
 
     private bool FilterIncome(MonthModel income)
@@ -420,7 +501,7 @@
         return false;
     }
 
-        private bool FilterExpenses(MonthModel expenses)
+    private bool FilterExpenses(MonthModel expenses)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
@@ -432,17 +513,17 @@
             return true;
         if (expenses.Expenses.Housing.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-            if (expenses.Expenses.Insuranses.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (expenses.Expenses.Insuranses.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-            if (expenses.Expenses.Media.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (expenses.Expenses.Media.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-            if (expenses.Expenses.Medicine.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (expenses.Expenses.Medicine.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-            if (expenses.Expenses.Transportation.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (expenses.Expenses.Transportation.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-            if (expenses.Expenses.Utilities.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (expenses.Expenses.Utilities.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-             if (expenses.Expenses.Vacation.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (expenses.Expenses.Vacation.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (expenses.Expenses.Date.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
@@ -452,6 +533,7 @@
             return true;
         return false;
     }
+
 }
 
 
