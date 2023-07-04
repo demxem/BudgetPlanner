@@ -267,9 +267,9 @@ namespace Client.Services
         {
             await httpClient.PostAsJsonAsync($"/years/months/income/", income);
         }
-        public async Task PostIncomeByYearIdAsync(MonthModel month, int id)
+        public async Task PostIncomeByYearIdAsync(MonthModel month)
         {
-            await httpClient.PostAsJsonAsync($"/years/months/income/{id}", month);
+            await httpClient.PostAsJsonAsync($"/years/months/incomeByYearId", month);
         }
 
         public async Task PostYearAsync(YearModel year)

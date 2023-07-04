@@ -3,6 +3,7 @@
 @inject Client.Services.ApiClient apiClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
+@inject NavigationManager UriHelper
 
 
 <style>
@@ -20,9 +21,9 @@
 <MudTabs Elevation="1" Rounded="true" PanelClass="pa-6">
     <MudTabPanel Text="Income" ToolTip="Plan Your Income">
     <MudText>
-    <MudButton @onclick="OpenDialog" ToolTip="Add Year to your budget plan" Variant="Variant.Filled" Color="Color.Primary">
-        Add Year 
-    </MudButton>
+<MudButton @onclick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">
+    Add Income
+</MudButton>
        <MudSelect T="YearModel" HelperText="Year" @Value="@_inputYear" ValueChanged="year => SetSelected(year)" AnchorOrigin="Origin.BottomCenter">
             @foreach (var year in YearsData)
             {
@@ -60,9 +61,6 @@
 
     </ColGroup>
     <HeaderContent>
-        <MudTh>
-            <MudIconButton Icon="@Icons.Material.Outlined.Add" />
-        </MudTh>
         <MudTh>
             <MudTableSortLabel SortBy="new Func<MonthModel, object>(x=>x.Name)">Month</MudTableSortLabel>
         </MudTh>
@@ -360,6 +358,7 @@
     private IEnumerable<YearModel> YearsData = new List<YearModel>();
     public int selectedYearId;
 
+
     protected override async Task OnInitializedAsync()
     {
         ExpensesData = await apiClient.GetExpensesByMonthAsync();
@@ -388,13 +387,13 @@
         IncomeData = await apiClient.GetIncomeByYearId(yearId);
         StateHasChanged(); 
     }
-@* 
-    public async Task PostIncome()
+
+    public async Task PostIncomeByYearId(string monthName)
     {
-        var monthModel = new MonthModel { Name = _selectedMonth };
-        await apiClient.PostIncomeByYearIdAsync(monthModel, selectedYearId);
+        var monthModel = new MonthModel { Name = monthName, YearId = selectedYearId };
+        await apiClient.PostIncomeByYearIdAsync(monthModel);
         GetIncomeByYearId(selectedYearId);
-    } *@
+    } 
 
     public async Task DeleteIncomeItem(int id)
     {
@@ -424,7 +423,6 @@
     }
 
     //Methods update income, savings and expenses//
-
     private async void SavingsCommited(object item)
     {
         await apiClient.UpdateSavingsAsync(selectedItem.Savings);
@@ -447,9 +445,14 @@
     private void OpenDialog()
     {    
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        DialogService.Show<DialogKeyboardNavigation>("Add New Year", closeOnEscapeKey);
+        DialogService.Show<DialogKeyboardNavigation>("Add Income", closeOnEscapeKey);
     }
-    
+    private void OnClick(MouseEventArgs args)
+    {
+        Snackbar.Add("Month Added");
+        PostIncomeByYearId("January");
+    }
+
    //Method for button selector//
     public void SetSelected(YearModel selectedYear)
     {

@@ -3,7 +3,13 @@
 
 <MudDialog>
     <DialogContent>
-        <MudTextField T="string" Label="Year" @bind-Value="@_inputYear"></MudTextField>
+        <MudSelect T="YearModel" Label="Select Year" @Value="@_selectedYear" ValueChanged="(year => SetSelected(year))"
+            AnchorOrigin="Origin.BottomCenter">
+            @foreach (var year in YearsData)
+            {
+                <MudSelectItem Value="@year">@year.Name</MudSelectItem>
+            }
+        </MudSelect>
         <MudSelect T="string" Label="Months" @bind-Value="@_selectedMonth" AnchorOrigin="Origin.BottomCenter">
             <MudSelectItem Value="@("January")" />
             <MudSelectItem Value="@("February")" />
@@ -28,26 +34,37 @@
 @code {
 
     private string _selectedMonth = "";
+    private YearModel _selectedYear;
     private string _inputYear = "";
+    private int yearId;
+
+    public IList<YearModel> YearsData = new List<YearModel>();
+    public IList<MonthModel> IncomeData = new List<MonthModel>();
 
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-
-    public async Task AddYear()
+    protected override async void OnInitialized()
     {
-        YearModel yearModel = new YearModel { Name = _inputYear };
-        await apiClient.PostYearAsync(yearModel);
+        YearsData = await apiClient.GetYearsAsync();
     }
-    public async Task AddMonth()
+    public async Task GetIncomeByMonthAsync()
     {
-        MonthModel monthModel = new MonthModel { Name = _selectedMonth };
-        await apiClient.PostMonthAsync(monthModel);
+        await apiClient.GetIncomeByMonthAsync();
+    }
+    public async Task AddIncomeByYearId()
+    {
+        MonthModel month = new MonthModel { Name = _selectedMonth, YearId = yearId };
+        await apiClient.PostIncomeByYearIdAsync(month);
+    }
+
+    public void SetSelected(YearModel year)
+    {
+        yearId = year.Id;
     }
 
     void Submit()
     {
-        AddYear();
-        AddMonth();
+        AddIncomeByYearId();
         MudDialog.Close(DialogResult.Ok(true));
     }
     void Cancel() => MudDialog.Cancel();

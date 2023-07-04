@@ -13,7 +13,7 @@ public interface IMonth
     Task<IEnumerable<MonthModel>> GetExpensesByMonth();
     Task DeleteMonthById(int id);
     Task InsertMonth(MonthModel month);
-    Task InsertIncomeByYearId(MonthModel month, int yearId);
+    Task InsertIncomeByYearId(MonthModel month);
     Task<IEnumerable<MonthModel?>> GetIncomeByYearId(int id);
 }
 

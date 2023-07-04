@@ -60,7 +60,7 @@ public class Income : IIncome
 
                        update months
                         set incomeid = 0
-                        where id = @id;";
+                        where incomeid = @id;";
 
         await _dataAccess.SafeData(sql, new { id = id });
     }
