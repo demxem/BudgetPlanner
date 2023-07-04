@@ -66,13 +66,13 @@ public class Month : IMonth
         }
     }
 
-    public async Task InsertIncomeByYearId(MonthModel month, int yearId)
+    public async Task InsertIncomeByYearId(MonthModel month)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
             string sql = @"With insert As (
                             insert into months(id, name, yearid)
-                            values((select max(id) + 1 from months), @Name, @yearId)
+                            values((select max(id) + 1 from months), @Name, @YearId)
                             )
                             insert into income (id, monthid)
                             values ((select max(id) + 1 from income), (select max(id) from months)
@@ -81,7 +81,7 @@ public class Month : IMonth
                             set incomeid = (select max(id) from income)
                             where id = (select max(id) from months);";
 
-            await connection.ExecuteAsync(sql, new { month.Id, month.Name, month.YearId });
+            await connection.ExecuteAsync(sql, new { month.Name, month.YearId });
         }
     }
 
