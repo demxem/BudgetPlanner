@@ -8,5 +8,5 @@ public interface IIncome
     Task<IEnumerable<IncomeModel>> GetIncome();
     Task<IncomeModel?> GetIncomeById(int id);
     Task InsertIncome(IncomeModel income);
-    Task UpdateIncomeById(IncomeModel income);
+    Task UpdateIncome(IncomeModel income);
 }

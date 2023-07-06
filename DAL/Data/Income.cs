@@ -14,7 +14,7 @@ public class Income : IIncome
 
     public Task<IEnumerable<IncomeModel>> GetIncome()
     {
-        string sql = @"select id, employment, sidehustle, dividends, date, monthid
+        string sql = @"select id, employment, sidehustle, dividends, date, monthid, yearid
                        from income
                        order by id;";
 
@@ -32,13 +32,14 @@ public class Income : IIncome
 
     public Task InsertIncome(IncomeModel income)
     {
-        string sql = @"insert into income (employment, sidehustle, dividends, date, monthid)
-                           values (@Employment, @SideHustle, @Dividends, @Date, (select id from months where id = (select max(id) from months)));";
+        income.Date = DateTime.Now;
+        string sql = @"insert into income (id, employment, sidehustle, dividends, monthid, yearid)
+                           values ((select max(id) + 1 from income), @Employment, @SideHustle, @Dividends, @MonthId, @YearId);";
 
-        return _dataAccess.SafeData(sql, new { income.Employment, income.SideHustle, income.Dividends, Date = DateTime.Now, income.MonthId });
+        return _dataAccess.SafeData(sql, new { income.Id, income.Employment, income.SideHustle, income.Dividends, income.MonthId, income.YearId });
     }
 
-    public async Task UpdateIncomeById(IncomeModel income)
+    public async Task UpdateIncome(IncomeModel income)
     {
         income.Date = DateTime.Now;
 
@@ -57,10 +58,9 @@ public class Income : IIncome
         string sql = @"delete 
                        from income
                        where id = @id;
-
-                       update months
-                        set incomeid = 0
-                        where incomeid = @id;";
+                    update months
+                    set incomeid = 0
+                    where incomeid = @id;";
 
         await _dataAccess.SafeData(sql, new { id = id });
     }

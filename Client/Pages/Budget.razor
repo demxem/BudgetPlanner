@@ -363,7 +363,7 @@
     {
         ExpensesData = await apiClient.GetExpensesByMonthAsync();
         SavingsData = await apiClient.GetSavingByMonthAsync();
-        IncomeData = await apiClient.GetIncomeByMonthAsync();
+        IncomeData = await apiClient.GetIncomeData();
         YearsData = await apiClient.GetYears();
     }
 
@@ -379,7 +379,7 @@
     }
     public async Task GetIncomeDataAsync()
     {
-        IncomeData = await apiClient.GetIncomeByMonthAsync();
+        IncomeData = await apiClient.GetIncomeData();
         StateHasChanged();
     }
     public async Task GetIncomeByYearId(int yearId)
@@ -445,7 +445,7 @@
     private void OpenDialog()
     {    
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        DialogService.Show<DialogKeyboardNavigation>("Add Income", closeOnEscapeKey);
+        DialogService.Show<IncomeSubmit>("Add Income", closeOnEscapeKey);
     }
     private void OnClick(MouseEventArgs args)
     {

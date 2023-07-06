@@ -15,5 +15,6 @@ public interface IMonth
     Task InsertMonth(MonthModel month);
     Task InsertIncomeByYearId(MonthModel month);
     Task<IEnumerable<MonthModel?>> GetIncomeByYearId(int id);
+    Task UpdateMonth(MonthModel month);
 }
 

@@ -17,6 +17,7 @@ namespace Api.Modules
             endpoints.MapGet("/years/months/{id}", GetMonthById);
             endpoints.MapGet("/years/months", GetMonths);
             endpoints.MapPost("/years/months", InsertMonth);
+            endpoints.MapPut("/years/months/{id}", UpdateMonth);
             endpoints.MapPost("/years/months/incomeByYearId/", InsertIncomeByYearId);
             endpoints.MapDelete("/years/months/{id}", DeleteMonthById);
         }
@@ -133,6 +134,18 @@ namespace Api.Modules
             try
             {
                 await data.InsertIncomeByYearId(monthModel);
+                return Results.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        }
+        private static async Task<IResult> UpdateMonth(IMonth data, MonthModel monthModel)
+        {
+            try
+            {
+                await data.UpdateMonth(monthModel);
                 return Results.Ok();
             }
             catch (Exception ex)

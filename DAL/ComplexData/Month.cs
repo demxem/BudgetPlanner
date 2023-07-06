@@ -85,7 +85,6 @@ public class Month : IMonth
         }
     }
 
-
     public async Task<IEnumerable<MonthModel>> GetExpensesByMonth()
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
@@ -188,9 +187,24 @@ public class Month : IMonth
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
             string sql = @"insert into months(id, name, yearid)
-                            values((select max(id) + 1 from months), @Name, (select max(id) from years));";
+                            values((select max(id) + 1 from months), @Name, @YearId);";
 
             await connection.ExecuteAsync(sql, new { month.Id, month.Name, month.YearId });
+        }
+    }
+    public async Task UpdateMonth(MonthModel month)
+    {
+        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
+        {
+            string sql = @"update months
+                            set name = @Name,
+                                yearid = @YearId,
+                                incomeid = @IncomeId,
+                                savingsId = @SavingsId,
+                                expensesId = @ExpensesId
+                            where id = @Id;";
+
+            await connection.ExecuteAsync(sql, month);
         }
     }
 

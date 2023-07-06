@@ -79,7 +79,7 @@ namespace Client.Services
         {
             try
             {
-                var response = await httpClient.GetAsync("/years/months/income");
+                var response = await httpClient.GetAsync("/income");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -155,7 +155,7 @@ namespace Client.Services
             }
             return new List<MonthModel>();
         }
-        public async Task<List<MonthModel>?> GetIncomeByMonthAsync()
+        public async Task<List<MonthModel>?> GetIncomeData()
         {
             try
             {
@@ -248,6 +248,10 @@ namespace Client.Services
         public async Task UpdateExpensesAsync(ExpensesModel item)
         {
             await httpClient.PutAsJsonAsync($"/years/months/expenses/{item.Id}", item);
+        }
+        public async Task UpdateMonthAsync(MonthModel month)
+        {
+            await httpClient.PutAsJsonAsync($"/years/months/{month.Id}", month);
         }
 
         public async Task DeleteIncomeAsync(int Id)

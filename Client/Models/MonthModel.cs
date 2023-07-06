@@ -3,6 +3,9 @@ namespace Client.Models;
 public class MonthModel
 {
     public int Id { get; set; }
+    public int IncomeId { get; set; }
+    public int SavingsId { get; set; }
+    public int ExpensesId { get; set; }
     public string? Name { get; set; }
     public float MonthlyIncome { get; set; }
     public float MonthlySavings { get; set; }

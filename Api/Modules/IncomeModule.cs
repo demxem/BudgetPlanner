@@ -8,7 +8,7 @@ public static class IncomeModule
     public static void RegisterIncomeEndpoints(this IEndpointRouteBuilder endpoints)
     {
         //endpoints
-        // endpoints.MapGet("/years/months/income", GetIncome);
+        endpoints.MapGet("/income", GetIncome);
         // endpoints.MapGet("/years/months/income/{id}", GetIncomeById);
         endpoints.MapPost("/years/months/income/", InsertIncome);
         endpoints.MapPut("/years/months/income/{id}", UpdateIncome);
@@ -58,7 +58,7 @@ public static class IncomeModule
     {
         try
         {
-            await data.UpdateIncomeById(income);
+            await data.UpdateIncome(income);
             return Results.Ok();
         }
         catch (Exception ex)
