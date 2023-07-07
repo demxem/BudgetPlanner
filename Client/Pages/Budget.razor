@@ -17,22 +17,24 @@
     }
 
 </style>
-
+        <header>
+            <p>
+                <MudButton @onclick="OpenSubmitYearDialog" Variant="Variant.Filled" Color="Color.Primary">Add Year</MudButton>
+            </p>
+        </header>
+<body>
 <MudTabs Elevation="1" Rounded="true" PanelClass="pa-6">
     <MudTabPanel Text="Income" ToolTip="Plan Your Income">
     <MudText>
-<MudButton @onclick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">
-    Add Income
-</MudButton>
-       <MudSelect T="YearModel" HelperText="Year" @Value="@_inputYear" ValueChanged="year => SetSelected(year)" AnchorOrigin="Origin.BottomCenter">
-            @foreach (var year in YearsData)
+       <MudSelect T="YearModel" Label="Select Year" @Value="@_inputYear" ValueChanged="year => SetSelected(year)" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var year in Years)
             {
                 <MudSelectItem Value="@year">@year.Name</MudSelectItem>
             }
         </MudSelect>
-    <MudTable Items="@IncomeData" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
+    <MudTable Items="@Income" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
         Filter="new Func<MonthModel ,bool>(FilterIncome)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
-        CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
+        CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Changes Are Commited To Your Budget"))"
         RowEditCommit="IncomeCommited" 
         IsEditRowSwitchingBlocked="@blockSwitch" ApplyButtonPosition="@applyButtonPosition"
         EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
@@ -58,7 +60,6 @@
                     {
                 <col style="width:50px;" />
                     }
-
     </ColGroup>
     <HeaderContent>
         <MudTh>
@@ -89,7 +90,7 @@
         <MudTd DataLabel="RetirementAccount">@context.Income.Dividends</MudTd>
         <MudTd DataLabel="Date">@context.Income.Date</MudTd>
         <MudTd id ="total" DataLabel="Total">@context.MonthlyIncome</MudTd>
-        <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="() => DeleteIncomeItem(context.Income.Id)"></MudIconButton>
+        <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="() => DeleteIncomeAsync(context.Income.Id)"></MudIconButton>
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
@@ -112,12 +113,16 @@
       </EditButtonContent>
   </MudTable>
          </MudText>
+        <div class="inline-block">
+            <MudButton @onclick="OpenSubmitIncomeDialog" Variant="Variant.Filled" Color="Color.Primary">Add Income</MudButton>
+            <MudButton @onclick="OpenDeleteYearDialog" Variant="Variant.Filled" Color="Color.Error">Delete Year</MudButton>
+        </div>
      </MudTabPanel>
      <MudTabPanel Text="Savings" ToolTip="Plan Your Savings">
         <MudText>
-        <MudTable Items="@SavingsData" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
+        <MudTable Items="@Savings" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
             Filter="new Func<MonthModel ,bool>(FilterSavings)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
-            CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
+            CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Changes Are Commited To Your Budget"))"
             RowEditCommit="SavingsCommited" 
             IsEditRowSwitchingBlocked="@blockSwitch" ApplyButtonPosition="@applyButtonPosition"
             EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
@@ -178,7 +183,7 @@
         <MudTd DataLabel="Vacation">@context.Savings.Vacation</MudTd>
         <MudTd DataLabel="Date">@context.Savings.Date</MudTd>
         <MudTd id ="total" DataLabel="Total">@context.MonthlySavings</MudTd>
-        <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="() => DeleteSavingsItem(context.Savings.Id)"></MudIconButton>
+        <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="() => DeleteSavingsAsync(context.Savings.Id)"></MudIconButton>
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
@@ -204,12 +209,19 @@
       </EditButtonContent>
   </MudTable>
          </MudText>
+         
      </MudTabPanel>
      <MudTabPanel Text="Expenses" ToolTip="Plan Your Expenses">
          <MudText>
-    <MudTable Items="@ExpensesData" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
+            <MudSelect T="YearModel" Label="Select Year" @Value="@_inputYear" ValueChanged="year => SetSelected(year)" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var year in Years)
+            {
+                <MudSelectItem Value="@year">@year.Name</MudSelectItem>
+            }
+        </MudSelect>
+    <MudTable Items="@Expenses" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
             Filter="new Func<MonthModel ,bool>(FilterExpenses)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
-            CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
+            CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Changes Are Commited To Your Budget"))"
         RowEditCommit="ExpensesCommited" 
         IsEditRowSwitchingBlocked="@blockSwitch" ApplyButtonPosition="@applyButtonPosition"
         EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
@@ -290,7 +302,7 @@
         <MudTd DataLabel="Vacation">@context.Expenses.Vacation</MudTd>
         <MudTd DataLabel="Date">@context.Expenses.Date</MudTd>
         <MudTd id ="total" DataLabel="Total">@context.MonthlyExpenses</MudTd>
-        <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="() => DeleteExpensesItem(context.Expenses.Id)"></MudIconButton>
+        <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="() => DeleteExpensesAsync(context.Expenses.Id)"></MudIconButton>
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
@@ -334,9 +346,13 @@
       </EditButtonContent>
   </MudTable>
          </MudText>
+            <div class="inline-block">
+            <MudButton @onclick="OpenSubmitExpensesDialog" Variant="Variant.Filled" Color="Color.Primary">Add Expenses</MudButton>
+            <MudButton @onclick="OpenDeleteYearDialog" Variant="Variant.Filled" Color="Color.Error">Delete Year</MudButton>
+            </div>
      </MudTabPanel>
  </MudTabs>
-
+</body>
 
  @code {
     private List<string> editEvents = new();
@@ -352,63 +368,61 @@
     private TableApplyButtonPosition applyButtonPosition = TableApplyButtonPosition.Start;
     private TableEditButtonPosition editButtonPosition = TableEditButtonPosition.Start;
     private TableEditTrigger editTrigger = TableEditTrigger.EditButton;
-    private IEnumerable<MonthModel> ExpensesData = new List<MonthModel>();
-    private IEnumerable<MonthModel> SavingsData = new List<MonthModel>();
-    private IEnumerable<MonthModel> IncomeData = new List<MonthModel>();
-    private IEnumerable<YearModel> YearsData = new List<YearModel>();
+    private IEnumerable<MonthModel> Expenses = new List<MonthModel>();
+    private IEnumerable<MonthModel> Savings = new List<MonthModel>();
+    private IEnumerable<MonthModel> Income = new List<MonthModel>();
+    private IEnumerable<YearModel> Years = new List<YearModel>();
     public int selectedYearId;
 
 
     protected override async Task OnInitializedAsync()
     {
-        ExpensesData = await apiClient.GetExpensesByMonthAsync();
-        SavingsData = await apiClient.GetSavingByMonthAsync();
-        IncomeData = await apiClient.GetIncomeData();
-        YearsData = await apiClient.GetYears();
+        Expenses = await apiClient.GetExpensesByEachMonthAsync();
+        Savings = await apiClient.GetSavingByEachMonthAsync();
+        Income = await apiClient.GetIncomeByEachMonthAsync();
+        Years = await apiClient.GetYearsAsync();
     }
 
-    public async Task GetExpensesDataAsync()
+    public async Task GetExpensesAsync()
     {
-        ExpensesData = await apiClient.GetExpensesByMonthAsync();
+        Expenses = await apiClient.GetExpensesByEachMonthAsync();
         StateHasChanged();
     }
-    public async Task GetSavingsDataAsync()
+    public async Task GetSavingsAsync()
     {
-        SavingsData = await apiClient.GetSavingByMonthAsync();
+        Savings = await apiClient.GetSavingByEachMonthAsync();
         StateHasChanged();
     }
-    public async Task GetIncomeDataAsync()
+    public async Task GetIncomeAsync()
     {
-        IncomeData = await apiClient.GetIncomeData();
+        Income = await apiClient.GetIncomeByEachMonthAsync();
         StateHasChanged();
     }
-    public async Task GetIncomeByYearId(int yearId)
+    public async Task GetIncomeByYearIdAsync(int yearId)
     {
-        IncomeData = await apiClient.GetIncomeByYearId(yearId);
+        Income = await apiClient.GetIncomeByYearId(yearId);
+        StateHasChanged(); 
+    }
+    public async Task GetExpensesByYearIdAsync(int yearId)
+    {
+        Expenses = await apiClient.GetExpensesByYearId(yearId);
         StateHasChanged(); 
     }
 
-    public async Task PostIncomeByYearId(string monthName)
+    public async Task DeleteIncomeAsync(int id)
     {
-        var monthModel = new MonthModel { Name = monthName, YearId = selectedYearId };
-        await apiClient.PostIncomeByYearIdAsync(monthModel);
-        GetIncomeByYearId(selectedYearId);
-    } 
-
-    public async Task DeleteIncomeItem(int id)
-    {
-        await apiClient.DeleteIncomeAsync(id);
-        GetIncomeDataAsync(); 
+        await apiClient.DeleteIncomeByIdAsync(id);
+        GetIncomeAsync(); 
     }
-    public async Task DeleteSavingsItem(int id)
+    public async Task DeleteSavingsAsync(int id)
     {
-        await apiClient.DeleteSavingsAsync(id);
-        GetSavingsDataAsync(); 
+        await apiClient.DeleteSavingsByIdAsync(id);
+        GetSavingsAsync(); 
     }
-    public async Task DeleteExpensesItem(int id)
+    public async Task DeleteExpensesAsync(int id)
     {
-        await apiClient.DeleteExpensesAsync(id);
-        GetExpensesDataAsync(); 
+        await apiClient.DeleteExpensesByIdAsync(id);
+        GetExpensesAsync(); 
     }
 
     private void ClearEventLog()
@@ -426,38 +440,50 @@
     private async void SavingsCommited(object item)
     {
         await apiClient.UpdateSavingsAsync(selectedItem.Savings);
-        GetSavingsDataAsync();
+        GetSavingsAsync();
         AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)item).Name} committed");
     }
     private async void IncomeCommited(object item)
     {
         await apiClient.UpdateIncomeAsync(selectedItem.Income);
-        GetIncomeDataAsync();
+        GetIncomeAsync();
         AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)item).Name} committed");
     }
     private async void ExpensesCommited(object item)
     {
         await apiClient.UpdateExpensesAsync(selectedItem.Expenses);
-        GetExpensesDataAsync();
+        GetExpensesAsync();
         AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)item).Name} committed");
     }
 
-    private void OpenDialog()
+    private void OpenSubmitIncomeDialog()
     {    
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        DialogService.Show<IncomeSubmit>("Add Income", closeOnEscapeKey);
+        DialogService.Show<IncomeSubmitForm>("Add Income", closeOnEscapeKey);
     }
-    private void OnClick(MouseEventArgs args)
-    {
-        Snackbar.Add("Month Added");
-        PostIncomeByYearId("January");
+    private void OpenSubmitExpensesDialog()
+    {    
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        DialogService.Show<ExpensesSubmitForm>("Add Expenses", closeOnEscapeKey);
     }
 
-   //Method for button selector//
+    private void OpenSubmitYearDialog()
+    {    
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        DialogService.Show<YearSubmitForm>("Add Year", closeOnEscapeKey);
+    }
+    private void OpenDeleteYearDialog()
+    {    
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        DialogService.Show<YearDeleteForm>(@"This action will delete complete year budget plan", closeOnEscapeKey);
+    }
+
+    //Method for button selector//
     public void SetSelected(YearModel selectedYear)
     {
         selectedYearId = selectedYear.Id;
-        GetIncomeByYearId(selectedYearId);
+        GetIncomeByYearIdAsync(selectedYearId);
+        GetExpensesByYearIdAsync(selectedYearId);
     }
 
     private bool FilterSavings(MonthModel savings)

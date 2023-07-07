@@ -28,16 +28,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGFzaEJvYXJkLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/DialogNavMonths.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGlhbG9nTmF2TW9udGhzLnJhem9y
+[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/ExpensesSubmitForm.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRXhwZW5zZXNTdWJtaXRGb3JtLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmit.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5jb21lU3VibWl0LnJhem9y
+[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5jb21lU3VibWl0Rm9ybS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/Main.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTWFpbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/YearDeleteForm.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvWWVhckRlbGV0ZUZvcm0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/YearSubmitForm.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvWWVhclN1Ym1pdEZvcm0ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Volumes/Mac/Projects/BudgetPlanner/Client/Shared/MyNavMenu.razor]

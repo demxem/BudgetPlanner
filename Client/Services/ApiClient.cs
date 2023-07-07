@@ -13,26 +13,6 @@ namespace Client.Services
             this.httpClient = httpClient;
         }
 
-        public async Task<List<YearModel?>> GetYears()
-        {
-            try
-            {
-                var response = await httpClient.GetAsync("/years");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var years = await response.Content.ReadFromJsonAsync<List<YearModel>>();
-
-                    return years;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-            return new List<YearModel?>();
-        }
         public async Task<List<MonthModel?>> GetMonthsAsync()
         {
             try
@@ -119,7 +99,7 @@ namespace Client.Services
         {
             try
             {
-                var response = await httpClient.GetAsync("/years/months/expenses");
+                var response = await httpClient.GetAsync("/expenses");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -136,7 +116,7 @@ namespace Client.Services
             return new List<ExpensesModel>();
         }
 
-        public async Task<List<MonthModel>?> GetExpensesByMonthAsync()
+        public async Task<List<MonthModel>?> GetExpensesByEachMonthAsync()
         {
             try
             {
@@ -155,7 +135,7 @@ namespace Client.Services
             }
             return new List<MonthModel>();
         }
-        public async Task<List<MonthModel>?> GetIncomeData()
+        public async Task<List<MonthModel>?> GetIncomeByEachMonthAsync()
         {
             try
             {
@@ -175,7 +155,7 @@ namespace Client.Services
             }
             return new List<MonthModel>();
         }
-        public async Task<List<MonthModel>?> GetSavingByMonthAsync()
+        public async Task<List<MonthModel>?> GetSavingByEachMonthAsync()
         {
             try
             {
@@ -237,6 +217,26 @@ namespace Client.Services
             return new List<MonthModel>();
         }
 
+        public async Task<List<MonthModel>> GetExpensesByYearId(int id)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"/years/months/expenses/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var expenses = await response.Content.ReadFromJsonAsync<List<MonthModel>>();
+
+                    return expenses;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return new List<MonthModel>();
+        }
+
         public async Task UpdateIncomeAsync(IncomeModel item)
         {
             await httpClient.PutAsJsonAsync($"/years/months/income/{item.Id}", item);
@@ -254,22 +254,31 @@ namespace Client.Services
             await httpClient.PutAsJsonAsync($"/years/months/{month.Id}", month);
         }
 
-        public async Task DeleteIncomeAsync(int Id)
+        public async Task DeleteIncomeByIdAsync(int Id)
         {
             await httpClient.DeleteAsync($"/years/months/income/{Id}");
         }
-        public async Task DeleteSavingsAsync(int Id)
+        public async Task DeleteSavingsByIdAsync(int Id)
         {
             await httpClient.DeleteAsync($"/years/months/savings/{Id}");
         }
-        public async Task DeleteExpensesAsync(int Id)
+        public async Task DeleteExpensesByIdAsync(int Id)
         {
             await httpClient.DeleteAsync($"/years/months/expenses/{Id}");
+        }
+
+        public async Task DeleteYearByIdAsync(int id)
+        {
+            await httpClient.DeleteAsync($"/years/{id}");
         }
 
         public async Task PostIncomeAsync(IncomeModel income)
         {
             await httpClient.PostAsJsonAsync($"/years/months/income/", income);
+        }
+        public async Task PostExpensesAsync(ExpensesModel expenses)
+        {
+            await httpClient.PostAsJsonAsync($"/years/months/expenses/", expenses);
         }
         public async Task PostIncomeByYearIdAsync(MonthModel month)
         {

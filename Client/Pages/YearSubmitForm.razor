@@ -1,0 +1,37 @@
+@inject Client.Services.ApiClient apiClient
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField T="string" Label="Name" @bind-Value="@inputName"></MudTextField>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Href="/budget" Color=" Color.Primary" OnClick="@SubmitAsync">Ok
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    private string inputName = "";
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    public async Task PostYearAsync()
+    {
+        YearModel inputYear = new YearModel { Name = inputName };
+        await apiClient.PostYearAsync(inputYear);
+    }
+
+    async Task SubmitAsync()
+    {
+        await PostYearAsync();
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+    void Cancel() => MudDialog.Cancel();
+}
+
+
+
+
+
+
+
+

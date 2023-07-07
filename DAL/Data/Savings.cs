@@ -42,8 +42,8 @@ public class Savings : ISavings
 
     public Task InsertSavings(SavingsModel savings)
     {
-        string sql = @"insert into savings (emergencyfund, retirementaccount, vacation, healthneeds, date, monthid)
-                           values (@EmergencyFund, @RetirementAccount, @Vacation, @HealthNeeds, @Date, (select id from months where id = (select max(id) from months)));";
+        string sql = @"insert into savings (id, emergencyfund, retirementaccount, vacation, healthneeds, date, monthid, yearid)
+                           values ((select max(id) + 1 from savings), @EmergencyFund, @RetirementAccount, @Vacation, @HealthNeeds, @Date, @MonthId, @YearId);";
 
         return _dataAccess.SafeData(sql, new
         {
@@ -52,7 +52,8 @@ public class Savings : ISavings
             savings.Vacation,
             savings.HealthNeeds,
             Date = DateTime.Now,
-            savings.MonthId
+            savings.MonthId,
+            YearId = savings.YearId
         });
     }
 

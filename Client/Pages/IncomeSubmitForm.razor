@@ -1,0 +1,141 @@
+@inject Client.Services.ApiClient apiClient
+@using Client.Models
+
+<MudDialog>
+    <DialogContent>
+        <MudSelect T="YearModel" Label="Select Year" @Value="@_selectedYear" ValueChanged="(year => SetSelected(year))"
+            AnchorOrigin="Origin.BottomCenter">
+            @foreach (var year in Years)
+            {
+                <MudSelectItem Value="@year">@year.Name</MudSelectItem>
+            }
+        </MudSelect>
+        <MudSelect T="string" Label="Months" @bind-Value="@_selectedMonth" AnchorOrigin="Origin.BottomCenter">
+            <MudSelectItem Value="@("January")" />
+            <MudSelectItem Value="@("February")" />
+            <MudSelectItem Value="@("March")" />
+            <MudSelectItem Value="@("April")" />
+            <MudSelectItem Value="@("May")" />
+            <MudSelectItem Value="@("June")" />
+            <MudSelectItem Value="@("July")" />
+            <MudSelectItem Value="@("August")" />
+            <MudSelectItem Value="@("September")" />
+            <MudSelectItem Value="@("October")" />
+            <MudSelectItem Value="@("November")" />
+            <MudSelectItem Value="@("Descember")" />
+        </MudSelect>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick=" Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="SubmitAsync">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    private string _selectedMonth = "";
+    private YearModel? _selectedYear;
+    private string _inputYear = "";
+    private int _selectedYearId;
+    private bool _isPresentYear;
+    private bool _isPresentMonth;
+    private bool _isPersentIncome;
+
+    public IList<YearModel>? Years = new List<YearModel>();
+    public IList<MonthModel>? IncomeByEachMonth = new List<MonthModel>();
+    public IList<IncomeModel>? Income = new List<IncomeModel>();
+    public IList<MonthModel> Months = new List<MonthModel>();
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+
+    protected override async void OnInitialized()
+    {
+        Years = await apiClient.GetYearsAsync();
+        IncomeByEachMonth = await apiClient.GetIncomeByEachMonthAsync();
+        Months = await apiClient.GetMonthsAsync();
+    }
+
+    public async Task GetIncomeByEachMonthAsync()
+    {
+        IncomeByEachMonth = await apiClient.GetIncomeByEachMonthAsync();
+    }
+
+    public async Task GetIncome()
+    {
+        Income = await apiClient.GetIncomeAsync();
+    }
+
+    public async Task GetMonth()
+    {
+        Months = await apiClient.GetMonthsAsync();
+    }
+
+    public async Task AddMonth()
+    {
+        MonthModel monthModel = new MonthModel { Name = _selectedMonth, YearId = _selectedYearId };
+        await apiClient.PostMonthAsync(monthModel);
+    }
+    public async Task AddIncome()
+    {
+        int monthId = Months.Where(m => m.Name == _selectedMonth && m.YearId == _selectedYearId).Select(m =>
+        m.Id).FirstOrDefault();
+
+        IncomeModel incomeModel = new IncomeModel { YearId = _selectedYearId, MonthId = monthId };
+        await apiClient.PostIncomeAsync(incomeModel);
+    }
+
+    public void SetSelected(YearModel year)
+    {
+        _selectedYearId = year.Id;
+    }
+
+    public async Task UpdateMonth()
+    {
+        MonthModel monthModel = Months.Where(m => m.Name == _selectedMonth && m.YearId == _selectedYearId).Select(m =>
+        m).FirstOrDefault();
+
+        int IncomeId = Income.Where(i => i.MonthId == monthModel.Id).Select(i => i.Id).FirstOrDefault();
+        monthModel.IncomeId = IncomeId;
+        await apiClient.UpdateMonthAsync(monthModel);
+    }
+
+    async Task SubmitAsync()
+    {
+        _isPresentYear = IncomeByEachMonth.Where(x => x.YearId == _selectedYearId).Select(x => x.YearId ==
+        _selectedYearId).FirstOrDefault();
+        _isPresentMonth = IncomeByEachMonth!.Where(m => m.YearId == _selectedYearId).Select(m =>
+        m.Name.Equals(_selectedMonth)).FirstOrDefault();
+        _isPersentIncome = IncomeByEachMonth!.Where(i => i.Name.Equals(_selectedMonth) && i.YearId == _selectedYearId).Select(i
+        =>
+        i.IncomeId == 0).FirstOrDefault();
+
+        if ((_isPresentYear && !_isPresentMonth) ||
+        (!_isPresentYear && _isPresentMonth) ||
+        (!_isPresentYear && !_isPresentMonth))
+        {
+            await AddMonth();
+            await GetMonth();
+            await AddIncome();
+            await GetIncome();
+            await UpdateMonth();
+
+        }
+
+        if ((_isPresentYear && _isPresentMonth) && _isPersentIncome)
+        {
+            await AddIncome();
+            await GetIncome();
+            await GetMonth();
+            await UpdateMonth();
+        }
+
+        MudDialog?.Close(DialogResult.Ok(true));
+    }
+    public void Cancel() => MudDialog?.Cancel();
+}
+
+
+
+
+
+
+

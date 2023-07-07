@@ -10,13 +10,13 @@ namespace Api.Modules
         public static void RegisterYearsEndpoints(this IEndpointRouteBuilder endpoints)
         {
             //endpoints
-            endpoints.MapGet("/years/{id}", GetYearById);
-            endpoints.MapPost("/years", InsertYear);
-            endpoints.MapGet("/years", GetYears);
-            endpoints.MapDelete("/years/{id}", DeleteYearById);
+            endpoints.MapGet("/years/{id}", GetYearByIdAsync);
+            endpoints.MapPost("/years", InsertYearAsync);
+            endpoints.MapGet("/years", GetYearsAsync);
+            endpoints.MapDelete("/years/{id}", DeleteYearByIdAsync);
         }
 
-        private static async Task<IResult> GetYears(IYears data)
+        private static async Task<IResult> GetYearsAsync(IYears data)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> GetYearById(IYears data, int id)
+        private static async Task<IResult> GetYearByIdAsync(IYears data, int id)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace Api.Modules
         //         return Results.Problem(ex.Message);
         //     }
         // }
-        private static async Task<IResult> InsertYear(IYears data, YearModel year)
+        private static async Task<IResult> InsertYearAsync(IYears data, YearModel year)
         {
             try
             {
@@ -63,8 +63,7 @@ namespace Api.Modules
                 return Results.Problem(ex.Message);
             }
         }
-
-        private static async Task<IResult> DeleteYearById(IYears Data, int id)
+        private static async Task<IResult> DeleteYearByIdAsync(IYears Data, int id)
         {
             try
             {

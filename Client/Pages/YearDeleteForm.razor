@@ -1,0 +1,72 @@
+@inject Client.Services.ApiClient apiClient
+@using Client.Models
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <DialogContent>
+        <MudSelect T="YearModel" Label="Select Year" @Value="@_selectedYear"
+            ValueChanged="(year => BindSelectedYear(year))" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var year in Years)
+            {
+                <MudSelectItem Value="@year">@year.Name</MudSelectItem>
+            }
+        </MudSelect>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick=" Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="SubmitAsync">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    private int _selectedYearId;
+    private YearModel? _selectedYear;
+    public IList<YearModel>? Years = new List<YearModel>();
+    public IList<MonthModel>? Income = new List<MonthModel>();
+    public IList<MonthModel>? Expenses = new List<MonthModel>();
+
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Years = await apiClient.GetYearsAsync();
+    }
+    public async Task GetYearsAsync()
+    {
+        Income = await apiClient.GetIncomeByYearId(_selectedYearId);
+        Expenses = await apiClient.GetExpensesByYearId(_selectedYearId);
+    }
+
+    public void BindSelectedYear(YearModel year)
+    {
+        _selectedYearId = year.Id;
+    }
+
+    public async Task DeleteYear()
+    {
+        await apiClient.DeleteYearByIdAsync(_selectedYearId);
+        StateHasChanged();
+        await GetYearsAsync();
+    }
+
+    async Task SubmitAsync()
+    {
+        await DeleteYear();
+        Snackbar.Add("Year Deleted", Severity.Success);
+        MudDialog?.Close(DialogResult.Ok(true));
+    }
+    public void Cancel()
+    {
+        Snackbar.Add("Delete Canceled", Severity.Warning);
+        MudDialog?.Cancel();
+    }
+
+}
+
+
+
+
+
+
+

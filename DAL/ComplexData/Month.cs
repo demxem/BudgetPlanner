@@ -106,6 +106,7 @@ public class Month : IMonth
             return result;
         }
     }
+
     public async Task<IEnumerable<MonthModel?>> GetIncomeByYearId(int id)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
@@ -122,6 +123,28 @@ public class Month : IMonth
                 month.Income = income;
                 return month;
             }, new { YearId = id });
+
+            return result;
+        }
+    }
+    public async Task<IEnumerable<MonthModel?>> GetExpensesByYearId(int id)
+    {
+        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
+        {
+            string sql = @"select m.*, sum (e.housing + e.groceries + e.utilities + e.vacation 
+                                        + e.transportation + e.medicine + e.clothing + e.media 
+                                        + e.insuranses) as monthlyExpenses, e.* 
+                            from months as m
+                            join expenses as e on m.expensesid = e.id
+                            where m.yearid = @YearId
+                            group by m.id, e.id
+                            order by m.id;";
+
+            var result = await connection.QueryAsync<MonthModel, ExpensesModel, MonthModel>(sql, (month, expenses) =>
+                    {
+                        month.Expenses = expenses;
+                        return month;
+                    }, new { YearId = id });
 
             return result;
         }

@@ -81,7 +81,7 @@ public class Years : IYears
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
             string sql = @"insert into years (id, name)
-                            values ((select max(id) + 1 from years, @Name);";
+                            values ((select max(id) + 1 from years), @Name);";
 
             await connection.ExecuteAsync(sql, new { year.Name });
         }
@@ -91,8 +91,25 @@ public class Years : IYears
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            string sql = @"delete from years
-                            where id = @Id;";
+            string sql = @"with MonthsToDelete as (
+                            delete from months
+	                        where yearid = @id
+                            ),
+                            IncomeDeleted as (
+                                delete from Income
+                            where yearId = @id
+                            ),
+                            SavingsDeleted as (
+                                delete from Savings
+                            where yearId = @id
+
+                            ),
+                            ExpensesDeleted as (
+                                delete from Expenses
+                            where yearId = @id
+                            )
+                            delete from years
+                            where id = @id;";
 
             await connection.ExecuteAsync(sql, new { Id = id });
         }

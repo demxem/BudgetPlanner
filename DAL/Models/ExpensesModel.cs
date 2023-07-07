@@ -21,5 +21,6 @@ public class ExpensesModel
     public float Insuranses { get; set; }
     public DateTime Date { get; set; }
     public int MonthId { get; set; }
+    public int YearId { get; set; }
 }
 
