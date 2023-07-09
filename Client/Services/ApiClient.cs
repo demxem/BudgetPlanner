@@ -79,7 +79,7 @@ namespace Client.Services
         {
             try
             {
-                var response = await httpClient.GetAsync("/years/months/savings");
+                var response = await httpClient.GetAsync("/savings");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -237,6 +237,26 @@ namespace Client.Services
             return new List<MonthModel>();
         }
 
+        public async Task<List<MonthModel>> GetSavingsByYearId(int id)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"/years/months/savings/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var savings = await response.Content.ReadFromJsonAsync<List<MonthModel>>();
+
+                    return savings;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return new List<MonthModel>();
+        }
+
         public async Task UpdateIncomeAsync(IncomeModel item)
         {
             await httpClient.PutAsJsonAsync($"/years/months/income/{item.Id}", item);
@@ -279,6 +299,10 @@ namespace Client.Services
         public async Task PostExpensesAsync(ExpensesModel expenses)
         {
             await httpClient.PostAsJsonAsync($"/years/months/expenses/", expenses);
+        }
+        public async Task PostSavingsAsync(SavingsModel savings)
+        {
+            await httpClient.PostAsJsonAsync($"/years/months/savings/", savings);
         }
         public async Task PostIncomeByYearIdAsync(MonthModel month)
         {

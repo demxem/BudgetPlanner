@@ -19,7 +19,10 @@
 </style>
         <header>
             <p>
+            <div class="incline-block">
                 <MudButton @onclick="OpenSubmitYearDialog" Variant="Variant.Filled" Color="Color.Primary">Add Year</MudButton>
+                <MudButton @onclick="OpenDeleteYearDialog" Variant="Variant.Filled" Color="Color.Error">Delete Year</MudButton>
+            </div>
             </p>
         </header>
 <body>
@@ -115,11 +118,16 @@
          </MudText>
         <div class="inline-block">
             <MudButton @onclick="OpenSubmitIncomeDialog" Variant="Variant.Filled" Color="Color.Primary">Add Income</MudButton>
-            <MudButton @onclick="OpenDeleteYearDialog" Variant="Variant.Filled" Color="Color.Error">Delete Year</MudButton>
         </div>
      </MudTabPanel>
      <MudTabPanel Text="Savings" ToolTip="Plan Your Savings">
         <MudText>
+        <MudSelect T="YearModel" Label="Select Year" @Value="@_inputYear" ValueChanged="year => SetSelected(year)" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var year in Years)
+            {
+                <MudSelectItem Value="@year">@year.Name</MudSelectItem>
+            }
+        </MudSelect>
         <MudTable Items="@Savings" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
             Filter="new Func<MonthModel ,bool>(FilterSavings)" @bind-SelectedItem="selectedItem" SortLabel="Sort By"
             CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Changes Are Commited To Your Budget"))"
@@ -209,7 +217,9 @@
       </EditButtonContent>
   </MudTable>
          </MudText>
-         
+         <div class="inline-block">
+            <MudButton @onclick="OpenSubmitSavingsDialog" Variant="Variant.Filled" Color="Color.Primary">Add Savings</MudButton>
+        </div>
      </MudTabPanel>
      <MudTabPanel Text="Expenses" ToolTip="Plan Your Expenses">
          <MudText>
@@ -348,7 +358,6 @@
          </MudText>
             <div class="inline-block">
             <MudButton @onclick="OpenSubmitExpensesDialog" Variant="Variant.Filled" Color="Color.Primary">Add Expenses</MudButton>
-            <MudButton @onclick="OpenDeleteYearDialog" Variant="Variant.Filled" Color="Color.Error">Delete Year</MudButton>
             </div>
      </MudTabPanel>
  </MudTabs>
@@ -406,6 +415,11 @@
     public async Task GetExpensesByYearIdAsync(int yearId)
     {
         Expenses = await apiClient.GetExpensesByYearId(yearId);
+        StateHasChanged(); 
+    }
+    public async Task GetSavingsByYearIdAsync(int yearId)
+    {
+        Savings = await apiClient.GetSavingsByYearId(yearId);
         StateHasChanged(); 
     }
 
@@ -466,6 +480,11 @@
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
         DialogService.Show<ExpensesSubmitForm>("Add Expenses", closeOnEscapeKey);
     }
+    private void OpenSubmitSavingsDialog()
+    {    
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        DialogService.Show<SavingsSubmitForm>("Add Savings", closeOnEscapeKey);
+    }
 
     private void OpenSubmitYearDialog()
     {    
@@ -484,6 +503,7 @@
         selectedYearId = selectedYear.Id;
         GetIncomeByYearIdAsync(selectedYearId);
         GetExpensesByYearIdAsync(selectedYearId);
+        GetSavingsByYearIdAsync(selectedYearId);
     }
 
     private bool FilterSavings(MonthModel savings)

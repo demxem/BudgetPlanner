@@ -19,7 +19,8 @@ public class Savings : ISavings
                               retirementaccount, 
                               vacation,
                               healthneeds,
-                              monthid 
+                              monthid,
+                              yearid
                     from savings;";
 
         return _dataAccess.LoadData<SavingsModel, dynamic>(sql, new { });
@@ -53,7 +54,7 @@ public class Savings : ISavings
             savings.HealthNeeds,
             Date = DateTime.Now,
             savings.MonthId,
-            YearId = savings.YearId
+            savings.YearId
         });
     }
 

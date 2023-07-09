@@ -1,0 +1,141 @@
+@inject Client.Services.ApiClient apiClient
+@using Client.Models
+
+<MudDialog>
+    <DialogContent>
+        <MudSelect T="YearModel" Label="Select Year" @Value="@_selectedYear" ValueChanged="(year => SetSelected(year))"
+            AnchorOrigin="Origin.BottomCenter">
+            @foreach (var year in Years)
+            {
+                <MudSelectItem Value="@year">@year.Name</MudSelectItem>
+            }
+        </MudSelect>
+        <MudSelect T="string" Label="Months" @bind-Value="@_selectedMonth" AnchorOrigin="Origin.BottomCenter">
+            <MudSelectItem Value="@("January")" />
+            <MudSelectItem Value="@("February")" />
+            <MudSelectItem Value="@("March")" />
+            <MudSelectItem Value="@("April")" />
+            <MudSelectItem Value="@("May")" />
+            <MudSelectItem Value="@("June")" />
+            <MudSelectItem Value="@("July")" />
+            <MudSelectItem Value="@("August")" />
+            <MudSelectItem Value="@("September")" />
+            <MudSelectItem Value="@("October")" />
+            <MudSelectItem Value="@("November")" />
+            <MudSelectItem Value="@("Descember")" />
+        </MudSelect>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick=" Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="SubmitAsync">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    private string _selectedMonth = "";
+    private YearModel? _selectedYear;
+    private string _inputYear = "";
+    private int _selectedYearId;
+    private bool _isPresentYear;
+    private bool _isPresentMonth;
+    private bool _isPersentIncome;
+
+    public IList<YearModel>? Years = new List<YearModel>();
+    public IList<MonthModel>? SavingsByEachMonth = new List<MonthModel>();
+    public IList<SavingsModel>? Savings = new List<SavingsModel>();
+    public IList<MonthModel> Months = new List<MonthModel>();
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+
+    protected override async void OnInitialized()
+    {
+        Years = await apiClient.GetYearsAsync();
+        SavingsByEachMonth = await apiClient.GetSavingByEachMonthAsync();
+        Months = await apiClient.GetMonthsAsync();
+    }
+
+    public async Task GetSavingsByEachMonthAsync()
+    {
+        SavingsByEachMonth = await apiClient.GetSavingByEachMonthAsync();
+    }
+
+    public async Task GetSavings()
+    {
+        Savings = await apiClient.GetSavingsAsync();
+    }
+
+    public async Task GetMonth()
+    {
+        Months = await apiClient.GetMonthsAsync();
+    }
+
+    public async Task AddMonth()
+    {
+        MonthModel monthModel = new MonthModel { Name = _selectedMonth, YearId = _selectedYearId };
+        await apiClient.PostMonthAsync(monthModel);
+    }
+    public async Task AddSavings()
+    {
+        int monthId = Months.Where(m => m.Name == _selectedMonth && m.YearId == _selectedYearId).Select(m =>
+        m.Id).FirstOrDefault();
+
+        SavingsModel savingsModel = new SavingsModel { YearId = _selectedYearId, MonthId = monthId };
+        await apiClient.PostSavingsAsync(savingsModel);
+    }
+
+    public void SetSelected(YearModel year)
+    {
+        _selectedYearId = year.Id;
+    }
+
+    public async Task UpdateMonth()
+    {
+        MonthModel monthModel = Months.Where(m => m.Name == _selectedMonth && m.YearId == _selectedYearId).Select(m =>
+        m).FirstOrDefault();
+
+        int SavingsId = Savings.Where(s => s.MonthId == monthModel.Id).Select(s => s.Id).FirstOrDefault();
+        monthModel.SavingsId = SavingsId;
+        await apiClient.UpdateMonthAsync(monthModel);
+    }
+
+    async Task SubmitAsync()
+    {
+        _isPresentYear = SavingsByEachMonth.Where(x => x.YearId == _selectedYearId).Select(x => x.YearId ==
+        _selectedYearId).FirstOrDefault();
+        _isPresentMonth = SavingsByEachMonth!.Where(m => m.YearId == _selectedYearId).Select(m =>
+        m.Name.Equals(_selectedMonth)).FirstOrDefault();
+        _isPersentIncome = SavingsByEachMonth!.Where(s => s.Name.Equals(_selectedMonth) && s.YearId == _selectedYearId).Select(s
+        =>
+        s.SavingsId == 0).FirstOrDefault();
+
+        if ((_isPresentYear && !_isPresentMonth) ||
+        (!_isPresentYear && _isPresentMonth) ||
+        (!_isPresentYear && !_isPresentMonth))
+        {
+            await AddMonth();
+            await GetMonth();
+            await AddSavings();
+            await GetSavings();
+            await UpdateMonth();
+
+        }
+
+        if ((_isPresentYear && _isPresentMonth) && _isPersentIncome)
+        {
+            await AddSavings();
+            await GetSavings();
+            await GetMonth();
+            await UpdateMonth();
+        }
+
+        MudDialog?.Close(DialogResult.Ok(true));
+    }
+    public void Cancel() => MudDialog?.Cancel();
+}
+
+
+
+
+
+
+
