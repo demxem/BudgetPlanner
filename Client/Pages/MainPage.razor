@@ -1,0 +1,141 @@
+@page "/"
+@inject Client.Services.ApiClient apiClient
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject Client.Services.SharedState state
+@inject IMessageService MessageService
+
+
+<MudGrid>
+    <MudItem xs="3">
+        <MudCard Outlined="true">
+            <MudCardContent>
+                <MudText>Date Of Today</MudText>
+                <MudText Typo="Typo.body2">@date</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudMenu Label="Plan Your Budget" Variant="Variant.Filled" Color="Color.Primary">
+                    <MudMenuItem href="/budget" OnClick="OnClick">Savings</MudMenuItem>
+                    <MudMenuItem href="/budget" OnClick="OnClick">Income</MudMenuItem>
+                    <MudMenuItem href="/budget" OnClick="OnClick">Expenses</MudMenuItem>
+                </MudMenu>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="3">
+        <MudCard Outlined="true">
+            <MudCardContent>
+                <MudText>Date Of Last Record</MudText>
+                <MudText Typo="Typo.body2">@latestRecordDate</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@data" InputLabels="@labels">
+    <CustomGraphics>
+        <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle" fill="black"
+            font-family="Helvetica" font-size="2">Total</text>
+        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black"
+            font-family="Helvetica" font-size="5">@data.Sum().ToString()</text>
+    </CustomGraphics>
+</MudChart>
+
+<div class="inline-block">
+    <MudButton @onclick="@OpenSubmitForm" Variant="Variant.Filled" Color="Color.Primary">Select Year </MudButton>
+</div>
+
+
+@code {
+    public double[] data = { 0, 0, 0 };
+    public string[] labels = { "Income", "Savings", "Expenses" };
+
+    private MonthModel? filteredIncome;
+    private MonthModel? filteredSavings;
+    private MonthModel? filteredExpenses;
+
+    private DateTime date = DateTime.Now;
+    private List<DateModel?> Dates = new List<DateModel?>();
+    private List<MonthModel?> Months = new List<MonthModel?>();
+    public IList<YearModel>? Years = new List<YearModel>();
+    public IList<MonthModel>? IncomeByEachMonth = new List<MonthModel>();
+    public IList<MonthModel>? SavingsByEachMonth = new List<MonthModel>();
+    public IList<MonthModel>? ExpensesByEachMonth = new List<MonthModel>();
+    public IList<IncomeModel>? Income = new List<IncomeModel>();
+
+    private DateTime latestRecordDate;
+
+    private List<string> messages = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Dates = await apiClient.GetLatestDateAsync();
+        GetLatestRecordDate();
+        Years = await apiClient.GetYearsAsync();
+        IncomeByEachMonth = await apiClient.GetIncomeByEachMonthAsync();
+        SavingsByEachMonth = await apiClient.GetSavingByEachMonthAsync();
+        ExpensesByEachMonth = await apiClient.GetExpensesByEachMonthAsync();
+        GetLatestMonthlyIncome();
+        GetLatestMonthlySavings();
+        GetLatestMonthlyExpenses();
+        CalculateUndistributedIcome();
+        Months = await apiClient.GetMonthsAsync();
+        MessageService.OnMessage += MessageHandler;
+    }
+
+    public void Dispose()
+    {
+        MessageService.OnMessage -= MessageHandler;
+    }
+
+    private void MessageHandler(string message)
+    {
+        if (message != null)
+            messages.Add(message);
+        else
+            messages.Clear();
+
+        StateHasChanged();
+        SetDataOnSelect();
+    }
+
+    private void GetLatestRecordDate() => latestRecordDate = Dates.Select(date => date.LatestDate).FirstOrDefault();
+
+    private void GetLatestMonthlyIncome()
+    {
+        filteredIncome = IncomeByEachMonth.LastOrDefault();
+    }
+    private void GetLatestMonthlySavings()
+    {
+        filteredSavings = SavingsByEachMonth.Last();
+    }
+    private void GetLatestMonthlyExpenses()
+    {
+        filteredExpenses = ExpensesByEachMonth.Last();
+    }
+
+    private void OpenSubmitForm()
+    {
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        DialogService.Show<MainSelectForm>("Select Income to Track", closeOnEscapeKey);
+    }
+
+    private void SetDataOnSelect()
+    {
+
+        data[0] = state.SelectedExpenses.MonthlyExpenses;
+        data[1] = state.SelectedIncome.MonthlyIncome;
+        data[2] = state.SelectedSavings.MonthlySavings;
+    }
+
+    public void CalculateUndistributedIcome()
+    {
+        data[0] = filteredSavings.MonthlySavings;
+        data[1] = filteredIncome.MonthlyIncome;
+        data[2] = filteredExpenses.MonthlyExpenses;
+    }
+
+    private void OnClick(MouseEventArgs args) => Snackbar.Add("Redirecting");
+    private void OnTouch(TouchEventArgs args) => Snackbar.Add("Redirecting");
+}

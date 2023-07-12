@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Client;
@@ -15,5 +16,8 @@ builder.Services.AddMudServices();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 
 builder.Services.AddScoped<ApiClient>();
+builder.Services.AddSingleton<SharedState>();
+builder.Services.AddSingleton<IMessageService, MessageService>();
+
 
 await builder.Build().RunAsync();

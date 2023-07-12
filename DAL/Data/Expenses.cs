@@ -18,7 +18,8 @@ public class Expenses : IExpenses
         string sql = @"select id,housing, groceries,utilities,
                               vacation,transportation,medicine,
                               clothing,media,insuranses, date, monthid, yearId
-                       from expenses;";
+                       from expenses
+                       order by date;";
 
         return _dataAccess.LoadData<ExpensesModel, dynamic>(sql, new { });
     }
@@ -37,10 +38,10 @@ public class Expenses : IExpenses
 
     public Task InsertExpenses(ExpensesModel expenses)
     {
-        string sql = @"insert into expenses (id, housing, groceries,utilities,
+        string sql = @"insert into expenses (housing, groceries,utilities,
                                             vacation,transportation,medicine,
                                             clothing,media,insuranses, monthid, yearid)
-                           values ((select max(id) + 1 from expenses), @Housing, @Groceries, @Utilities, @Vacation,@Transportation,@Medicine,@Clothing,@Media,@Insuranses, @MonthId, @YearId);";
+                           values (@Housing, @Groceries, @Utilities, @Vacation,@Transportation,@Medicine,@Clothing,@Media,@Insuranses, @MonthId, @YearId);";
 
         return _dataAccess.SafeData(sql, new
         {
@@ -54,7 +55,8 @@ public class Expenses : IExpenses
             expenses.Media,
             expenses.Insuranses,
             expenses.MonthId,
-            expenses.YearId
+            expenses.YearId,
+            Date = DateTime.Now
         });
     }
 

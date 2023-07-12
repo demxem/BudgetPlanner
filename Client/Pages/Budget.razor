@@ -4,6 +4,7 @@
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject NavigationManager UriHelper
+@inject IMessageService MessageService
 
 
 <style>
@@ -29,7 +30,7 @@
 <MudTabs Elevation="1" Rounded="true" PanelClass="pa-6">
     <MudTabPanel Text="Income" ToolTip="Plan Your Income">
     <MudText>
-       <MudSelect T="YearModel" Label="Select Year" @Value="@_inputYear" ValueChanged="year => SetSelected(year)" AnchorOrigin="Origin.BottomCenter">
+       <MudSelect T="YearModel" Label="Select Year" @Value="@inputYear" ValueChanged="year => SetSelected(year)" AnchorOrigin="Origin.BottomCenter">
             @foreach (var year in Years)
             {
                 <MudSelectItem Value="@year">@year.Name</MudSelectItem>
@@ -122,7 +123,7 @@
      </MudTabPanel>
      <MudTabPanel Text="Savings" ToolTip="Plan Your Savings">
         <MudText>
-        <MudSelect T="YearModel" Label="Select Year" @Value="@_inputYear" ValueChanged="year => SetSelected(year)" AnchorOrigin="Origin.BottomCenter">
+        <MudSelect T="YearModel" Label="Select Year" @Value="@inputYear" ValueChanged="year => SetSelected(year)" AnchorOrigin="Origin.BottomCenter">
             @foreach (var year in Years)
             {
                 <MudSelectItem Value="@year">@year.Name</MudSelectItem>
@@ -223,7 +224,7 @@
      </MudTabPanel>
      <MudTabPanel Text="Expenses" ToolTip="Plan Your Expenses">
          <MudText>
-            <MudSelect T="YearModel" Label="Select Year" @Value="@_inputYear" ValueChanged="year => SetSelected(year)" AnchorOrigin="Origin.BottomCenter">
+            <MudSelect T="YearModel" Label="Select Year" @Value="@inputYear" ValueChanged="year => SetSelected(year)" AnchorOrigin="Origin.BottomCenter">
             @foreach (var year in Years)
             {
                 <MudSelectItem Value="@year">@year.Name</MudSelectItem>
@@ -372,7 +373,7 @@
     private bool blockSwitch = false;
     private string searchString = "";
     private MonthModel selectedItem = null;
-    private YearModel _inputYear = null;
+    private YearModel inputYear = null;
     private HashSet<MonthModel> selectedItems1 = new HashSet<MonthModel>();
     private TableApplyButtonPosition applyButtonPosition = TableApplyButtonPosition.Start;
     private TableEditButtonPosition editButtonPosition = TableEditButtonPosition.Start;
@@ -382,7 +383,7 @@
     private IEnumerable<MonthModel> Income = new List<MonthModel>();
     private IEnumerable<YearModel> Years = new List<YearModel>();
     public int selectedYearId;
-
+    private List<string> messages = new List<string>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -390,23 +391,46 @@
         Savings = await apiClient.GetSavingByEachMonthAsync();
         Income = await apiClient.GetIncomeByEachMonthAsync();
         Years = await apiClient.GetYearsAsync();
+        MessageService.OnMessage += MessageHandler;
+    }
+    public void Dispose()
+    {
+        MessageService.OnMessage -= MessageHandler;
+    }
+
+    private async void MessageHandler(string message)
+    {
+        if (message != null)
+            messages.Add(message);
+        else
+            messages.Clear();
+
+        StateHasChanged();
+
+        if(message.Equals("YearPosted") || message.Equals("yearDeleted"))
+        {
+            await GetYearsAsync();
+        }
     }
 
     public async Task GetExpensesAsync()
     {
         Expenses = await apiClient.GetExpensesByEachMonthAsync();
-        StateHasChanged();
+
+    }
+    public async Task GetYearsAsync()
+    {
+        Years = await apiClient.GetYearsAsync();
     }
     public async Task GetSavingsAsync()
     {
         Savings = await apiClient.GetSavingByEachMonthAsync();
-        StateHasChanged();
     }
     public async Task GetIncomeAsync()
     {
         Income = await apiClient.GetIncomeByEachMonthAsync();
-        StateHasChanged();
     }
+
     public async Task GetIncomeByYearIdAsync(int yearId)
     {
         Income = await apiClient.GetIncomeByYearId(yearId);
@@ -422,23 +446,21 @@
         Savings = await apiClient.GetSavingsByYearId(yearId);
         StateHasChanged(); 
     }
-
     public async Task DeleteIncomeAsync(int id)
     {
         await apiClient.DeleteIncomeByIdAsync(id);
-        GetIncomeAsync(); 
+        await GetIncomeAsync(); 
     }
     public async Task DeleteSavingsAsync(int id)
     {
         await apiClient.DeleteSavingsByIdAsync(id);
-        GetSavingsAsync(); 
+        await GetSavingsAsync(); 
     }
     public async Task DeleteExpensesAsync(int id)
     {
         await apiClient.DeleteExpensesByIdAsync(id);
-        GetExpensesAsync(); 
+        await GetExpensesAsync(); 
     }
-
     private void ClearEventLog()
     {
         editEvents.Clear();
@@ -454,19 +476,19 @@
     private async void SavingsCommited(object item)
     {
         await apiClient.UpdateSavingsAsync(selectedItem.Savings);
-        GetSavingsAsync();
+        await GetSavingsAsync();
         AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)item).Name} committed");
     }
     private async void IncomeCommited(object item)
     {
         await apiClient.UpdateIncomeAsync(selectedItem.Income);
-        GetIncomeAsync();
+        await GetIncomeAsync();
         AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)item).Name} committed");
     }
     private async void ExpensesCommited(object item)
     {
         await apiClient.UpdateExpensesAsync(selectedItem.Expenses);
-        GetExpensesAsync();
+        await GetExpensesAsync();
         AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)item).Name} committed");
     }
 
@@ -498,12 +520,12 @@
     }
 
     //Method for button selector//
-    public void SetSelected(YearModel selectedYear)
+    public async void SetSelected(YearModel selectedYear)
     {
         selectedYearId = selectedYear.Id;
-        GetIncomeByYearIdAsync(selectedYearId);
-        GetExpensesByYearIdAsync(selectedYearId);
-        GetSavingsByYearIdAsync(selectedYearId);
+        await GetIncomeByYearIdAsync(selectedYearId);
+        await GetExpensesByYearIdAsync(selectedYearId);
+        await GetSavingsByYearIdAsync(selectedYearId);
     }
 
     private bool FilterSavings(MonthModel savings)

@@ -27,5 +27,6 @@
             "database": "budgetdb",
             "username": "postgres"
         }
-    ]
+    ],
+    "dotnet.defaultSolution": "BudgetPlanner.sln"
 }

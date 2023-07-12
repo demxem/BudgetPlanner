@@ -21,7 +21,8 @@ public class Savings : ISavings
                               healthneeds,
                               monthid,
                               yearid
-                    from savings;";
+                    from savings
+                    order by date;";
 
         return _dataAccess.LoadData<SavingsModel, dynamic>(sql, new { });
     }
@@ -43,8 +44,8 @@ public class Savings : ISavings
 
     public Task InsertSavings(SavingsModel savings)
     {
-        string sql = @"insert into savings (id, emergencyfund, retirementaccount, vacation, healthneeds, date, monthid, yearid)
-                           values ((select max(id) + 1 from savings), @EmergencyFund, @RetirementAccount, @Vacation, @HealthNeeds, @Date, @MonthId, @YearId);";
+        string sql = @"insert into savings (emergencyfund, retirementaccount, vacation, healthneeds, date, monthid, yearid)
+                           values (@EmergencyFund, @RetirementAccount, @Vacation, @HealthNeeds, @Date, @MonthId, @YearId);";
 
         return _dataAccess.SafeData(sql, new
         {
@@ -68,7 +69,8 @@ public class Savings : ISavings
                             vacation = @Vacation,
                             healthneeds = @HealthNeeds, 
                             date = @Date,
-                            monthid = @MonthId
+                            monthid = @MonthId,
+                            yearid = @YearId
                         where id = @Id;";
 
         await _dataAccess.SafeData(sql, savings);
@@ -78,7 +80,10 @@ public class Savings : ISavings
     {
         string sql = @"delete 
                        from savings
-                       where Id = @Id;";
+                       where Id = @Id;
+                       update months
+                        set savingsid = 0
+                        where savingsid = @id;";
 
         await _dataAccess.SafeData(sql, new { Id = id });
     }

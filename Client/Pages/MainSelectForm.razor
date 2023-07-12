@@ -1,0 +1,148 @@
+@inject Client.Services.ApiClient apiClient
+@using Client.Models
+@inject Client.Services.SharedState state
+@inject IMessageService MessageService
+
+
+<MudDialog>
+    <DialogContent>
+        <MudSelect T="YearModel" Label="Select Year" @Value="@selectedYear"
+            ValueChanged="(year => SetYearOnSelect(year))" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var year in Years)
+            {
+                <MudSelectItem Value="@year">@year.Name</MudSelectItem>
+            }
+        </MudSelect>
+        <MudSelect T="string" Label="Months" @bind-Value="@selectedMonth" AnchorOrigin="Origin.BottomCenter">
+            <MudSelectItem Value="@("January")" />
+            <MudSelectItem Value="@("February")" />
+            <MudSelectItem Value="@("March")" />
+            <MudSelectItem Value="@("April")" />
+            <MudSelectItem Value="@("May")" />
+            <MudSelectItem Value="@("June")" />
+            <MudSelectItem Value="@("July")" />
+            <MudSelectItem Value="@("August")" />
+            <MudSelectItem Value="@("September")" />
+            <MudSelectItem Value="@("October")" />
+            <MudSelectItem Value="@("November")" />
+            <MudSelectItem Value="@("Descember")" />
+        </MudSelect>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" @onclick="@SubmitAsync">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    private MonthModel? filteredIncome;
+    private MonthModel? filteredSavings;
+    private MonthModel? filteredExpenses;
+
+    private string selectedMonth = "";
+    private YearModel? selectedYear;
+    private string inputYear = "";
+    private int selectedYearId;
+    private int selectedMonthId;
+    private bool dialogSubmit = false;
+
+    public IList<YearModel>? Years = new List<YearModel>();
+    public IList<MonthModel>? IncomeByEachMonth = new List<MonthModel>();
+    public IList<MonthModel>? SavingsByEachMonth = new List<MonthModel>();
+    public IList<MonthModel>? ExpensesByEachMonth = new List<MonthModel>();
+    public IList<IncomeModel>? Income = new List<IncomeModel>();
+    public IList<MonthModel> Months = new List<MonthModel>();
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Years = await apiClient.GetYearsAsync();
+        Months = await apiClient.GetMonthsAsync();
+        IncomeByEachMonth = await apiClient.GetIncomeByEachMonthAsync();
+        SavingsByEachMonth = await apiClient.GetSavingByEachMonthAsync();
+        ExpensesByEachMonth = await apiClient.GetExpensesByEachMonthAsync();
+    }
+
+    public void SetYearOnSelect(YearModel selectedYear)
+    {
+        selectedYearId = selectedYear.Id;
+    }
+
+    async Task SubmitAsync()
+    {
+        FilterIncomeOnSelect();
+        FilterSavingsOnSelect();
+        FilterExpensesOnSelect();
+        state.SelectedIncome = filteredIncome;
+        state.SelectedSavings = filteredSavings;
+        state.SelectedExpenses = filteredExpenses;
+        MudDialog?.Close(DialogResult.Ok(true));
+        SendMessage();
+    }
+
+    public MonthModel? FilterIncomeOnSelect()
+    {
+        FilterMonthOnSelect();
+        filteredIncome = IncomeByEachMonth.Where(i => i.Id == selectedMonthId && i.YearId == selectedYearId).Select(i =>
+        i).FirstOrDefault();
+        if (filteredIncome == null)
+        {
+            filteredIncome = new MonthModel { MonthlyIncome = 0 };
+            return filteredIncome;
+        }
+        return filteredIncome;
+    }
+
+    public MonthModel? FilterSavingsOnSelect()
+    {
+        FilterMonthOnSelect();
+        filteredSavings = SavingsByEachMonth.Where(s => s.Id == selectedMonthId && s.YearId == selectedYearId).Select(s =>
+        s).FirstOrDefault();
+
+        if (filteredSavings == null)
+        {
+            filteredSavings = new MonthModel { MonthlySavings = 0 };
+            return filteredSavings;
+        }
+        return filteredSavings;
+    }
+
+    public MonthModel FilterExpensesOnSelect()
+    {
+        FilterMonthOnSelect();
+        filteredExpenses = ExpensesByEachMonth.Where(e => e.Id == selectedMonthId && e.YearId == selectedYearId).Select(e
+        => e).FirstOrDefault();
+        if (filteredExpenses == null)
+        {
+            filteredExpenses = new MonthModel { MonthlyExpenses = 0 };
+            return filteredExpenses;
+        }
+        return filteredExpenses;
+    }
+
+    private void FilterMonthOnSelect()
+    {
+        selectedMonthId = Months.Where(m => m.Name == selectedMonth && m.YearId == selectedYearId).Select(m
+        => m.Id).FirstOrDefault();
+    }
+    private void SendMessage()
+    {
+        MessageService.SendMessage("rerender");
+    }
+
+    private void ClearMessages()
+    {
+        MessageService.ClearMessages();
+    }
+
+    public void Cancel() => MudDialog?.Cancel();
+
+}
+
+
+
+
+
+
+

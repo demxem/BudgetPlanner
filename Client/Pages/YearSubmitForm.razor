@@ -1,4 +1,5 @@
-@inject Client.Services.ApiClient apiClient
+@inject Client.Services.ApiClient ApiClient
+@inject IMessageService MessageService
 
 <MudDialog>
     <DialogContent>
@@ -18,13 +19,24 @@
     public async Task PostYearAsync()
     {
         YearModel inputYear = new YearModel { Name = inputName };
-        await apiClient.PostYearAsync(inputYear);
+        await ApiClient.PostYearAsync(inputYear);
     }
 
     async Task SubmitAsync()
     {
         await PostYearAsync();
+        SendMessage();
         MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void SendMessage()
+    {
+        MessageService.SendMessage("YearPosted");
+    }
+
+    private void ClearMessages()
+    {
+        MessageService.ClearMessages();
     }
     void Cancel() => MudDialog.Cancel();
 }

@@ -1,6 +1,7 @@
 @inject Client.Services.ApiClient apiClient
 @using Client.Models
 @inject ISnackbar Snackbar
+@inject IMessageService MessageService
 
 <MudDialog>
     <DialogContent>
@@ -53,6 +54,7 @@
     async Task SubmitAsync()
     {
         await DeleteYear();
+        SendMessage();
         Snackbar.Add("Year Deleted", Severity.Success);
         MudDialog?.Close(DialogResult.Ok(true));
     }
@@ -61,7 +63,15 @@
         Snackbar.Add("Delete Canceled", Severity.Warning);
         MudDialog?.Cancel();
     }
+    private void SendMessage()
+    {
+        MessageService.SendMessage("yearDeleted");
+    }
 
+    private void ClearMessages()
+    {
+        MessageService.ClearMessages();
+    }
 }
 
 

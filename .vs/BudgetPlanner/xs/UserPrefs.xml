@@ -1,0 +1,44 @@
+﻿<Properties StartupConfiguration="{083D3D22-870D-4943-86DE-62FB7FCA5281}|http">
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.Client PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Client/Program.cs">
+    <Files>
+      <File FileName="Client/Program.cs" Line="9" Column="41" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="BudgetPlanner" expanded="True">
+            <Node name="Api" expanded="True">
+              <Node name="Modules" expanded="True" />
+            </Node>
+            <Node name="Client" expanded="True">
+              <Node name="Models" expanded="True" />
+              <Node name="Pages" expanded="True" />
+              <Node name="Services" expanded="True" />
+              <Node name="Shared" expanded="True" />
+              <Node name="Program.cs" selected="True" />
+            </Node>
+            <Node name="DAL" expanded="True">
+              <Node name="ComplexData" expanded="True" />
+              <Node name="Data" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Services/SharedState.cs" relfile="Client/Services/SharedState.cs" line="7" column="1" />
+      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="93" column="1" />
+      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="94" column="1" />
+      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="96" column="1" />
+      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="97" column="1" />
+      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="98" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+</Properties>

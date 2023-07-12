@@ -16,7 +16,7 @@ public class Income : IIncome
     {
         string sql = @"select id, employment, sidehustle, dividends, date, monthid, yearid
                        from income
-                       order by id;";
+                       order by date;";
 
         return _dataAccess.LoadData<IncomeModel, dynamic>(sql, new { });
     }
@@ -32,22 +32,23 @@ public class Income : IIncome
 
     public Task InsertIncome(IncomeModel income)
     {
-        income.Date = DateTime.Now;
-        string sql = @"insert into income (id, employment, sidehustle, dividends, monthid, yearid)
-                           values ((select max(id) + 1 from income), @Employment, @SideHustle, @Dividends, @MonthId, @YearId);";
 
-        return _dataAccess.SafeData(sql, new { income.Id, income.Employment, income.SideHustle, income.Dividends, income.MonthId, income.YearId });
+        string sql = @"insert into income (employment, sidehustle, dividends, monthid, yearid, date)
+                           values (@Employment, @SideHustle, @Dividends, @MonthId, @YearId, @Date);";
+
+        return _dataAccess.SafeData(sql, new { income.Id, income.Employment, income.SideHustle, income.Dividends, income.MonthId, income.YearId, Date = DateTime.Now });
     }
 
     public async Task UpdateIncome(IncomeModel income)
     {
         income.Date = DateTime.Now;
-
         string sql = @"update income
                        set employment = @Employment, 
                             sidehustle = @SideHustle,
                             dividends = @Dividends, 
-                            date = @Date
+                            date = @Date,
+                            yearid = @YearId,
+                            monthid = @MonthId
                         where id = @Id;";
 
         await _dataAccess.SafeData(sql, income);

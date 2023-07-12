@@ -1,6 +1,7 @@
 @inject Client.Services.ApiClient apiClient
 @using Client.Models
 
+
 <MudDialog>
     <DialogContent>
         <MudSelect T="YearModel" Label="Select Year" @Value="@_selectedYear" ValueChanged="(year => SetSelected(year))"
@@ -47,11 +48,13 @@
     public IList<MonthModel> Months = new List<MonthModel>();
     [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
 
-    protected override async void OnInitialized()
+
+    protected override async Task OnInitializedAsync()
     {
         Years = await apiClient.GetYearsAsync();
         ExpensesByEachMonth = await apiClient.GetExpensesByEachMonthAsync();
         Months = await apiClient.GetMonthsAsync();
+
     }
 
     public async Task GetExpensesByEachMonthAsync()
@@ -118,7 +121,7 @@
             await UpdateMonth();
         }
 
-        if ((_isPresentYear && _isPresentMonth) && _isPersentExpenses)
+        if ((_isPresentYear && _isPresentMonth) && !_isPersentExpenses)
         {
             await AddExpenses();
             await GetExpenses();

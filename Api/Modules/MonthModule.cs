@@ -8,7 +8,7 @@ namespace Api.Modules
         public static void RegisterMonthsEndpoints(this IEndpointRouteBuilder endpoints)
         {
             //endpoints
-            // endpoints.MapGet("/years/months/savings/{id}", GetSavingsByMonthId);
+            endpoints.MapGet("/months/savings/{id}", GetSavingsByMonthId);
             endpoints.MapGet("/years/months/total/{id}", GetAllByMonthId);
             endpoints.MapGet("/years/months/income", GetIncomeByMonth);
             endpoints.MapGet("/years/months/savings", GetSavingsByMonth);

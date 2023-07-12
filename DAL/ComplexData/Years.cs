@@ -80,10 +80,10 @@ public class Years : IYears
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            string sql = @"insert into years (id, name)
-                            values ((select max(id) + 1 from years), @Name);";
+            string sql = @"insert into years (name, date)
+                            values (@Name, @Date);";
 
-            await connection.ExecuteAsync(sql, new { year.Name });
+            await connection.ExecuteAsync(sql, new { year.Name, Date = DateTime.Now });
         }
     }
 

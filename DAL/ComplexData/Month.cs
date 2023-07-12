@@ -20,7 +20,8 @@ public class Month : IMonth
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            string sql = @"select id, name, yearid from months order by id;";
+            string sql = @"select * from months 
+                            order by date;";
 
             var result = await connection.QueryAsync<MonthModel>(sql);
             return result;
@@ -35,7 +36,7 @@ public class Month : IMonth
                             from months as m
                             join income as i on m.incomeid = i.id
                             group by m.id, i.id
-                            order by m.id;";
+                            order by m.date;";
 
             var result = await connection.QueryAsync<MonthModel, IncomeModel, MonthModel>(sql, (month, income) =>
             {
@@ -54,7 +55,7 @@ public class Month : IMonth
                             from months as m
                             join savings as s on m.savingsid = s.id
                             group by m.id, s.id
-                            order by m.id;";
+                            order by m.date;";
 
             var result = await connection.QueryAsync<MonthModel, SavingsModel, MonthModel>(sql, (month, savings) =>
             {
@@ -95,7 +96,7 @@ public class Month : IMonth
                             from months as m
                             join expenses as e on m.expensesid = e.id
                             group by m.id, e.id
-                            order by m.id;";
+                            order by m.date;";
 
             var result = await connection.QueryAsync<MonthModel, ExpensesModel, MonthModel>(sql, (month, expenses) =>
             {
@@ -116,7 +117,7 @@ public class Month : IMonth
                             join income as i on m.incomeid = i.id
                             where m.yearid = @YearId
                             group by m.id, i.id
-                            order by m.id;";
+                            order by m.date;";
 
             var result = await connection.QueryAsync<MonthModel, IncomeModel, MonthModel>(sql, (month, income) =>
             {
@@ -137,7 +138,7 @@ public class Month : IMonth
                             join savings as s on m.savingsid = s.id
                             where m.yearid = @YearId
                             group by m.id, s.id
-                            order by m.id;";
+                            order by m.date;";
 
             var result = await connection.QueryAsync<MonthModel, SavingsModel, MonthModel>(sql, (month, savings) =>
             {
@@ -159,7 +160,7 @@ public class Month : IMonth
                             join expenses as e on m.expensesid = e.id
                             where m.yearid = @YearId
                             group by m.id, e.id
-                            order by m.id;";
+                            order by m.date;";
 
             var result = await connection.QueryAsync<MonthModel, ExpensesModel, MonthModel>(sql, (month, expenses) =>
                     {
@@ -230,22 +231,24 @@ public class Month : IMonth
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            string sql = @"insert into months(id, name, yearid)
-                            values((select max(id) + 1 from months), @Name, @YearId);";
+            string sql = @"insert into months(name, yearid, date)
+                            values(@Name, @YearId, @Date);";
 
-            await connection.ExecuteAsync(sql, new { month.Id, month.Name, month.YearId });
+            await connection.ExecuteAsync(sql, new { month.Name, month.YearId, Date = DateTime.Now });
         }
     }
     public async Task UpdateMonth(MonthModel month)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
+            month.Date = DateTime.Now;
             string sql = @"update months
                             set name = @Name,
                                 yearid = @YearId,
                                 incomeid = @IncomeId,
                                 savingsId = @SavingsId,
-                                expensesId = @ExpensesId
+                                expensesId = @ExpensesId,
+                                date = @Date
                             where id = @Id;";
 
             await connection.ExecuteAsync(sql, month);
