@@ -33,27 +33,36 @@
     </MudItem>
 </MudGrid>
 
-<MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@data" InputLabels="@labels">
-    <CustomGraphics>
-        <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle" fill="black"
-            font-family="Helvetica" font-size="2">Total</text>
-        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black"
-            font-family="Helvetica" font-size="5">@data.Sum().ToString()</text>
-    </CustomGraphics>
-</MudChart>
-
-<div class="inline-block">
-    <MudButton @onclick="@OpenSubmitForm" Variant="Variant.Filled" Color="Color.Primary">Select Year </MudButton>
-</div>
-
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    <MudGrid>
+        <MudItem xs="8" sm="3">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+                <div class="inline-block">
+                    <MudButton @onclick="@OpenSubmitForm" Variant="Variant.Filled" Color="Color.Primary">Select Year
+                    </MudButton>
+                </div>
+                <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@data"
+                    InputLabels="@labels">
+                    <CustomGraphics>
+                        <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
+                            fill="blue" font-family="Helvetica" font-size="3">Income</text>
+                        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                            fill="blue" font-family="Helvetica"
+                            font-size="5">@CalculateUndistributedIcomePercentage()</text>
+                    </CustomGraphics>
+                </MudChart>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
 
 @code {
-    public double[] data = { 0, 0, 0 };
+    public double[] data = new double[3];
     public string[] labels = { "Income", "Savings", "Expenses" };
 
-    private MonthModel? filteredIncome;
-    private MonthModel? filteredSavings;
-    private MonthModel? filteredExpenses;
+    private MonthModel? latestIncome;
+    private MonthModel? latestSavings;
+    private MonthModel? latestExpenses;
 
     private DateTime date = DateTime.Now;
     private List<DateModel?> Dates = new List<DateModel?>();
@@ -79,7 +88,6 @@
         GetLatestMonthlyIncome();
         GetLatestMonthlySavings();
         GetLatestMonthlyExpenses();
-        CalculateUndistributedIcome();
         Months = await apiClient.GetMonthsAsync();
         MessageService.OnMessage += MessageHandler;
     }
@@ -102,17 +110,20 @@
 
     private void GetLatestRecordDate() => latestRecordDate = Dates.Select(date => date.LatestDate).FirstOrDefault();
 
+    private void GetLatestMonthlyExpenses()
+    {
+        float latestExpenses = ExpensesByEachMonth.Select(expenses => expenses.MonthlyExpenses).LastOrDefault(0);
+        data[0] = latestExpenses;
+    }
     private void GetLatestMonthlyIncome()
     {
-        filteredIncome = IncomeByEachMonth.LastOrDefault();
+        float latestIncome = IncomeByEachMonth.Select(income => income.MonthlyIncome).LastOrDefault(0);
+        data[1] = latestIncome;
     }
     private void GetLatestMonthlySavings()
     {
-        filteredSavings = SavingsByEachMonth.Last();
-    }
-    private void GetLatestMonthlyExpenses()
-    {
-        filteredExpenses = ExpensesByEachMonth.Last();
+        float latestSavings = SavingsByEachMonth.Select(savings => savings.MonthlySavings).LastOrDefault(0);
+        data[2] = latestSavings;
     }
 
     private void OpenSubmitForm()
@@ -123,17 +134,22 @@
 
     private void SetDataOnSelect()
     {
-
         data[0] = state.SelectedExpenses.MonthlyExpenses;
         data[1] = state.SelectedIncome.MonthlyIncome;
         data[2] = state.SelectedSavings.MonthlySavings;
     }
 
-    public void CalculateUndistributedIcome()
+    public string CalculateUndistributedIcomePercentage()
     {
-        data[0] = filteredSavings.MonthlySavings;
-        data[1] = filteredIncome.MonthlyIncome;
-        data[2] = filteredExpenses.MonthlyExpenses;
+        double latestExpenses = data[0];
+        double latestIncome = data[1];
+        double latestSavings = data[2];
+
+        var remainingIncome = latestIncome - (latestExpenses + latestSavings);
+        double percentOfUndistributedIncome = (remainingIncome / latestIncome) * 100;
+
+        string result = String.Format("{0:0.00}", percentOfUndistributedIncome);
+        return result + "%";
     }
 
     private void OnClick(MouseEventArgs args) => Snackbar.Add("Redirecting");
