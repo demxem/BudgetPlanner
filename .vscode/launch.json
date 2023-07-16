@@ -9,6 +9,14 @@
             "browser": "chrome",
             "url": "http://localhost:5095",
         },
+        {
+            "name": "Core",
+            "type": "core",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/Api",
+            "browser": "chrome",
+            "url": "http://localhost:5055",
+        },
     ],
     "compounds": [
         {

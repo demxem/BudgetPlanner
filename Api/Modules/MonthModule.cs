@@ -22,6 +22,8 @@ namespace Api.Modules
             endpoints.MapPut("/years/months/{id}", UpdateMonth);
             endpoints.MapPost("/years/months/incomeByYearId/", InsertIncomeByYearId);
             endpoints.MapDelete("/years/months/{id}", DeleteMonthById);
+            endpoints.MapGet("/months/budget", GetBudget);
+
         }
 
         private static async Task<IResult> GetMonthById(IMonth data, int id)
@@ -77,6 +79,17 @@ namespace Api.Modules
             try
             {
                 return Results.Ok(await data.GetExpensesByMonth());
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        }
+        private static async Task<IResult> GetBudget(IMonth data)
+        {
+            try
+            {
+                return Results.Ok(await data.GetBudget());
             }
             catch (Exception ex)
             {
@@ -191,6 +204,4 @@ namespace Api.Modules
             }
         }
     }
-
-
 }

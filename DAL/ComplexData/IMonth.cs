@@ -18,5 +18,6 @@ public interface IMonth
     Task<IEnumerable<MonthModel?>> GetExpensesByYearId(int id);
     Task<IEnumerable<MonthModel>> GetSavingsByYearId(int id);
     Task UpdateMonth(MonthModel month);
+    Task<IEnumerable<MonthModel>> GetBudget();
 }
 

@@ -5,7 +5,6 @@
 @inject Client.Services.SharedState state
 @inject IMessageService MessageService
 
-
 <MudGrid>
     <MudItem xs="3">
         <MudCard Outlined="true">
@@ -22,7 +21,6 @@
             </MudCardActions>
         </MudCard>
     </MudItem>
-
     <MudItem xs="3">
         <MudCard Outlined="true">
             <MudCardContent>
@@ -32,7 +30,6 @@
         </MudCard>
     </MudItem>
 </MudGrid>
-
 <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
     <MudGrid>
         <MudItem xs="8" sm="3">
@@ -47,23 +44,22 @@
                         <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
                             fill="blue" font-family="Helvetica" font-size="3">Income</text>
                         <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                            fill="blue" font-family="Helvetica"
-                            font-size="5">@CalculateUndistributedIcomePercentage()</text>
+                            fill="blue" font-family="Helvetica" font-size="5">@CalculateUndistributedIcome()</text>
                     </CustomGraphics>
                 </MudChart>
             </MudPaper>
         </MudItem>
+        <div class="incline-block">
+            <MudText>Income : @data[1]</MudText>
+            <MudText>Savings : @data[0]</MudText>
+            <MudText>Expenses : @data[2]</MudText>
+        </div>
     </MudGrid>
 </MudContainer>
 
 @code {
     public double[] data = new double[3];
-    public string[] labels = { "Income", "Savings", "Expenses" };
-
-    private MonthModel? latestIncome;
-    private MonthModel? latestSavings;
-    private MonthModel? latestExpenses;
-
+    public string[] labels = { "Expenses", "Income", "Savings" };
     private DateTime date = DateTime.Now;
     private List<DateModel?> Dates = new List<DateModel?>();
     private List<MonthModel?> Months = new List<MonthModel?>();
@@ -139,7 +135,7 @@
         data[2] = state.SelectedSavings.MonthlySavings;
     }
 
-    public string CalculateUndistributedIcomePercentage()
+    public string CalculateUndistributedIcome()
     {
         double latestExpenses = data[0];
         double latestIncome = data[1];

@@ -47,6 +47,33 @@ public class Month : IMonth
             return result;
         }
     }
+    public async Task<IEnumerable<MonthModel>> GetBudget()
+    {
+        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
+        {
+            string sql = @"select m.*, sum(i.employment + i.sidehustle + i.dividends) as monthlyIncome,
+                                        sum (s.emergencyfund + s.retirementaccount + s.vacation + s.healthneeds) as monthlySavings, 
+                                        sum (e.housing + e.groceries + e.utilities + e.vacation 
+                                        + e.transportation + e.medicine + e.clothing + e.media 
+                                        + e.insuranses) as monthlyExpenses, i.*, s.*, e.* 
+                            from months as m
+                            FULL OUTER JOIN income as i on m.incomeid = i.id
+                            FULL OUTER JOIN savings as s on m.savingsid = s.id
+                            FULL OUTER JOIN expenses as e on m.expensesid = e.id
+                            group by m.id, i.id, s.id, e.id
+                            order by m.date;";
+
+            var result = await connection.QueryAsync<MonthModel, IncomeModel, SavingsModel, ExpensesModel, MonthModel>(sql, (month, income, savings, expenses) =>
+            {
+                month.Income = income;
+                month.Savings = savings;
+                month.Expenses = expenses;
+                return month;
+            }
+            );
+            return result;
+        }
+    }
     public async Task<IEnumerable<MonthModel>> GetSavingsByMonth()
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
@@ -265,5 +292,6 @@ public class Month : IMonth
             await connection.ExecuteAsync(sql, new { Id = id });
         }
     }
+
 }
 

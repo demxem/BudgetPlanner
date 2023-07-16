@@ -1,11 +1,10 @@
-﻿<Properties StartupConfiguration="{083D3D22-870D-4943-86DE-62FB7FCA5281}|http">
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.Client PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Client/Program.cs">
+﻿<Properties StartupConfiguration="{29874159-3E21-43B8-B3FD-83B4EA3A47BC}|http">
+  <MonoDevelop.Ide.Workbench ActiveDocument="DAL/Data/Calculations.cs">
     <Files>
-      <File FileName="Client/Program.cs" Line="9" Column="41" />
+      <File FileName="Client/Program.cs" />
+      <File FileName="Api/Modules/CalculationsModul.cs" />
+      <File FileName="DAL/Data/Calculations.cs" Line="33" Column="37" />
+      <File FileName="Api/Program.cs" Line="9" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -19,18 +18,22 @@
               <Node name="Pages" expanded="True" />
               <Node name="Services" expanded="True" />
               <Node name="Shared" expanded="True" />
-              <Node name="Program.cs" selected="True" />
             </Node>
             <Node name="DAL" expanded="True">
               <Node name="ComplexData" expanded="True" />
-              <Node name="Data" expanded="True" />
+              <Node name="Data" expanded="True">
+                <Node name="Calculations.cs" selected="True" />
+              </Node>
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.ItemProperties.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.ItemProperties.Client PreferredExecutionTarget="/Applications/Google Chrome.app" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Services/SharedState.cs" relfile="Client/Services/SharedState.cs" line="7" column="1" />
@@ -41,4 +44,5 @@
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="98" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
 </Properties>

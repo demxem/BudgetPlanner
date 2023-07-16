@@ -115,7 +115,25 @@ namespace Client.Services
             }
             return new List<ExpensesModel>();
         }
+        public async Task<List<MonthModel>?> GetDataAsync()
+        {
+            try
+            {
+                var response = await httpClient.GetAsync("months/budget");
 
+                if (response.IsSuccessStatusCode)
+                {
+                    var data = await response.Content.ReadFromJsonAsync<List<MonthModel>>();
+
+                    return data;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return new List<MonthModel>();
+        }
         public async Task<List<MonthModel>?> GetExpensesByEachMonthAsync()
         {
             try
@@ -317,6 +335,170 @@ namespace Client.Services
         {
             await httpClient.PostAsJsonAsync($"/years/months", month);
         }
+        public async Task<float> GetMonthlyIncome(int id)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"/months/income/monthlyIncome/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var monthlyIncome = await response.Content.ReadFromJsonAsync<float>();
+
+                    return monthlyIncome;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return 0;
+        }
+
+        public async Task<float> GetMonthlySavings(int id)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"/months/income/monthlySavings/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var monthlyIncome = await response.Content.ReadFromJsonAsync<float>();
+
+                    return monthlyIncome;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return 0;
+        }
+        public async Task<float> GetMonthlyExpenses(int id)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"/months/income/monthlyExpenses/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var monthlyIncome = await response.Content.ReadFromJsonAsync<float>();
+
+                    return monthlyIncome;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return 0;
+        }
+        public async Task<float> GetMonthlyUndistributedIncome(int id)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"/months/income/monthlyUndistributedIncome/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var monthlyUndistributedIncome = await response.Content.ReadFromJsonAsync<float>();
+
+                    return monthlyUndistributedIncome;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return 0;
+        }
+
+        public async Task<float> GetYearlyIncome(int id)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"/months/income/totalIncome/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var monthlyIncome = await response.Content.ReadFromJsonAsync<float>();
+
+                    return monthlyIncome;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return 0;
+        }
+
+        public async Task<float> GetYearlySavings(int id)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"/months/savings/totalSavings/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var yearlySavings = await response.Content.ReadFromJsonAsync<float>();
+
+                    return yearlySavings;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return 0;
+        }
+        public async Task<float> GetYearlyExpenses(int id)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"/months/expenses/totalExpenses/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var yearlyExpenses = await response.Content.ReadFromJsonAsync<float>();
+
+                    return yearlyExpenses;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return 0;
+        }
+        public async Task<float> GetYearlyUndistributedIncome(int id)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"/months/income/yearlyUndistributedIncome/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var yearlyUndistributedIncome = await response.Content.ReadFromJsonAsync<float>();
+
+                    return yearlyUndistributedIncome;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return 0;
+        }
+
+
     }
+
 
 }
