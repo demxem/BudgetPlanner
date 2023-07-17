@@ -4,6 +4,11 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 
+
+
+// this is the test class. Due to perfomance hit all the calculations implemented in these methods are made in Client side.//
+//The class would be removed completely later//
+
 namespace DAL.Data;
 
 public class Calculations : ICalculations

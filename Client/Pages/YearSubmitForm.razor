@@ -3,7 +3,7 @@
 
 <MudDialog>
     <DialogContent>
-        <MudTextField T="string" Label="Name" @bind-Value="@inputName"></MudTextField>
+        <MudTextField T="string" Label="Name" @bind-Value="@inputYearName"></MudTextField>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>
@@ -13,12 +13,16 @@
 </MudDialog>
 
 @code {
-    private string inputName = "";
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private string inputYearName = "";
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
 
     public async Task PostYearAsync()
     {
-        YearModel inputYear = new YearModel { Name = inputName };
+        YearModel inputYear = new YearModel
+            {
+                Name = inputYearName
+            };
+
         await ApiClient.PostYearAsync(inputYear);
     }
 
@@ -26,7 +30,7 @@
     {
         await PostYearAsync();
         SendMessage();
-        MudDialog.Close(DialogResult.Ok(true));
+        MudDialog?.Close(DialogResult.Ok(true));
     }
 
     private void SendMessage()
@@ -38,7 +42,7 @@
     {
         MessageService.ClearMessages();
     }
-    void Cancel() => MudDialog.Cancel();
+    void Cancel() => MudDialog?.Cancel();
 }
 
 

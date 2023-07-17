@@ -1,11 +1,10 @@
 @inject Client.Services.ApiClient apiClient
 @using Client.Models
-@inject IMessageService MessageService
 
 <MudDialog>
     <DialogContent>
-        <MudSelect T="YearModel" Label="Select Year" @Value="@selectedYear" ValueChanged="(year => SetSelected(year))"
-            AnchorOrigin="Origin.BottomCenter">
+        <MudSelect T="YearModel" Label="Select Year" @Value="@selectedYear"
+            ValueChanged="(year => SetYearOnSelect(year))" AnchorOrigin="Origin.BottomCenter">
             @foreach (var year in Years)
             {
                 <MudSelectItem Value="@year">@year.Name</MudSelectItem>
@@ -36,114 +35,113 @@
 
     private string selectedMonth = "";
     private YearModel? selectedYear;
-    private string inputYear = "";
     private int selectedYearId;
-    private bool isPresentYear;
-    private bool isPresentMonth;
-    private bool isPersentIncome;
 
-    public IList<YearModel>? Years = new List<YearModel>();
-    public IList<MonthModel>? IncomeByEachMonth = new List<MonthModel>();
-    public IList<IncomeModel>? Income = new List<IncomeModel>();
-    public IList<MonthModel> Months = new List<MonthModel>();
+    public List<YearModel>? Years = new List<YearModel>();
+    public List<MonthModel>? Data = new List<MonthModel>();
+    public List<IncomeModel>? Income = new List<IncomeModel>();
+    public List<MonthModel>? Months = new List<MonthModel>();
     [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
 
     protected override async void OnInitialized()
     {
         Years = await apiClient.GetYearsAsync();
-        IncomeByEachMonth = await apiClient.GetIncomeByEachMonthAsync();
+        Data = await apiClient.GetSavingByEachMonthAsync();
         Months = await apiClient.GetMonthsAsync();
-    }
-
-    public async Task GetIncomeByEachMonthAsync()
-    {
-        IncomeByEachMonth = await apiClient.GetIncomeByEachMonthAsync();
-    }
-
-    public async Task GetIncome()
-    {
-        Income = await apiClient.GetIncomeAsync();
-    }
-
-    public async Task GetMonth()
-    {
-        Months = await apiClient.GetMonthsAsync();
-    }
-
-    public async Task AddMonth()
-    {
-        MonthModel monthModel = new MonthModel { Name = selectedMonth, YearId = selectedYearId };
-        await apiClient.PostMonthAsync(monthModel);
-    }
-    public async Task AddIncome()
-    {
-        int monthId = Months.Where(m => m.Name == selectedMonth && m.YearId == selectedYearId).Select(m =>
-        m.Id).FirstOrDefault();
-
-        IncomeModel incomeModel = new IncomeModel { YearId = selectedYearId, MonthId = monthId };
-        await apiClient.PostIncomeAsync(incomeModel);
-    }
-
-    public void SetSelected(YearModel year)
-    {
-        selectedYearId = year.Id;
-    }
-
-    public async Task UpdateMonth()
-    {
-        MonthModel monthModel = Months.Where(m => m.Name == selectedMonth && m.YearId == selectedYearId).Select(m =>
-        m).FirstOrDefault();
-
-        int IncomeId = Income.Where(i => i.MonthId == monthModel.Id).Select(i => i.Id).FirstOrDefault();
-        monthModel.IncomeId = IncomeId;
-        await apiClient.UpdateMonthAsync(monthModel);
     }
 
     async Task SubmitAsync()
     {
-        isPresentYear = IncomeByEachMonth.Where(x => x.YearId == selectedYearId).Select(x => x.YearId ==
-        selectedYearId).FirstOrDefault();
-        isPresentMonth = IncomeByEachMonth!.Where(m => m.YearId == selectedYearId).Select(m =>
-        m.Name.Equals(selectedMonth)).FirstOrDefault();
-        isPersentIncome = IncomeByEachMonth!.Where(i => i.Name.Equals(selectedMonth) && i.YearId == selectedYearId).Select(i
-        => i.IncomeId == 0).FirstOrDefault();
-
-        if ((isPresentYear && !isPresentMonth) ||
-        (!isPresentYear && isPresentMonth) ||
-        (!isPresentYear && !isPresentMonth))
+        if ((YearFoundIn(Data)) && !(MonthFoundIn(Data)) || (!YearFoundIn(Data)) &&
+        (MonthFoundIn(Data)) || (!YearFoundIn(Data)) && !(MonthFoundIn(Data)))
         {
-            await AddMonth();
-            await GetMonth();
-            await AddIncome();
-            await GetIncome();
-            await UpdateMonth();
+            await AddMonthAsync();
+            await GetMonthsAsync();
+            await AddIncomeAsync();
+            await GetIncomeAsync();
+            await UpdateMonthAsync();
         }
 
-        if ((isPresentYear && isPresentMonth) && isPersentIncome)
+        if ((YearFoundIn(Data) && MonthFoundIn(Data)) && IncomeFoundIn(Data))
         {
-            await AddIncome();
-            await GetIncome();
-            await GetMonth();
-            await UpdateMonth();
+            await AddIncomeAsync();
+            await GetIncomeAsync();
+            await GetMonthsAsync();
+            await UpdateMonthAsync();
         }
 
+        StateHasChanged();
         MudDialog?.Close(DialogResult.Ok(true));
     }
-
-    private void SendMessage()
+    public async Task GetIncomeAsync()
     {
-        MessageService.SendMessage("incomeSubmited");
+        Income = await apiClient.GetIncomeAsync();
     }
 
-    private void ClearMessages()
+    public async Task GetMonthsAsync()
     {
-        MessageService.ClearMessages();
+        Months = await apiClient.GetMonthsAsync();
     }
+
+    public async Task AddMonthAsync()
+    {
+        MonthModel monthModel = new MonthModel
+            {
+                Name = selectedMonth,
+                YearId = selectedYearId
+            };
+
+        await apiClient.PostMonthAsync(monthModel);
+    }
+    public async Task AddIncomeAsync()
+    {
+        int monthId = Months!.Where(m => m.Name == selectedMonth && m.YearId == selectedYearId).Select(m =>
+        m.Id).FirstOrDefault();
+
+        IncomeModel IncomeModel = new IncomeModel
+            {
+                YearId = selectedYearId,
+                MonthId = monthId
+            };
+
+        await apiClient.PostIncomeAsync(IncomeModel);
+    }
+
+    public void SetYearOnSelect(YearModel year)
+    {
+        selectedYearId = year.Id;
+    }
+
+    public bool YearFoundIn(List<MonthModel>? data)
+    {
+        return Data!.Where(year => year.YearId == selectedYearId).Select(year => year.YearId ==
+        selectedYearId).FirstOrDefault();
+    }
+    public bool MonthFoundIn(List<MonthModel>? data)
+    {
+        return Data!.Where(month => month.YearId == selectedYearId).Select(month =>
+        month!.Name!.Equals(selectedMonth)).FirstOrDefault();
+
+    }
+    public bool IncomeFoundIn(List<MonthModel>? data)
+    {
+        return Data!.Where(income => income!.Name!.Equals(selectedMonth) && income.YearId ==
+        selectedYearId).Select(income => income.IncomeId == 0).FirstOrDefault();
+    }
+
+    public async Task UpdateMonthAsync()
+    {
+        MonthModel? monthModel = Months?.Where(month => month.Name == selectedMonth && month.YearId ==
+        selectedYearId).Select(month => month).FirstOrDefault();
+
+        monthModel!.IncomeId = Income!.Where(income => income.MonthId == monthModel.Id).Select(income =>
+        income.Id).FirstOrDefault();
+
+        await apiClient.UpdateMonthAsync(monthModel);
+    }
+
     public void Cancel() => MudDialog?.Cancel();
 }
-
-
-
 
 
 

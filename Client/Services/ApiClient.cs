@@ -1,4 +1,3 @@
-using System.Data.Common;
 using System.Net.Http.Json;
 using Client.Models;
 
@@ -13,7 +12,7 @@ namespace Client.Services
             this.httpClient = httpClient;
         }
 
-        public async Task<List<MonthModel?>> GetMonthsAsync()
+        public async Task<List<MonthModel>?> GetMonthsAsync()
         {
             try
             {
@@ -31,10 +30,11 @@ namespace Client.Services
             {
                 Console.WriteLine(ex.Message.ToString());
             }
-            return new List<MonthModel?>();
+
+            return new List<MonthModel>();
         }
 
-        public async Task<List<DateModel?>> GetLatestDateAsync()
+        public async Task<List<DateModel>?> GetLatestDateAsync()
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Client.Services
             {
                 Console.WriteLine(ex.Message.ToString());
             }
-            return new List<DateModel?>();
+            return new List<DateModel>();
         }
 
         public async Task<List<IncomeModel>?> GetIncomeAsync()
@@ -171,7 +171,7 @@ namespace Client.Services
             {
                 Console.WriteLine(ex.Message.ToString());
             }
-            return new List<MonthModel>();
+            return new List<MonthModel?>();
         }
         public async Task<List<MonthModel>?> GetSavingByEachMonthAsync()
         {
@@ -214,7 +214,7 @@ namespace Client.Services
             }
             return new List<YearModel>();
         }
-        public async Task<List<MonthModel>> GetIncomeByYearId(int id)
+        public async Task<List<MonthModel>?> GetIncomeByYearId(int id)
         {
             try
             {
@@ -235,7 +235,7 @@ namespace Client.Services
             return new List<MonthModel>();
         }
 
-        public async Task<List<MonthModel>> GetExpensesByYearId(int id)
+        public async Task<List<MonthModel>?> GetExpensesByYearId(int id)
         {
             try
             {
@@ -255,7 +255,7 @@ namespace Client.Services
             return new List<MonthModel>();
         }
 
-        public async Task<List<MonthModel>> GetSavingsByYearId(int id)
+        public async Task<List<MonthModel>?> GetSavingsByYearId(int id)
         {
             try
             {
@@ -275,17 +275,17 @@ namespace Client.Services
             return new List<MonthModel>();
         }
 
-        public async Task UpdateIncomeAsync(IncomeModel item)
+        public async Task UpdateIncomeAsync(IncomeModel? item)
         {
-            await httpClient.PutAsJsonAsync($"/years/months/income/{item.Id}", item);
+            await httpClient.PutAsJsonAsync($"/years/months/income/{item?.Id}", item);
         }
-        public async Task UpdateSavingsAsync(SavingsModel item)
+        public async Task UpdateSavingsAsync(SavingsModel? item)
         {
-            await httpClient.PutAsJsonAsync($"/years/months/savings/{item.Id}", item);
+            await httpClient.PutAsJsonAsync($"/years/months/savings/{item?.Id}", item);
         }
-        public async Task UpdateExpensesAsync(ExpensesModel item)
+        public async Task UpdateExpensesAsync(ExpensesModel? item)
         {
-            await httpClient.PutAsJsonAsync($"/years/months/expenses/{item.Id}", item);
+            await httpClient.PutAsJsonAsync($"/years/months/expenses/{item?.Id}", item);
         }
         public async Task UpdateMonthAsync(MonthModel month)
         {

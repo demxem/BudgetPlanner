@@ -10,7 +10,7 @@
         <MudCard Outlined="true">
             <MudCardContent>
                 <MudText>Date Of Today</MudText>
-                <MudText Typo="Typo.body2">@date</MudText>
+                <MudText Typo="Typo.body2">@DateOfToday</MudText>
             </MudCardContent>
             <MudCardActions>
                 <MudMenu Label="Plan Your Budget" Variant="Variant.Filled" Color="Color.Primary">
@@ -25,7 +25,7 @@
         <MudCard Outlined="true">
             <MudCardContent>
                 <MudText>Date Of Last Record</MudText>
-                <MudText Typo="Typo.body2">@latestRecordDate</MudText>
+                <MudText Typo="Typo.body2">@LatestRecordDate</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -38,8 +38,8 @@
                     <MudButton @onclick="@OpenSubmitForm" Variant="Variant.Filled" Color="Color.Primary">Select Year
                     </MudButton>
                 </div>
-                <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@data"
-                    InputLabels="@labels">
+                <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@Data"
+                    InputLabels="@Labels">
                     <CustomGraphics>
                         <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
                             fill="blue" font-family="Helvetica" font-size="3">Income</text>
@@ -50,26 +50,28 @@
             </MudPaper>
         </MudItem>
         <div class="incline-block">
-            <MudText>Income : @data[1]</MudText>
-            <MudText>Savings : @data[0]</MudText>
-            <MudText>Expenses : @data[2]</MudText>
+            <MudText>Income : @Data[0]</MudText>
+            <MudText>Savings : @Data[1]</MudText>
+            <MudText>Expenses : @Data[2]</MudText>
         </div>
     </MudGrid>
 </MudContainer>
 
 @code {
-    public double[] data = new double[3];
-    public string[] labels = { "Expenses", "Income", "Savings" };
-    private DateTime date = DateTime.Now;
-    private List<DateModel?> Dates = new List<DateModel?>();
-    private List<MonthModel?> Months = new List<MonthModel?>();
-    public IList<YearModel>? Years = new List<YearModel>();
-    public IList<MonthModel>? IncomeByEachMonth = new List<MonthModel>();
-    public IList<MonthModel>? SavingsByEachMonth = new List<MonthModel>();
-    public IList<MonthModel>? ExpensesByEachMonth = new List<MonthModel>();
-    public IList<IncomeModel>? Income = new List<IncomeModel>();
+    private double[] Data = new double[3];
+    private string[] Labels = { "Income", "Savings", "Expenses" };
+    private DateTime DateOfToday = DateTime.Now;
+    private List<DateModel>? Dates = new List<DateModel>();
+    private List<MonthModel>? Months = new List<MonthModel>();
+    private IList<YearModel>? Years = new List<YearModel>();
+    private IList<MonthModel>? IncomeByEachMonth = new List<MonthModel>();
+    private IList<MonthModel>? SavingsByEachMonth = new List<MonthModel>();
+    private IList<MonthModel>? ExpensesByEachMonth = new List<MonthModel>();
+    private IList<IncomeModel>? Income = new List<IncomeModel>();
+    private MonthModel? LatestIncome;
 
-    private DateTime latestRecordDate;
+
+    private DateTime LatestRecordDate;
 
     private List<string> messages = new List<string>();
 
@@ -88,7 +90,7 @@
         MessageService.OnMessage += MessageHandler;
     }
 
-    public void Dispose()
+    private void Dispose()
     {
         MessageService.OnMessage -= MessageHandler;
     }
@@ -104,22 +106,25 @@
         SetDataOnSelect();
     }
 
-    private void GetLatestRecordDate() => latestRecordDate = Dates.Select(date => date.LatestDate).FirstOrDefault();
+    private void GetLatestRecordDate() => LatestRecordDate = Dates!.Select(date => date.LatestDate).FirstOrDefault();
 
-    private void GetLatestMonthlyExpenses()
-    {
-        float latestExpenses = ExpensesByEachMonth.Select(expenses => expenses.MonthlyExpenses).LastOrDefault(0);
-        data[0] = latestExpenses;
-    }
     private void GetLatestMonthlyIncome()
     {
-        float latestIncome = IncomeByEachMonth.Select(income => income.MonthlyIncome).LastOrDefault(0);
-        data[1] = latestIncome;
+        @* float latestIncome = IncomeByEachMonth!.Select(income => income.MonthlyIncome).LastOrDefault(0); *@
+        LatestIncome = IncomeByEachMonth!.Select(income => income).LastOrDefault(new MonthModel { });
+        Data[0] = LatestIncome.MonthlyIncome;
+    }
+    private void GetLatestMonthlyExpenses()
+    {
+        float latestExpenses = ExpensesByEachMonth!.Where(expenses => expenses.Id == LatestIncome.Id && expenses.YearId ==
+        LatestIncome.YearId).Select(expenses => expenses.MonthlyExpenses).LastOrDefault(0);
+        Data[2] = latestExpenses;
     }
     private void GetLatestMonthlySavings()
     {
-        float latestSavings = SavingsByEachMonth.Select(savings => savings.MonthlySavings).LastOrDefault(0);
-        data[2] = latestSavings;
+        float latestSavings = SavingsByEachMonth!.Where(savings => savings.Id == LatestIncome.Id && savings.YearId ==
+        LatestIncome.YearId).Select(savings => savings.MonthlySavings).LastOrDefault(0);
+        Data[1] = latestSavings;
     }
 
     private void OpenSubmitForm()
@@ -130,16 +135,16 @@
 
     private void SetDataOnSelect()
     {
-        data[0] = state.SelectedExpenses.MonthlyExpenses;
-        data[1] = state.SelectedIncome.MonthlyIncome;
-        data[2] = state.SelectedSavings.MonthlySavings;
+        Data[0] = state.SelectedIncome!.MonthlyIncome;
+        Data[1] = state.SelectedSavings!.MonthlySavings;
+        Data[2] = state.SelectedExpenses!.MonthlyExpenses;
     }
 
     public string CalculateUndistributedIcome()
     {
-        double latestExpenses = data[0];
-        double latestIncome = data[1];
-        double latestSavings = data[2];
+        double latestIncome = Data[0];
+        double latestSavings = Data[1];
+        double latestExpenses = Data[2];
 
         var remainingIncome = latestIncome - (latestExpenses + latestSavings);
         double percentOfUndistributedIncome = (remainingIncome / latestIncome) * 100;

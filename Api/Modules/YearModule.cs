@@ -1,6 +1,4 @@
-using System.ComponentModel.Design;
-using System.Runtime.Intrinsics.X86;
-using DAL.ComplexData;
+using DAL.Data;
 using DAL.Models;
 
 namespace Api.Modules
@@ -40,17 +38,6 @@ namespace Api.Modules
             }
         }
 
-        // private static async Task<IResult> Get(IYears data)
-        // {
-        //     try
-        //     {
-        //         return Results.Ok(await data.Get());
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return Results.Problem(ex.Message);
-        //     }
-        // }
         private static async Task<IResult> InsertYearAsync(IYears data, YearModel year)
         {
             try

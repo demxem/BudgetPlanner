@@ -5,28 +5,29 @@ namespace Client.Pages
 {
     public partial class Budget
     {
+        private IEnumerable<MonthModel>? Expenses = new List<MonthModel>();
+        private IEnumerable<MonthModel>? Savings = new List<MonthModel>();
+        private IEnumerable<MonthModel>? Income = new List<MonthModel>();
+        private IEnumerable<YearModel>? Years = new List<YearModel>();
+        private YearModel? inputYear;
+        private YearModel? selectedYear = new YearModel { Name = "" };
+
+        private TableApplyButtonPosition applyButtonPosition = TableApplyButtonPosition.Start;
+        private TableEditButtonPosition editButtonPosition = TableEditButtonPosition.Start;
+        private TableEditTrigger editTrigger = TableEditTrigger.EditButton;
         private List<string> editEvents = new();
-        private int activePanel = 2;
+        private List<string> messages = new List<string>();
+
+        private int activeTabNumber = 0;
         private bool dense = true;
         private bool hover = true;
         private bool ronly = false;
         private bool canCancelEdit = true;
         private bool blockSwitch = false;
         private string searchString = "";
-        private MonthModel? selectedItemRow;
-        private MonthModel selectedIncome = new MonthModel { Name = "" };
-        private MonthModel selectedSavings = new MonthModel { Name = "" };
-        private MonthModel selectedExpenses = new MonthModel { Name = "" };
-        private YearModel? inputYear;
-        private TableApplyButtonPosition applyButtonPosition = TableApplyButtonPosition.Start;
-        private TableEditButtonPosition editButtonPosition = TableEditButtonPosition.Start;
-        private TableEditTrigger editTrigger = TableEditTrigger.EditButton;
-        private IEnumerable<MonthModel> Expenses = new List<MonthModel>();
-        private IEnumerable<MonthModel> Savings = new List<MonthModel>();
-        private IEnumerable<MonthModel> Income = new List<MonthModel>();
-        private IEnumerable<YearModel> Years = new List<YearModel>();
-        private YearModel? selectedYear = new YearModel { Name = "" };
-        private List<string> messages = new List<string>();
+        private MonthModel incomeSelectedOnRowClick = new MonthModel { Name = "" };
+        private MonthModel savingsSelectedOnRowClick = new MonthModel { Name = "" };
+        private MonthModel expensesSelectedOnRowClick = new MonthModel { Name = "" };
 
         protected override async Task OnInitializedAsync()
         {
@@ -49,12 +50,11 @@ namespace Client.Pages
             else
                 messages.Clear();
             StateHasChanged();
-            if (message.Equals("YearPosted") || message.Equals("yearDeleted"))
+            if (message!.Equals("YearPosted") || message.Equals("yearDeleted"))
             {
                 await GetYearsAsync();
             }
         }
-
         public async Task GetExpensesAsync()
         {
             Expenses = await apiClient.GetExpensesByEachMonthAsync();
@@ -125,21 +125,21 @@ namespace Client.Pages
 
         private async void SavingsCommited(object savings)
         {
-            await apiClient.UpdateSavingsAsync(selectedSavings.Savings);
+            await apiClient.UpdateSavingsAsync(savingsSelectedOnRowClick.Savings);
             await GetSavingsAsync();
             AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)savings).Name} committed");
         }
 
         private async void IncomeCommited(object income)
         {
-            await apiClient.UpdateIncomeAsync(selectedIncome.Income);
+            await apiClient.UpdateIncomeAsync(incomeSelectedOnRowClick.Income);
             await GetIncomeAsync();
             AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)income).Name} committed");
         }
 
         private async void ExpensesCommited(object expenses)
         {
-            await apiClient.UpdateExpensesAsync(selectedExpenses.Expenses);
+            await apiClient.UpdateExpensesAsync(expensesSelectedOnRowClick.Expenses);
             await GetExpensesAsync();
             AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)expenses).Name} committed");
         }
@@ -221,62 +221,62 @@ namespace Client.Pages
 
         public float CalculateMonthlyIncome()
         {
-            if (activePanel == 0)
+            if (activeTabNumber == 0)
             {
-                return Income.Where(income => income.Equals(selectedIncome)).Select(income => income.MonthlyIncome).FirstOrDefault(0);
+                return Income!.Where(income => income.Equals(incomeSelectedOnRowClick)).Select(income => income.MonthlyIncome).FirstOrDefault(0);
             }
 
-            if (activePanel == 1)
+            if (activeTabNumber == 1)
             {
-                return Income.Where(income => income.Name.Equals(selectedSavings.Name)).Select(income => income.MonthlyIncome).FirstOrDefault(0);
+                return Income!.Where(income => income!.Name!.Equals(savingsSelectedOnRowClick.Name)).Select(income => income.MonthlyIncome).FirstOrDefault(0);
             }
 
-            return Income.Where(income => income.Name.Equals(selectedExpenses.Name)).Select(income => income.MonthlyIncome).FirstOrDefault(0);
+            return Income!.Where(income => income!.Name!.Equals(expensesSelectedOnRowClick.Name)).Select(income => income.MonthlyIncome).FirstOrDefault(0);
         }
 
         public float CalculateMonthlySavings()
         {
-            if (activePanel == 0)
+            if (activeTabNumber == 0)
             {
-                return Savings.Where(savings => savings.Name.Equals(selectedIncome.Name)).Select(savings => savings.MonthlySavings).FirstOrDefault(0);
+                return Savings!.Where(savings => savings!.Name!.Equals(incomeSelectedOnRowClick.Name)).Select(savings => savings.MonthlySavings).FirstOrDefault(0);
             }
 
-            if (activePanel == 1)
+            if (activeTabNumber == 1)
             {
-                return Savings.Where(savings => savings.Equals(selectedSavings)).Select(savings => savings.MonthlySavings).FirstOrDefault(0);
+                return Savings!.Where(savings => savings.Equals(savingsSelectedOnRowClick)).Select(savings => savings.MonthlySavings).FirstOrDefault(0);
             }
 
-            return Savings.Where(savings => savings.Name.Equals(selectedExpenses.Name)).Select(savings => savings.MonthlySavings).FirstOrDefault(0);
+            return Savings!.Where(savings => savings!.Name!.Equals(expensesSelectedOnRowClick.Name)).Select(savings => savings.MonthlySavings).FirstOrDefault(0);
         }
 
         public float CalculateMonthlyExpenses()
         {
-            if (activePanel == 0)
+            if (activeTabNumber == 0)
             {
-                return Expenses.Where(expenses => expenses.Name.Equals(selectedIncome.Name)).Select(expenses => expenses.MonthlyExpenses).FirstOrDefault(0);
+                return Expenses!.Where(expenses => expenses!.Name!.Equals(incomeSelectedOnRowClick.Name)).Select(expenses => expenses.MonthlyExpenses).FirstOrDefault(0);
             }
 
-            if (activePanel == 1)
+            if (activeTabNumber == 1)
             {
-                return Expenses.Where(expenses => expenses.Name.Equals(selectedSavings.Name)).Select(expenses => expenses.MonthlyExpenses).FirstOrDefault(0);
+                return Expenses!.Where(expenses => expenses!.Name!.Equals(savingsSelectedOnRowClick.Name)).Select(expenses => expenses.MonthlyExpenses).FirstOrDefault(0);
             }
 
-            return Expenses.Where(expenses => expenses.Equals(selectedExpenses)).Select(expenses => expenses.MonthlyExpenses).FirstOrDefault(0);
+            return Expenses!.Where(expenses => expenses.Equals(expensesSelectedOnRowClick)).Select(expenses => expenses.MonthlyExpenses).FirstOrDefault(0);
         }
 
         public float CalculateYearlyIncome()
         {
-            return Income.Select(income => income.MonthlyIncome).Sum();
+            return Income!.Select(income => income.MonthlyIncome).Sum();
         }
 
         public float CalculateYearlySavings()
         {
-            return Savings.Select(savings => savings.MonthlySavings).Sum();
+            return Savings!.Select(savings => savings.MonthlySavings).Sum();
         }
 
         public float CalculateYearlyExpenses()
         {
-            return Expenses.Select(expenses => expenses.MonthlyExpenses).Sum();
+            return Expenses!.Select(expenses => expenses.MonthlyExpenses).Sum();
         }
 
         private bool FilterSavings(MonthModel savings)

@@ -47,12 +47,13 @@
     private int selectedMonthId;
     private bool dialogSubmit = false;
 
-    public IList<YearModel>? Years = new List<YearModel>();
-    public IList<MonthModel>? IncomeByEachMonth = new List<MonthModel>();
-    public IList<MonthModel>? SavingsByEachMonth = new List<MonthModel>();
-    public IList<MonthModel>? ExpensesByEachMonth = new List<MonthModel>();
-    public IList<IncomeModel>? Income = new List<IncomeModel>();
-    public IList<MonthModel> Months = new List<MonthModel>();
+    private IList<YearModel>? Years = new List<YearModel>();
+    private IList<MonthModel>? IncomeByEachMonth = new List<MonthModel>();
+    private IList<MonthModel>? SavingsByEachMonth = new List<MonthModel>();
+    private IList<MonthModel>? ExpensesByEachMonth = new List<MonthModel>();
+    private IList<IncomeModel>? Income = new List<IncomeModel>();
+    private IList<MonthModel>? Months = new List<MonthModel>();
+
     [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -64,12 +65,12 @@
         ExpensesByEachMonth = await apiClient.GetExpensesByEachMonthAsync();
     }
 
-    public void SetYearOnSelect(YearModel selectedYear)
+    private void SetYearOnSelect(YearModel selectedYear)
     {
         selectedYearId = selectedYear.Id;
     }
 
-    async Task SubmitAsync()
+    private void SubmitAsync()
     {
         FilterIncomeOnSelect();
         FilterSavingsOnSelect();
@@ -81,10 +82,10 @@
         SendMessage();
     }
 
-    public MonthModel? FilterIncomeOnSelect()
+    private MonthModel? FilterIncomeOnSelect()
     {
         FilterMonthOnSelect();
-        filteredIncome = IncomeByEachMonth.Where(i => i.Id == selectedMonthId && i.YearId == selectedYearId).Select(i =>
+        filteredIncome = IncomeByEachMonth?.Where(i => i.Id == selectedMonthId && i.YearId == selectedYearId).Select(i =>
         i).FirstOrDefault();
         if (filteredIncome == null)
         {
@@ -94,10 +95,10 @@
         return filteredIncome;
     }
 
-    public MonthModel? FilterSavingsOnSelect()
+    private MonthModel? FilterSavingsOnSelect()
     {
         FilterMonthOnSelect();
-        filteredSavings = SavingsByEachMonth.Where(s => s.Id == selectedMonthId && s.YearId == selectedYearId).Select(s =>
+        filteredSavings = SavingsByEachMonth?.Where(s => s.Id == selectedMonthId && s.YearId == selectedYearId).Select(s =>
         s).FirstOrDefault();
 
         if (filteredSavings == null)
@@ -108,10 +109,10 @@
         return filteredSavings;
     }
 
-    public MonthModel FilterExpensesOnSelect()
+    private MonthModel FilterExpensesOnSelect()
     {
         FilterMonthOnSelect();
-        filteredExpenses = ExpensesByEachMonth.Where(e => e.Id == selectedMonthId && e.YearId == selectedYearId).Select(e
+        filteredExpenses = ExpensesByEachMonth?.Where(e => e.Id == selectedMonthId && e.YearId == selectedYearId).Select(e
         => e).FirstOrDefault();
         if (filteredExpenses == null)
         {
@@ -123,7 +124,7 @@
 
     private void FilterMonthOnSelect()
     {
-        selectedMonthId = Months.Where(m => m.Name == selectedMonth && m.YearId == selectedYearId).Select(m
+        selectedMonthId = Months!.Where(m => m.Name == selectedMonth && m.YearId == selectedYearId).Select(m
         => m.Id).FirstOrDefault();
     }
     private void SendMessage()
@@ -136,7 +137,7 @@
         MessageService.ClearMessages();
     }
 
-    public void Cancel() => MudDialog?.Cancel();
+    private void Cancel() => MudDialog?.Cancel();
 
 }
 

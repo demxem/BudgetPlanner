@@ -3,8 +3,8 @@
 
 <MudDialog>
     <DialogContent>
-        <MudSelect T="YearModel" Label="Select Year" @Value="@selectedYear" ValueChanged="(year => SetSelected(year))"
-            AnchorOrigin="Origin.BottomCenter">
+        <MudSelect T="YearModel" Label="Select Year" @Value="@selectedYear"
+            ValueChanged="(year => SetYearOnSelect(year))" AnchorOrigin="Origin.BottomCenter">
             @foreach (var year in Years)
             {
                 <MudSelectItem Value="@year">@year.Name</MudSelectItem>
@@ -35,11 +35,7 @@
 
     private string selectedMonth = "";
     private YearModel? selectedYear;
-    private string inputYear = "";
     private int selectedYearId;
-    private bool isPresentYear;
-    private bool isPresentMonth;
-    private bool isPersentIncome;
 
     public List<YearModel>? Years = new List<YearModel>();
     public List<MonthModel>? Data = new List<MonthModel>();
@@ -54,14 +50,8 @@
         Months = await apiClient.GetMonthsAsync();
     }
 
-    public async Task GetDataAsync()
-    {
-        Data = await apiClient.GetSavingByEachMonthAsync();
-    }
-
     async Task SubmitAsync()
     {
-
         if ((YearFoundIn(Data)) && !(MonthFoundIn(Data)) || (!YearFoundIn(Data)) &&
         (MonthFoundIn(Data)) || (!YearFoundIn(Data)) && !(MonthFoundIn(Data)))
         {
@@ -94,45 +84,58 @@
 
     public async Task AddMonthAsync()
     {
-        MonthModel monthModel = new MonthModel { Name = selectedMonth, YearId = selectedYearId };
+        MonthModel monthModel = new MonthModel
+            {
+                Name = selectedMonth,
+                YearId = selectedYearId
+            };
+
         await apiClient.PostMonthAsync(monthModel);
     }
     public async Task AddSavingsAsync()
     {
-        int monthId = Months.Where(m => m.Name == selectedMonth && m.YearId == selectedYearId).Select(m =>
+        int monthId = Months!.Where(m => m.Name == selectedMonth && m.YearId == selectedYearId).Select(m =>
         m.Id).FirstOrDefault();
-        SavingsModel savingsModel = new SavingsModel { YearId = selectedYearId, MonthId = monthId };
+
+        SavingsModel savingsModel = new SavingsModel
+            {
+                YearId = selectedYearId,
+                MonthId = monthId
+            };
+
         await apiClient.PostSavingsAsync(savingsModel);
     }
 
-    public void SetSelected(YearModel year)
+    public void SetYearOnSelect(YearModel year)
     {
         selectedYearId = year.Id;
     }
 
-    public bool YearFoundIn(List<MonthModel> data)
+    public bool YearFoundIn(List<MonthModel>? data)
     {
-        return Data.Where(year => year.YearId == selectedYearId).Select(year => year.YearId ==
+        return Data!.Where(year => year.YearId == selectedYearId).Select(year => year.YearId ==
         selectedYearId).FirstOrDefault();
     }
-    public bool MonthFoundIn(List<MonthModel> data)
+    public bool MonthFoundIn(List<MonthModel>? data)
     {
         return Data!.Where(month => month.YearId == selectedYearId).Select(month =>
-        month.Name.Equals(selectedMonth)).FirstOrDefault();
+        month!.Name!.Equals(selectedMonth)).FirstOrDefault();
 
     }
-    public bool SavingsFoundIn(List<MonthModel> data)
+    public bool SavingsFoundIn(List<MonthModel>? data)
     {
-        return Data!.Where(savings => savings.Name.Equals(selectedMonth) && savings.YearId ==
+        return Data!.Where(savings => savings!.Name!.Equals(selectedMonth) && savings.YearId ==
         selectedYearId).Select(savings => savings.SavingsId == 0).FirstOrDefault();
     }
 
     public async Task UpdateMonthAsync()
     {
-        MonthModel monthModel = Months.Where(month => month.Name == selectedMonth && month.YearId ==
+        MonthModel? monthModel = Months!.Where(month => month.Name == selectedMonth && month.YearId ==
         selectedYearId).Select(month => month).FirstOrDefault();
-        monthModel.SavingsId = Savings.Where(savings => savings.MonthId == monthModel.Id).Select(savings =>
+
+        monthModel!.SavingsId = Savings!.Where(savings => savings.MonthId == monthModel.Id).Select(savings =>
         savings.Id).FirstOrDefault();
+
         await apiClient.UpdateMonthAsync(monthModel);
     }
 

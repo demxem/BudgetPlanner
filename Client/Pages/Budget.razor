@@ -36,11 +36,11 @@
 </header>
 
 <body>
-    <MudTabs Elevation="1" Rounded="true" PanelClass="pa-6" @bind-ActivePanelIndex="activePanel">
+    <MudTabs Elevation="1" Rounded="true" PanelClass="pa-6" @bind-ActivePanelIndex="activeTabNumber">
         <MudTabPanel Text="Income" ToolTip="Plan Your Income" ID='"pn_one"'>
             <MudText>
                 <MudTable Items="@Income" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
-                    Filter="new Func<MonthModel ,bool>(FilterIncome)" @bind-SelectedItem="selectedIncome"
+                    Filter="new Func<MonthModel ,bool>(FilterIncome)" @bind-SelectedItem="incomeSelectedOnRowClick"
                     SortLabel="Sort By" CommitEditTooltip="Commit Edit"
                     OnCommitEditClick="@(() => Snackbar.Add("Changes Are Commited To Your Budget"))"
                     RowEditCommit="IncomeCommited" IsEditRowSwitchingBlocked="@blockSwitch"
@@ -137,16 +137,9 @@
          </MudTabPanel>
          <MudTabPanel Text="Savings" ToolTip="Plan Your Savings" ID='"pn_two"'>
              <MudText>
-                 @* <MudSelect T="YearModel" Label="Select Year" @Value="@inputYear" ValueChanged="year =>
-                SetSelectedYear(year)" AnchorOrigin="Origin.BottomCenter">
-                @foreach (var year in Years)
-                {
-                <MudSelectItem Value="@year">@year.Name</MudSelectItem>
-                }
-                </MudSelect> *@
                  <MudTable Items="@Savings" Dense="@dense" Hover="@hover" ReadOnly="@ronly"
                      CanCancelEdit="@canCancelEdit" Filter="new Func<MonthModel ,bool>(FilterSavings)"
-                 @bind-SelectedItem="selectedSavings" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
+                 @bind-SelectedItem="savingsSelectedOnRowClick" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
                      OnCommitEditClick="@(() => Snackbar.Add("Changes Are Commited To Your Budget"))"
                      RowEditCommit="SavingsCommited" IsEditRowSwitchingBlocked="@blockSwitch"
                      ApplyButtonPosition="@applyButtonPosition" EditButtonPosition="@editButtonPosition"
@@ -251,16 +244,9 @@
          </MudTabPanel>
          <MudTabPanel Text="Expenses" ToolTip="Plan Your Expenses" ID='"pn_three"'>
              <MudText>
-                 @* <MudSelect T="YearModel" Label="Select Year" @Value="@inputYear" ValueChanged="year =>
-                SetSelectedYear(year)" AnchorOrigin="Origin.BottomCenter">
-                @foreach (var year in Years)
-                {
-                <MudSelectItem Value="@year">@year.Name</MudSelectItem>
-                }
-                </MudSelect> *@
                  <MudTable Items="@Expenses" Dense="@dense" Hover="@hover" ReadOnly="@ronly"
                      CanCancelEdit="@canCancelEdit" Filter="new Func<MonthModel ,bool>(FilterExpenses)"
-                 @bind-SelectedItem="selectedExpenses" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
+                 @bind-SelectedItem="expensesSelectedOnRowClick" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
                      OnCommitEditClick="@(() => Snackbar.Add("Changes Are Commited To Your Budget"))"
                      RowEditCommit="ExpensesCommited" IsEditRowSwitchingBlocked="@blockSwitch"
                      ApplyButtonPosition="@applyButtonPosition" EditButtonPosition="@editButtonPosition"
@@ -410,7 +396,7 @@
              <MudItem xs="3">
                  <MudCard Outlined="true">
                      <MudCardContent>
-                         <MudText>Monthly Income in @selectedIncome.Name</MudText>
+                         <MudText>Monthly Income</MudText>
                          <MudText Typo="Typo.body1">@CalculateMonthlyIncome()</MudText>
                      </MudCardContent>
                  </MudCard>
@@ -418,7 +404,7 @@
              <MudItem xs="3">
                  <MudCard Outlined="true">
                      <MudCardContent>
-                         <MudText>Monthly Savings in @selectedSavings.Name</MudText>
+                         <MudText>Monthly Savings</MudText>
                          <MudText Typo="Typo.body1">@CalculateMonthlySavings()</MudText>
                      </MudCardContent>
                  </MudCard>
@@ -426,7 +412,7 @@
              <MudItem xs="3">
                  <MudCard Outlined="true">
                      <MudCardContent>
-                         <MudText>Monthly Expenses in @selectedExpenses.Name</MudText>
+                         <MudText>Monthly Expenses</MudText>
                          <MudText Typo="Typo.body1">@CalculateMonthlyExpenses()</MudText>
                      </MudCardContent>
                  </MudCard>
@@ -434,7 +420,7 @@
              <MudItem xs="3">
                  <MudCard Outlined="true">
                      <MudCardContent>
-                         <MudText>Undistributed Mothly Income in @selectedIncome.Name</MudText>
+                         <MudText>Undistributed Mothly Income</MudText>
                          <MudText Typo="Typo.body1">@CalculateMonthlyUndistributedIncome()</MudText>
                      </MudCardContent>
                  </MudCard>
