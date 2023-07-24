@@ -5,6 +5,30 @@
 @inject Client.Services.SharedState state
 @inject IMessageService MessageService
 
+<style>
+    select {
+        width: 100%;
+        padding: 10px;
+    }
+
+    td {
+        border: 1px solid rgb(190, 190, 190);
+    }
+
+    th {
+        border: 1px solid rgb(190, 190, 190);
+        padding: 10px;
+    }
+
+    input {
+        padding: 10px;
+        width: 100%;
+    }
+
+    td {
+        text-align: center;
+    }
+</style>
 <MudGrid>
     <MudItem xs="3">
         <MudCard Outlined="true">
@@ -29,10 +53,18 @@
             </MudCardContent>
         </MudCard>
     </MudItem>
+    <MudItem xs="3">
+        <MudCard Outlined="true">
+            <MudCardContent>
+                <MudText>Left To Budget</MudText>
+                <MudText Typo="Typo.body2">@GetLatestTrackedUndistributedIncome()</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
 </MudGrid>
 <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
     <MudGrid>
-        <MudItem xs="8" sm="3">
+        <MudItem xs="12" sm="4">
             <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
                 <div class="inline-block">
                     <MudButton @onclick="@OpenSubmitForm" Variant="Variant.Filled" Color="Color.Primary">Select Year
@@ -49,11 +81,77 @@
                 </MudChart>
             </MudPaper>
         </MudItem>
-        <div class="incline-block">
-            <MudText>Income : @Data[0]</MudText>
-            <MudText>Savings : @Data[1]</MudText>
-            <MudText>Expenses : @Data[2]</MudText>
-        </div>
+        <MudItem xs="12" sm="6">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+                <table>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Category</th>
+                        <th>Details</th>
+                        <th>Amount</th>
+                        <th>Balance</th>
+                        <th>Submit</th>
+                    </tr>
+                    <tr>
+                        <td><input type="datetime-local" required @bind-value="@date"></td>
+                        <td>
+                            <select name="Type" @onchange="((ChangeEventArgs e) => itemType = e.Value.ToString())">
+                                <option value="Income">Income</option>
+                                <option value="Savings">Savings</option>
+                                <option value="Expenses">Expenses</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="Category"
+                            @onchange="((ChangeEventArgs e) => itemCategory = e.Value.ToString())">
+                                @if (itemType.Equals("Income"))
+                                {
+                                    <option value="Employment">Employment</option>
+                                    <option value="SideHustle">SideHustle</option>
+                                    <option value="Dividents">Dividents</option>
+                                }
+                                else if (itemType.Equals("Savings"))
+                                {
+                                    <option value="EmergencyFund">EmergencyFund</option>
+                                    <option value="RetirementAccount">RetirementAccount</option>
+                                    <option value="Vacation">Vacation</option>
+                                    <option value="HealthNeeds">HealthNeeds</option>
+                                }
+                                else if (itemType.Equals("Expenses"))
+                                {
+                                    <option value="Housing">Housing</option>
+                                    <option value="Groceries">Groceries</option>
+                                    <option value="Utilities">Utilities</option>
+                                    <option value="Vacation">Vacation</option>
+                                    <option value="Transportation">Transportation</option>
+                                    <option value="Medicine">Medicine</option>
+                                    <option value="Clothing">Clothing</option>
+                                    <option value="Media">Media</option>
+                                    <option value="Insurances">Insurances</option>
+                                }
+                            </select>
+                        </td>
+                        <td><input type="text" required @bind-value="@itemDetails"></td>
+                        <td><input type="number" required @bind-value="@itemAmount"></td>
+                        <td>@itemBalance</td>
+                        <td><button @onclick="@PostBudgetAsync">Submit</button></td>
+                    </tr>
+                    @foreach (var item in Budget)
+                    {
+                        <tr>
+                            <td>@item.Date</td>
+                            <td>@item.Type</td>
+                            <td>@item.Category</td>
+                            <td>@item.Details</td>
+                            <td>@item.Amount</td>
+                            <td>@item.Balance</td>
+                            <td><input type="button" value="Remove" @onclick="(() => DeleteBudgetAsync(item.Id))"></td>
+                        </tr>
+                    }
+                </table>
+            </MudPaper>
+        </MudItem>
     </MudGrid>
 </MudContainer>
 
@@ -68,8 +166,15 @@
     private IList<MonthModel>? SavingsByEachMonth = new List<MonthModel>();
     private IList<MonthModel>? ExpensesByEachMonth = new List<MonthModel>();
     private IList<IncomeModel>? Income = new List<IncomeModel>();
+    private IList<BudgetModel>? Budget = new List<BudgetModel>();
     private MonthModel? LatestIncome;
+    private string? itemType { get; set; } = "Income";
+    private string itemCategory { get; set; } = "";
+    private float itemAmount { get; set; }
+    private DateTime date { get; set; } = DateTime.Now;
+    private string itemDetails { get; set; } = "";
 
+    private float itemBalance { get; set; }
 
     private DateTime LatestRecordDate;
 
@@ -78,6 +183,7 @@
     protected override async Task OnInitializedAsync()
     {
         Dates = await apiClient.GetLatestDateAsync();
+        Budget = await apiClient.GetBudgetAsync();
         GetLatestRecordDate();
         Years = await apiClient.GetYearsAsync();
         IncomeByEachMonth = await apiClient.GetIncomeByEachMonthAsync();
@@ -106,25 +212,44 @@
         SetDataOnSelect();
     }
 
-    private void GetLatestRecordDate() => LatestRecordDate = Dates!.Select(date => date.LatestDate).FirstOrDefault();
+    private void GetLatestRecordDate() => LatestRecordDate = Dates!.Select(date =>
+    date.LatestDate).FirstOrDefault();
 
     private void GetLatestMonthlyIncome()
     {
-        @* float latestIncome = IncomeByEachMonth!.Select(income => income.MonthlyIncome).LastOrDefault(0); *@
+
         LatestIncome = IncomeByEachMonth!.Select(income => income).LastOrDefault(new MonthModel { });
         Data[0] = LatestIncome.MonthlyIncome;
     }
     private void GetLatestMonthlyExpenses()
     {
-        float latestExpenses = ExpensesByEachMonth!.Where(expenses => expenses.Id == LatestIncome.Id && expenses.YearId ==
+        float latestExpenses = ExpensesByEachMonth!.Where(expenses => expenses.Id == LatestIncome.Id &&
+        expenses.YearId ==
         LatestIncome.YearId).Select(expenses => expenses.MonthlyExpenses).LastOrDefault(0);
         Data[2] = latestExpenses;
     }
     private void GetLatestMonthlySavings()
     {
-        float latestSavings = SavingsByEachMonth!.Where(savings => savings.Id == LatestIncome.Id && savings.YearId ==
+        float latestSavings = SavingsByEachMonth!.Where(savings => savings.Id == LatestIncome.Id &&
+        savings.YearId ==
         LatestIncome.YearId).Select(savings => savings.MonthlySavings).LastOrDefault(0);
         Data[1] = latestSavings;
+    }
+
+    private double GetLatestTrackedUndistributedIncome()
+    {
+        double latestIncome = Data[0];
+        double latestSavings = Data[1];
+        double latestExpenses = Data[2];
+
+        var remainingIncome = latestIncome - (latestExpenses + latestSavings);
+        return remainingIncome;
+    }
+
+    private async Task GetBudgetAsync()
+    {
+        Budget = await apiClient.GetBudgetAsync();
+        StateHasChanged();
     }
 
     private void OpenSubmitForm()
@@ -155,4 +280,28 @@
 
     private void OnClick(MouseEventArgs args) => Snackbar.Add("Redirecting");
     private void OnTouch(TouchEventArgs args) => Snackbar.Add("Redirecting");
+
+    private void set()
+    {
+        itemType = itemType;
+    }
+    private async Task PostBudgetAsync()
+    {
+        var budgetModel = new BudgetModel
+            {
+                Date = date,
+                Type = itemType,
+                Category = itemCategory,
+                Details = itemDetails,
+                Amount = Math.Round(itemAmount, 2)
+            };
+        await apiClient.InsertBudgetAsync(budgetModel);
+        await GetBudgetAsync();
+    }
+
+    private async Task DeleteBudgetAsync(int id)
+    {
+        await apiClient.DeleteBudgetAsync(id);
+        await GetBudgetAsync();
+    }
 }

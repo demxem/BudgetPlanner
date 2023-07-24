@@ -497,8 +497,59 @@ namespace Client.Services
             return 0;
         }
 
+        public async Task<List<BudgetModel>?> GetBudgetAsync()
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"/years/months/budget");
 
+                if (response.IsSuccessStatusCode)
+                {
+                    var budget = await response.Content.ReadFromJsonAsync<List<BudgetModel>>();
+
+                    return budget;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return new List<BudgetModel>();
+        }
+
+        public async Task InsertBudgetAsync(BudgetModel budget)
+        {
+            try
+            {
+                await httpClient.PostAsJsonAsync("/years/months/budget/", budget);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+        }
+
+        public async Task UpdateBudgetAsync(int id)
+        {
+            try
+            {
+                await httpClient.PutAsJsonAsync($"/years/months/budget/{id}", id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+        }
+        public async Task DeleteBudgetAsync(int id)
+        {
+            try
+            {
+                await httpClient.DeleteAsync($"/years/months/budget/{id}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+        }
     }
-
-
 }

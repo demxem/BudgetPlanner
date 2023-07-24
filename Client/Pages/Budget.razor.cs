@@ -189,6 +189,11 @@ namespace Client.Pages
             DialogService.Show<YearDeleteForm>(@"This action will delete complete year budget plan", closeOnEscapeKey);
         }
 
+        private void ChangeOnRowClick(MonthModel model)
+        {
+
+        }
+
         //Method for button selector//
         public async void SetSelectedYear(YearModel year)
         {

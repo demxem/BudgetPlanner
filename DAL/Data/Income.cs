@@ -21,6 +21,7 @@ public class Income : IIncome
         return _dataAccess.LoadData<IncomeModel, dynamic>(sql, new { });
     }
 
+
     public async Task<IncomeModel?> GetIncomeById(int id)
     {
         string sql = @"select id,employment, sidehustle, dividends, date, monthid
