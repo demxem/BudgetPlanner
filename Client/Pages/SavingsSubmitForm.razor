@@ -71,7 +71,7 @@
             await GetMonthsAsync();
             await UpdateMonthAsync();
         }
-
+        StateHasChanged();
         MudDialog?.Close(DialogResult.Ok(true));
     }
     public async Task GetSavingsAsync()
@@ -99,13 +99,13 @@
         int monthId = Months!.Where(m => m.Name == selectedMonth && m.YearId == selectedYearId).Select(m =>
         m.Id).FirstOrDefault();
 
-        SavingsModel savingsModel = new SavingsModel
+        SavingsModel SavingsModel = new SavingsModel
             {
                 YearId = selectedYearId,
                 MonthId = monthId
             };
 
-        await savingsApiClient.PostSavingsAsync(savingsModel);
+        await savingsApiClient.PostSavingsAsync(SavingsModel);
     }
 
     public void SetYearOnSelect(YearModel year)
