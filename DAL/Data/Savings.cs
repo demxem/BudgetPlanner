@@ -44,11 +44,12 @@ public class Savings : ISavings
 
     public Task InsertSavings(SavingsModel savings)
     {
-        string sql = @"insert into savings (emergencyfund, retirementaccount, vacation, healthneeds,trackedemergencyfund, trackedretirementaccount, trackedvacation, trackedhealthneeds, date, monthid, yearid)
-                           values (@EmergencyFund, @RetirementAccount, @Vacation, @HealthNeeds,@TrackedEmergencyFund, @TrackedRetirementAccount, @TrackedVacation, @TrackedHealthNeeds @Date, @MonthId, @YearId);";
+        string sql = @"insert into savings (emergencyfund, retirementaccount, vacation, healthneeds, trackedemergencyfund, trackedretirementaccount, trackedvacation, trackedhealthneeds, date, monthid, yearid)
+                           values (@EmergencyFund, @RetirementAccount, @Vacation, @HealthNeeds,@TrackedEmergencyFund, @TrackedRetirementAccount, @TrackedVacation, @TrackedHealthNeeds, @Date, @MonthId, @YearId);";
 
         return _dataAccess.SafeData(sql, new
         {
+            savings.Id,
             savings.EmergencyFund,
             savings.RetirementAccount,
             savings.Vacation,

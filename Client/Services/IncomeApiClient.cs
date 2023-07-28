@@ -12,7 +12,6 @@ namespace Client.Services
             this.httpClient = httpClient;
         }
 
-
         public async Task<List<IncomeModel>?> GetIncomeAsync()
         {
             try
@@ -25,7 +24,6 @@ namespace Client.Services
 
                     return income;
                 }
-
             }
             catch (Exception ex)
             {
@@ -46,7 +44,6 @@ namespace Client.Services
 
                     return income;
                 }
-
             }
             catch (Exception ex)
             {
@@ -74,7 +71,6 @@ namespace Client.Services
             }
             return new BudgetModel();
         }
-
         public async Task<List<BudgetModel>?> GetIncomeByYearId(int id)
         {
             try

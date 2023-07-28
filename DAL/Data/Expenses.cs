@@ -43,10 +43,11 @@ public class Expenses : IExpenses
                                             clothing,media,insuranses, trackedhousing, trackedgroceries,trackedutilities,
                                             trackedvacation,trackedtransportation,trackedmedicine,
                                             trackedclothing,trackedmedia,trackedinsuranses, monthid, yearid)
-                           values (@Housing, @Groceries, @Utilities, @Vacation,@Transportation,@Medicine,@Clothing,@Media,@Insuranses,@TrackedHousing, @TrackedGroceries, @TrackedUtilities, @TrackedVacation,@TrackedTransportation,@TrackedMedicine,@TrackedClothing,@TrackedMedia,@Insuranses@MonthId, @YearId);";
+                           values (@Housing, @Groceries, @Utilities, @Vacation,@Transportation,@Medicine,@Clothing,@Media,@Insuranses,@TrackedHousing, @TrackedGroceries, @TrackedUtilities, @TrackedVacation,@TrackedTransportation,@TrackedMedicine,@TrackedClothing,@TrackedMedia,@TrackedInsuranses, @MonthId, @YearId);";
 
         return _dataAccess.SafeData(sql, new
         {
+            expenses.Id,
             expenses.Housing,
             expenses.Groceries,
             expenses.Utilities,
