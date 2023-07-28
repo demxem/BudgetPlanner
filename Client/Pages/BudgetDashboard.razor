@@ -1,0 +1,437 @@
+@page "/budgetdashboard"
+@using Client.Models
+@inject Client.Services.IncomeApiClient incomeApiClient
+@inject Client.Services.SavingsApiClient savingsApiClient
+@inject Client.Services.ExpensesApiClient expensesApiClient
+@inject Client.Services.YearApiClient yearsApiClient
+
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject NavigationManager UriHelper
+@inject IMessageService MessageService
+
+<style>
+    td {
+        text-align: center;
+        border: 1px solid rgb(190, 190, 190);
+    }
+
+    th {
+        text-align: center;
+        border: 1px solid rgb(190, 190, 190);
+        padding: 10px;
+    }
+</style>
+
+<select @onchange="((ChangeEventArgs e) => GetLatestDataByYearIdAsync(e))">
+    <option value="budget">--Year-</option>
+    @foreach (var year in Years)
+    {
+        <option value="@year.Id">@year.Name</option>
+    }
+</select>
+
+
+<select @onchange="((ChangeEventArgs e) => GetIncomeByMonthIdAsync(e))">
+    <option value="income">--income-</option>
+    @foreach (var month in Income)
+    {
+        <option value="@month.Id">Income in @month.Name</option>
+    }
+</select>
+
+<select @onchange="((ChangeEventArgs e) => GetSavingsByMonthIdAsync(e))">
+    <option value="savings">--savings-</option>
+    @foreach (var month in Savings)
+    {
+        <option value="@month.Id">Savings in @month.Name</option>
+    }
+</select>
+
+<select @onchange="((ChangeEventArgs e) => GetExpensesByMonthIdAsync(e))">
+    <option value="expenses">--expenses-</option>
+    @foreach (var month in Expenses)
+    {
+        <option value="@month.Id">Expenses in @month.Name</option>
+    }
+</select>
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    <MudGrid>
+        <MudItem xs="12" sm="6">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+                <table>
+                    <tr>
+                        <th>Income</th>
+                        <th>Tracked</th>
+                        <th>Budget</th>
+                        <th>%Compl.</th>
+                        <th>Remaining</th>
+                        <th>Excess</th>
+                    </tr>
+                    @if (TrackedBudgetIncome != null)
+                    {
+                        <tr>
+                            <td>Employment</td>
+                            <td>@TrackedBudgetIncome.Income.TrackedEmployment</td>
+                            <td>@TrackedBudgetIncome.Income.Employment</td>
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                        aria-valuemin="0" aria-valuemax="100">40%</div>
+                                </div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                        <td>SideHustle</td>
+                        <td>@TrackedBudgetIncome.Income.TrackedSideHustle</td>
+                        <td>@TrackedBudgetIncome.Income.SideHustle</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>Dividents</td>
+                        <td>@TrackedBudgetIncome.Income.TrackedDividends</td>
+                        <td>@TrackedBudgetIncome.Income.Dividends</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>Total</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                    }
+                    else
+                    {
+                        <h1>loading...</h1>
+                    }
+                </table>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+                <table>
+                    <tr>
+                        <th>Savings</th>
+                        <th>Tracked</th>
+                        <th>Budget</th>
+                        <th>%Compl.</th>
+                        <th>Remaining</th>
+                        <th>Excess</th>
+                    </tr>
+                    @if (TrackedBudgetSavings != null)
+                    {
+                        <tr>
+                            <td>EmergencyFund</td>
+                            <td>@TrackedBudgetSavings.Savings.TrackedEmergencyFund</td>
+                            <td>@TrackedBudgetSavings.Savings.EmergencyFund</td>
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                        aria-valuemin="0" aria-valuemax="100">40%</div>
+                                </div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                        <td>RetirementAccount</td>
+                        <td>@TrackedBudgetSavings.Savings.TrackedRetirementAccount</td>
+                        <td>@TrackedBudgetSavings.Savings.RetirementAccount</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>Vacation</td>
+                        <td>@TrackedBudgetSavings.Savings.TrackedVacation</td>
+                        <td>@TrackedBudgetSavings.Savings.Vacation</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>HealthNeeds</td>
+                        <td>@TrackedBudgetSavings.Savings.TrackedHealthNeeds</td>
+                        <td>@TrackedBudgetSavings.Savings.HealthNeeds</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>Total</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                    }
+                    else
+                    {
+                        <h1>loading...</h1>
+                    }
+                </table>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+                <table>
+                    <tr>
+                        <th>Expenses</th>
+                        <th>Tracked</th>
+                        <th>Budget</th>
+                        <th>%Compl.</th>
+                        <th>Remaining</th>
+                        <th>Excess</th>
+                    </tr>
+                    @if (TrackedBudgetSavings != null)
+                    {
+
+                        <tr>
+                            <td>Housing</td>
+                            <td>@TrackedBudgetExpenses.Expenses.TrackedHousing</td>
+                            <td>@TrackedBudgetExpenses.Expenses.Housing</td>
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                        aria-valuemin="0" aria-valuemax="100">40%</div>
+                                </div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                        <td>Groceries</td>
+                        <td>@TrackedBudgetExpenses.Expenses.TrackedGroceries</td>
+                        <td>@TrackedBudgetExpenses.Expenses.Groceries</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>Utilities</td>
+                        <td>@TrackedBudgetExpenses.Expenses.TrackedUtilities</td>
+                        <td>@TrackedBudgetExpenses.Expenses.Utilities</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>Vacation</td>
+                        <td>@TrackedBudgetExpenses.Expenses.TrackedVacation</td>
+                        <td>@TrackedBudgetExpenses.Expenses.Vacation</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>Transportation</td>
+                        <td>@TrackedBudgetExpenses.Expenses.TrackedTransportation</td>
+                        <td>@TrackedBudgetExpenses.Expenses.Transportation</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>Medicine</td>
+                        <td>@TrackedBudgetExpenses.Expenses.TrackedMedicine</td>
+                        <td>@TrackedBudgetExpenses.Expenses.Medicine</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>Clothing</td>
+                        <td>@TrackedBudgetExpenses.Expenses.TrackedClothing</td>
+                        <td>@TrackedBudgetExpenses.Expenses.Clothing</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>Media</td>
+                        <td>@TrackedBudgetExpenses.Expenses.TrackedMedia</td>
+                        <td>@TrackedBudgetExpenses.Expenses.Media</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>Insuranses</td>
+                        <td>@TrackedBudgetExpenses.Expenses.TrackedInsuranses</td>
+                        <td>@TrackedBudgetExpenses.Expenses.Insuranses</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
+                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        <tr>
+                        <td>Total</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                    }
+                    else
+                    {
+                        <h1>loading...</h1>
+                    }
+                </table>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code
+{
+    private string size = "50%";
+    private BudgetModel? TrackedBudgetIncome;
+    private BudgetModel? TrackedBudgetSavings;
+    private BudgetModel? TrackedBudgetExpenses;
+    private IEnumerable<BudgetModel>? Expenses = new List<BudgetModel>();
+    private IEnumerable<BudgetModel>? Savings = new List<BudgetModel>();
+    public IEnumerable<BudgetModel>? Income = new List<BudgetModel>();
+    private IEnumerable<YearModel>? Years = new List<YearModel>();
+    private IEnumerable<BudgetModel>? Months = new List<BudgetModel>();
+    private YearModel selectedYear { get; set; } = new YearModel { Name = "" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        Years = await yearsApiClient.GetYearsAsync();
+        TrackedBudgetIncome = await incomeApiClient.GetLatestIncomeAsync();
+        TrackedBudgetSavings = await savingsApiClient.GetLatestSavingsAsync();
+        TrackedBudgetExpenses = await expensesApiClient.GetLatestExpensesAsync();
+    }
+
+    public async Task GetLatestDataByYearIdAsync(ChangeEventArgs e)
+    {
+        await GetLatestIncomeByYearIdAsync(e);
+        await GetLatestExpensesByYearIdAsync(e);
+        await GetLatestSavingsByYearIdAsync(e);
+    }
+    @* public async Task GetLatestDataByMonthIdAsync(ChangeEventArgs e)
+{
+await GetIncomeByMonthIdAsync(e);
+await GetSavingsByMonthIdAsync(e);
+await GetEpxpensesByMonthIdAsync(e);
+} *@
+
+    public async Task GetLatestIncomeByYearIdAsync(ChangeEventArgs e)
+    {
+        var yearId = int.Parse(e.Value?.ToString());
+        Income = await incomeApiClient.GetIncomeByYearId(yearId);
+        TrackedBudgetIncome = Income?.LastOrDefault();
+        StateHasChanged();
+    }
+
+    public async Task GetIncomeByMonthIdAsync(ChangeEventArgs e)
+    {
+        var monthId = int.Parse(e.Value?.ToString());
+        TrackedBudgetIncome = await incomeApiClient.GetIncomeByMonthIdAsync(monthId);
+        StateHasChanged();
+    }
+
+    public async Task GetLatestSavingsByYearIdAsync(ChangeEventArgs e)
+    {
+        var yearId = int.Parse(e.Value?.ToString());
+        Savings = await savingsApiClient.GetSavingsByYearId(yearId);
+        TrackedBudgetSavings = Savings?.LastOrDefault();
+        StateHasChanged();
+    }
+
+    public async Task GetSavingsByMonthIdAsync(ChangeEventArgs e)
+    {
+        var monthId = int.Parse(e.Value?.ToString());
+        TrackedBudgetSavings = await savingsApiClient.GetSavingsByMonthIdAsync(monthId);
+        StateHasChanged();
+    }
+
+    public async Task GetLatestExpensesByYearIdAsync(ChangeEventArgs e)
+    {
+        var yearId = int.Parse(e.Value?.ToString());
+        Expenses = await expensesApiClient.GetExpensesByYearId(yearId);
+        TrackedBudgetExpenses = Expenses?.LastOrDefault();
+        StateHasChanged();
+    }
+
+    public async Task GetExpensesByMonthIdAsync(ChangeEventArgs e)
+    {
+        var monthId = int.Parse(e.Value?.ToString());
+        TrackedBudgetExpenses = await expensesApiClient.GetExpensesByMonthIdAsync(monthId);
+        StateHasChanged();
+    }
+}

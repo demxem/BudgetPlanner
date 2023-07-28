@@ -44,8 +44,8 @@ public class Savings : ISavings
 
     public Task InsertSavings(SavingsModel savings)
     {
-        string sql = @"insert into savings (emergencyfund, retirementaccount, vacation, healthneeds, date, monthid, yearid)
-                           values (@EmergencyFund, @RetirementAccount, @Vacation, @HealthNeeds, @Date, @MonthId, @YearId);";
+        string sql = @"insert into savings (emergencyfund, retirementaccount, vacation, healthneeds,trackedemergencyfund, trackedretirementaccount, trackedvacation, trackedhealthneeds, date, monthid, yearid)
+                           values (@EmergencyFund, @RetirementAccount, @Vacation, @HealthNeeds,@TrackedEmergencyFund, @TrackedRetirementAccount, @TrackedVacation, @TrackedHealthNeeds @Date, @MonthId, @YearId);";
 
         return _dataAccess.SafeData(sql, new
         {
@@ -53,6 +53,10 @@ public class Savings : ISavings
             savings.RetirementAccount,
             savings.Vacation,
             savings.HealthNeeds,
+            savings.TrackedEmergencyFund,
+            savings.TrackedRetirementAccount,
+            savings.TrackedVacation,
+            savings.TrackedHealthNeeds,
             Date = DateTime.Now,
             savings.MonthId,
             savings.YearId
@@ -67,7 +71,11 @@ public class Savings : ISavings
                         set emergencyfund = @EmergencyFund, 
                             retirementaccount = @RetirementAccount, 
                             vacation = @Vacation,
-                            healthneeds = @HealthNeeds, 
+                            healthneeds = @HealthNeeds,
+                            trackedemergencyfund = @TrackedEmergencyFund, 
+                            trackedretirementaccount = @TrackedRetirementAccount, 
+                            trackedvacation = @TrackedVacation,
+                            trackedhealthneeds = @TrackedHealthNeeds, 
                             date = @Date,
                             monthid = @MonthId,
                             yearid = @YearId

@@ -1,4 +1,10 @@
-@inject Client.Services.ApiClient apiClient
+@inject Client.Services.IncomeApiClient incomeApiClient
+@inject Client.Services.SavingsApiClient savingsApiClient
+@inject Client.Services.ExpensesApiClient expensesApiClient
+@inject Client.Services.YearApiClient yearsApiClient
+@inject Client.Services.DateApiClient dateApiClient
+@inject Client.Services.MonthsApiClient monthsApiClient
+@inject Client.Services.DetailedBudgetApiClient detailedBudgetApiClient
 @using Client.Models
 @inject Client.Services.SharedState state
 @inject IMessageService MessageService
@@ -36,9 +42,9 @@
 
 @code {
 
-    private MonthModel? filteredIncome;
-    private MonthModel? filteredSavings;
-    private MonthModel? filteredExpenses;
+    private BudgetModel? filteredIncome;
+    private BudgetModel? filteredSavings;
+    private BudgetModel? filteredExpenses;
 
     private string selectedMonth = "";
     private YearModel? selectedYear;
@@ -48,21 +54,21 @@
     private bool dialogSubmit = false;
 
     private IList<YearModel>? Years = new List<YearModel>();
-    private IList<MonthModel>? IncomeByEachMonth = new List<MonthModel>();
-    private IList<MonthModel>? SavingsByEachMonth = new List<MonthModel>();
-    private IList<MonthModel>? ExpensesByEachMonth = new List<MonthModel>();
+    private IList<BudgetModel>? IncomeByEachMonth = new List<BudgetModel>();
+    private IList<BudgetModel>? SavingsByEachMonth = new List<BudgetModel>();
+    private IList<BudgetModel>? ExpensesByEachMonth = new List<BudgetModel>();
     private IList<IncomeModel>? Income = new List<IncomeModel>();
-    private IList<MonthModel>? Months = new List<MonthModel>();
+    private IList<BudgetModel>? Months = new List<BudgetModel>();
 
     [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Years = await apiClient.GetYearsAsync();
-        Months = await apiClient.GetMonthsAsync();
-        IncomeByEachMonth = await apiClient.GetIncomeByEachMonthAsync();
-        SavingsByEachMonth = await apiClient.GetSavingByEachMonthAsync();
-        ExpensesByEachMonth = await apiClient.GetExpensesByEachMonthAsync();
+        Years = await yearsApiClient.GetYearsAsync();
+        Months = await monthsApiClient.GetMonthsAsync();
+        IncomeByEachMonth = await incomeApiClient.GetIncomeByEachMonthAsync();
+        SavingsByEachMonth = await savingsApiClient.GetSavingByEachMonthAsync();
+        ExpensesByEachMonth = await expensesApiClient.GetExpensesByEachMonthAsync();
     }
 
     private void SetYearOnSelect(YearModel selectedYear)
@@ -82,20 +88,20 @@
         SendMessage();
     }
 
-    private MonthModel? FilterIncomeOnSelect()
+    private BudgetModel? FilterIncomeOnSelect()
     {
         FilterMonthOnSelect();
         filteredIncome = IncomeByEachMonth?.Where(i => i.Id == selectedMonthId && i.YearId == selectedYearId).Select(i =>
         i).FirstOrDefault();
         if (filteredIncome == null)
         {
-            filteredIncome = new MonthModel { MonthlyIncome = 0 };
+            filteredIncome = new BudgetModel { MonthlyIncome = 0 };
             return filteredIncome;
         }
         return filteredIncome;
     }
 
-    private MonthModel? FilterSavingsOnSelect()
+    private BudgetModel? FilterSavingsOnSelect()
     {
         FilterMonthOnSelect();
         filteredSavings = SavingsByEachMonth?.Where(s => s.Id == selectedMonthId && s.YearId == selectedYearId).Select(s =>
@@ -103,20 +109,20 @@
 
         if (filteredSavings == null)
         {
-            filteredSavings = new MonthModel { MonthlySavings = 0 };
+            filteredSavings = new BudgetModel { MonthlySavings = 0 };
             return filteredSavings;
         }
         return filteredSavings;
     }
 
-    private MonthModel FilterExpensesOnSelect()
+    private BudgetModel FilterExpensesOnSelect()
     {
         FilterMonthOnSelect();
         filteredExpenses = ExpensesByEachMonth?.Where(e => e.Id == selectedMonthId && e.YearId == selectedYearId).Select(e
         => e).FirstOrDefault();
         if (filteredExpenses == null)
         {
-            filteredExpenses = new MonthModel { MonthlyExpenses = 0 };
+            filteredExpenses = new BudgetModel { MonthlyExpenses = 0 };
             return filteredExpenses;
         }
         return filteredExpenses;

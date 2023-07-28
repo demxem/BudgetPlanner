@@ -31,7 +31,7 @@ public class Calculations : ICalculations
                             group by m.id, i.id
                             order by m.date; ";
 
-            var result = await connection.QueryAsync<MonthModel, IncomeModel, MonthModel>(sql, (months, income) =>
+            var result = await connection.QueryAsync<BudgetModel, IncomeModel, BudgetModel>(sql, (months, income) =>
             {
                 months.Income = income;
                 return months;
@@ -53,7 +53,7 @@ public class Calculations : ICalculations
                             group by m.id, s.id
                             order by m.date;";
 
-            var result = await connection.QueryAsync<MonthModel, SavingsModel, MonthModel>(sql, (months, savings) =>
+            var result = await connection.QueryAsync<BudgetModel, SavingsModel, BudgetModel>(sql, (months, savings) =>
             {
                 months.Savings = savings;
                 return months;
@@ -78,7 +78,7 @@ public class Calculations : ICalculations
                             group by m.id, e.id
                             order by m.date;";
 
-            var result = await connection.QueryAsync<MonthModel, ExpensesModel, MonthModel>(sql, (months, expenses) =>
+            var result = await connection.QueryAsync<BudgetModel, ExpensesModel, BudgetModel>(sql, (months, expenses) =>
             {
                 months.Expenses = expenses;
                 return months;
@@ -100,7 +100,7 @@ public class Calculations : ICalculations
                             group by m.id, i.id
                             order by m.date;";
 
-            var result = await connection.QueryAsync<MonthModel, IncomeModel, MonthModel>(sql, (month, income) =>
+            var result = await connection.QueryAsync<BudgetModel, IncomeModel, BudgetModel>(sql, (month, income) =>
             {
                 month.Income = income;
                 return month;
@@ -120,7 +120,7 @@ public class Calculations : ICalculations
                             group by m.id, s.id
                             order by m.date;";
 
-            var result = await connection.QueryAsync<MonthModel, SavingsModel, MonthModel>(sql, (month, savings) =>
+            var result = await connection.QueryAsync<BudgetModel, SavingsModel, BudgetModel>(sql, (month, savings) =>
             {
                 month.Savings = savings;
                 return month;
@@ -142,7 +142,7 @@ public class Calculations : ICalculations
                             group by m.id, e.id
                             order by m.date;";
 
-            var result = await connection.QueryAsync<MonthModel, ExpensesModel, MonthModel>(sql, (month, expenses) =>
+            var result = await connection.QueryAsync<BudgetModel, ExpensesModel, BudgetModel>(sql, (month, expenses) =>
             {
                 month.Expenses = expenses;
                 return month;
@@ -169,7 +169,7 @@ public class Calculations : ICalculations
                             group by m.id, i.id, s.id, e.id
                             order by m.date;";
 
-            var result = await connection.QueryAsync<MonthModel, IncomeModel, SavingsModel, ExpensesModel, MonthModel>(sql, (months, income, savings, expenses) =>
+            var result = await connection.QueryAsync<BudgetModel, IncomeModel, SavingsModel, ExpensesModel, BudgetModel>(sql, (months, income, savings, expenses) =>
             {
                 months.Income = income;
                 months.Savings = savings;
@@ -203,7 +203,7 @@ public class Calculations : ICalculations
                             group by m.id, i.id, s.id, e.id
                             order by m.date;";
 
-            var result = await connection.QueryAsync<MonthModel, IncomeModel, SavingsModel, ExpensesModel, MonthModel>(sql, (months, income, savings, expenses) =>
+            var result = await connection.QueryAsync<BudgetModel, IncomeModel, SavingsModel, ExpensesModel, BudgetModel>(sql, (months, income, savings, expenses) =>
             {
                 months.Income = income;
                 months.Savings = savings;

@@ -1,6 +1,43 @@
-﻿<Properties StartupConfiguration="{083D3D22-870D-4943-86DE-62FB7FCA5281}|http">
+﻿<Properties StartupConfiguration="{29874159-3E21-43B8-B3FD-83B4EA3A47BC}|http">
   <MonoDevelop.Ide.ItemProperties.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
   <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Client/Pages/BudgetDashboard.razor">
+    <Files>
+      <File FileName="Client/Program.cs" />
+      <File FileName="Api/Modules/MonthModule.cs" />
+      <File FileName="Client/Models/SharedState.cs" Line="1" Column="1" />
+      <File FileName="Client/Services/ApiClient.cs" />
+      <File FileName="Client/Pages/ExpensesSubmitForm.razor" />
+      <File FileName="Client/Pages/IncomeSubmitForm.razor" Line="1" Column="1" />
+      <File FileName="Client/Pages/SavingsSubmitForm.razor" />
+      <File FileName="Client/Pages/YearSubmitForm.razor" />
+      <File FileName="Client/Pages/Budget.razor" />
+      <File FileName="Client/Pages/MainPage.razor" Line="301" Column="51" />
+      <File FileName="Client/Models/BudgetModel.cs" Line="1" Column="1" />
+      <File FileName="Client/Models/DateModel.cs" Line="1" Column="1" />
+      <File FileName="Client/Models/DetailedBudgetModel.cs" Line="1" Column="1" />
+      <File FileName="Client/Models/SavingsModel.cs" Line="1" Column="1" />
+      <File FileName="Client/Models/YearModel.cs" Line="1" Column="1" />
+      <File FileName="DAL/Data/Month.cs" Line="161" Column="10" />
+      <File FileName="Client/Models/IncomeModel.cs" Line="1" Column="1" />
+      <File FileName="Client/Pages/BudgetDashboard.razor" Line="390" Column="6" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="BudgetPlanner" expanded="True">
+            <Node name="Client">
+              <Node name="Pages" expanded="True">
+                <Node name="BudgetDashboard.razor" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="94" column="1" />
@@ -9,32 +46,5 @@
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="98" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.ItemProperties.Client PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Client/Pages/YearSubmitForm.razor">
-    <Files>
-      <File FileName="Client/Program.cs" />
-      <File FileName="Api/Modules/MonthModule.cs" />
-      <File FileName="Client/Models/SharedState.cs" />
-      <File FileName="Client/Services/ApiClient.cs" />
-      <File FileName="Client/Pages/ExpensesSubmitForm.razor" />
-      <File FileName="Client/Pages/IncomeSubmitForm.razor" />
-      <File FileName="Client/Pages/SavingsSubmitForm.razor" />
-      <File FileName="Client/Pages/YearSubmitForm.razor" Line="33" Column="49" />
-    </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="BudgetPlanner" expanded="True">
-            <Node name="Client">
-              <Node name="Pages" expanded="True">
-                <Node name="YearSubmitForm.razor" selected="True" />
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
-  </MonoDevelop.Ide.Workbench>
 </Properties>

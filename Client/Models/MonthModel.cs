@@ -1,6 +1,6 @@
 namespace Client.Models;
 
-public class MonthModel
+public class BudgetModel
 {
     public int Id { get; set; }
     public int IncomeId { get; set; }

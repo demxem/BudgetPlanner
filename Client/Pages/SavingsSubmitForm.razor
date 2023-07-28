@@ -1,4 +1,6 @@
-@inject Client.Services.ApiClient apiClient
+@inject Client.Services.YearApiClient yearsApiClient
+@inject Client.Services.SavingsApiClient savingsApiClient
+@inject Client.Services.MonthsApiClient monthsApiClient
 @using Client.Models
 
 <MudDialog>
@@ -38,16 +40,16 @@
     private int selectedYearId;
 
     public List<YearModel>? Years = new List<YearModel>();
-    public List<MonthModel>? Data = new List<MonthModel>();
+    public List<BudgetModel>? Data = new List<BudgetModel>();
     public List<SavingsModel>? Savings = new List<SavingsModel>();
-    public List<MonthModel>? Months = new List<MonthModel>();
+    public List<BudgetModel>? Months = new List<BudgetModel>();
     [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
 
     protected override async void OnInitialized()
     {
-        Years = await apiClient.GetYearsAsync();
-        Data = await apiClient.GetSavingByEachMonthAsync();
-        Months = await apiClient.GetMonthsAsync();
+        Years = await yearsApiClient.GetYearsAsync();
+        Data = await savingsApiClient.GetSavingByEachMonthAsync();
+        Months = await monthsApiClient.GetMonthsAsync();
     }
 
     async Task SubmitAsync()
@@ -74,23 +76,23 @@
     }
     public async Task GetSavingsAsync()
     {
-        Savings = await apiClient.GetSavingsAsync();
+        Savings = await savingsApiClient.GetSavingsAsync();
     }
 
     public async Task GetMonthsAsync()
     {
-        Months = await apiClient.GetMonthsAsync();
+        Months = await monthsApiClient.GetMonthsAsync();
     }
 
     public async Task AddMonthAsync()
     {
-        MonthModel monthModel = new MonthModel
+        BudgetModel BudgetModel = new BudgetModel
             {
                 Name = selectedMonth,
                 YearId = selectedYearId
             };
 
-        await apiClient.PostMonthAsync(monthModel);
+        await monthsApiClient.PostMonthAsync(BudgetModel);
     }
     public async Task AddSavingsAsync()
     {
@@ -103,7 +105,7 @@
                 MonthId = monthId
             };
 
-        await apiClient.PostSavingsAsync(savingsModel);
+        await savingsApiClient.PostSavingsAsync(savingsModel);
     }
 
     public void SetYearOnSelect(YearModel year)
@@ -111,18 +113,18 @@
         selectedYearId = year.Id;
     }
 
-    public bool YearFoundIn(List<MonthModel>? data)
+    public bool YearFoundIn(List<BudgetModel>? data)
     {
         return Data!.Where(year => year.YearId == selectedYearId).Select(year => year.YearId ==
         selectedYearId).FirstOrDefault();
     }
-    public bool MonthFoundIn(List<MonthModel>? data)
+    public bool MonthFoundIn(List<BudgetModel>? data)
     {
         return Data!.Where(month => month.YearId == selectedYearId).Select(month =>
         month!.Name!.Equals(selectedMonth)).FirstOrDefault();
 
     }
-    public bool SavingsFoundIn(List<MonthModel>? data)
+    public bool SavingsFoundIn(List<BudgetModel>? data)
     {
         return Data!.Where(savings => savings!.Name!.Equals(selectedMonth) && savings.YearId ==
         selectedYearId).Select(savings => savings.SavingsId == 0).FirstOrDefault();
@@ -130,13 +132,13 @@
 
     public async Task UpdateMonthAsync()
     {
-        MonthModel? monthModel = Months!.Where(month => month.Name == selectedMonth && month.YearId ==
+        BudgetModel? BudgetModel = Months!.Where(month => month.Name == selectedMonth && month.YearId ==
         selectedYearId).Select(month => month).FirstOrDefault();
 
-        monthModel!.SavingsId = Savings!.Where(savings => savings.MonthId == monthModel.Id).Select(savings =>
+        BudgetModel!.SavingsId = Savings!.Where(savings => savings.MonthId == BudgetModel.Id).Select(savings =>
         savings.Id).FirstOrDefault();
 
-        await apiClient.UpdateMonthAsync(monthModel);
+        await monthsApiClient.UpdateMonthAsync(BudgetModel);
     }
 
     public void Cancel() => MudDialog?.Cancel();

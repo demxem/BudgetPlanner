@@ -24,7 +24,7 @@ public class Income : IIncome
 
     public async Task<IncomeModel?> GetIncomeById(int id)
     {
-        string sql = @"select id,employment, sidehustle, dividends, date, monthid
+        string sql = @"select id,employment, sidehustle, dividends, date, monthid, yearid
                        from income where id = @id;";
 
         var result = await _dataAccess.LoadData<IncomeModel, dynamic>(sql, new { id = id });
@@ -34,10 +34,22 @@ public class Income : IIncome
     public Task InsertIncome(IncomeModel income)
     {
 
-        string sql = @"insert into income (employment, sidehustle, dividends, monthid, yearid, date)
-                           values (@Employment, @SideHustle, @Dividends, @MonthId, @YearId, @Date);";
+        string sql = @"insert into income (employment, sidehustle, dividends,trackedemployment, trackedsidehustle, trackeddividends, monthid, yearid, date)
+                           values (@Employment, @SideHustle, @Dividends,@TrackedEmployment, @TrackedSideHustle, @TrackedDividends, @MonthId, @YearId, @Date);";
 
-        return _dataAccess.SafeData(sql, new { income.Id, income.Employment, income.SideHustle, income.Dividends, income.MonthId, income.YearId, Date = DateTime.Now });
+        return _dataAccess.SafeData(sql, new
+        {
+            income.Id,
+            income.Employment,
+            income.SideHustle,
+            income.Dividends,
+            income.TrackedEmployment,
+            income.TrackedSideHustle,
+            income.TrackedDividends,
+            income.MonthId,
+            income.YearId,
+            Date = DateTime.Now
+        });
     }
 
     public async Task UpdateIncome(IncomeModel income)
@@ -49,7 +61,10 @@ public class Income : IIncome
                             dividends = @Dividends, 
                             date = @Date,
                             yearid = @YearId,
-                            monthid = @MonthId
+                            monthid = @MonthId,
+                            trackedemployment = @TrackedEmployment,
+                            trackedsidehustle = @TrackedSideHustle,
+                            trackeddividends = @TrackedDividends
                         where id = @Id;";
 
         await _dataAccess.SafeData(sql, income);

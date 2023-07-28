@@ -1,4 +1,4 @@
-@inject Client.Services.ApiClient ApiClient
+@inject Client.Services.YearApiClient yearsApiClient
 @inject IMessageService MessageService
 
 <MudDialog>
@@ -23,7 +23,7 @@
                 Name = inputYearName
             };
 
-        await ApiClient.PostYearAsync(inputYear);
+        await yearsApiClient.PostYearAsync(inputYear);
     }
 
     async Task SubmitAsync()

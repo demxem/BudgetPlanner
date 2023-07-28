@@ -5,9 +5,9 @@ namespace Client.Pages
 {
     public partial class Budget
     {
-        private IEnumerable<MonthModel>? Expenses = new List<MonthModel>();
-        private IEnumerable<MonthModel>? Savings = new List<MonthModel>();
-        private IEnumerable<MonthModel>? Income = new List<MonthModel>();
+        private IEnumerable<BudgetModel>? Expenses = new List<BudgetModel>();
+        private IEnumerable<BudgetModel>? Savings = new List<BudgetModel>();
+        private IEnumerable<BudgetModel>? Income = new List<BudgetModel>();
         private IEnumerable<YearModel>? Years = new List<YearModel>();
         private YearModel? inputYear;
         private YearModel? selectedYear = new YearModel { Name = "" };
@@ -25,16 +25,16 @@ namespace Client.Pages
         private bool canCancelEdit = true;
         private bool blockSwitch = false;
         private string searchString = "";
-        private MonthModel incomeSelectedOnRowClick = new MonthModel { Name = "" };
-        private MonthModel savingsSelectedOnRowClick = new MonthModel { Name = "" };
-        private MonthModel expensesSelectedOnRowClick = new MonthModel { Name = "" };
+        private BudgetModel incomeSelectedOnRowClick = new BudgetModel { Name = "" };
+        private BudgetModel savingsSelectedOnRowClick = new BudgetModel { Name = "" };
+        private BudgetModel expensesSelectedOnRowClick = new BudgetModel { Name = "" };
 
         protected override async Task OnInitializedAsync()
         {
-            Expenses = await apiClient.GetExpensesByEachMonthAsync();
-            Savings = await apiClient.GetSavingByEachMonthAsync();
-            Income = await apiClient.GetIncomeByEachMonthAsync();
-            Years = await apiClient.GetYearsAsync();
+            Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
+            Savings = await savingsApiClient.GetSavingByEachMonthAsync();
+            Income = await incomeApiClient.GetIncomeByEachMonthAsync();
+            Years = await yearsApiClient.GetYearsAsync();
             MessageService.OnMessage += MessageHandler;
         }
 
@@ -57,58 +57,58 @@ namespace Client.Pages
         }
         public async Task GetExpensesAsync()
         {
-            Expenses = await apiClient.GetExpensesByEachMonthAsync();
+            Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
             StateHasChanged();
         }
 
         public async Task GetYearsAsync()
         {
-            Years = await apiClient.GetYearsAsync();
+            Years = await yearsApiClient.GetYearsAsync();
         }
 
         public async Task GetSavingsAsync()
         {
-            Savings = await apiClient.GetSavingByEachMonthAsync();
+            Savings = await savingsApiClient.GetSavingByEachMonthAsync();
         }
 
         public async Task GetIncomeAsync()
         {
-            Income = await apiClient.GetIncomeByEachMonthAsync();
+            Income = await incomeApiClient.GetIncomeByEachMonthAsync();
         }
 
         public async Task GetIncomeByYearIdAsync(int yearId)
         {
-            Income = await apiClient.GetIncomeByYearId(yearId);
+            Income = await incomeApiClient.GetIncomeByYearId(yearId);
             StateHasChanged();
         }
 
         public async Task GetExpensesByYearIdAsync(int yearId)
         {
-            Expenses = await apiClient.GetExpensesByYearId(yearId);
+            Expenses = await expensesApiClient.GetExpensesByYearId(yearId);
             StateHasChanged();
         }
 
         public async Task GetSavingsByYearIdAsync(int yearId)
         {
-            Savings = await apiClient.GetSavingsByYearId(yearId);
+            Savings = await savingsApiClient.GetSavingsByYearId(yearId);
             StateHasChanged();
         }
 
         public async Task DeleteIncomeAsync(int id)
         {
-            await apiClient.DeleteIncomeByIdAsync(id);
+            await incomeApiClient.DeleteIncomeByIdAsync(id);
             await GetIncomeAsync();
         }
 
         public async Task DeleteSavingsAsync(int id)
         {
-            await apiClient.DeleteSavingsByIdAsync(id);
+            await savingsApiClient.DeleteSavingsByIdAsync(id);
             await GetSavingsAsync();
         }
 
         public async Task DeleteExpensesAsync(int id)
         {
-            await apiClient.DeleteExpensesByIdAsync(id);
+            await expensesApiClient.DeleteExpensesByIdAsync(id);
             await GetExpensesAsync();
         }
 
@@ -125,23 +125,23 @@ namespace Client.Pages
 
         private async void SavingsCommited(object savings)
         {
-            await apiClient.UpdateSavingsAsync(savingsSelectedOnRowClick.Savings);
+            await savingsApiClient.UpdateSavingsAsync(savingsSelectedOnRowClick.Savings);
             await GetSavingsAsync();
-            AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)savings).Name} committed");
+            AddEditionEvent($"RowEditCommit event: Changes to Element {((BudgetModel)savings).Name} committed");
         }
 
         private async void IncomeCommited(object income)
         {
-            await apiClient.UpdateIncomeAsync(incomeSelectedOnRowClick.Income);
+            await incomeApiClient.UpdateIncomeAsync(incomeSelectedOnRowClick.Income);
             await GetIncomeAsync();
-            AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)income).Name} committed");
+            AddEditionEvent($"RowEditCommit event: Changes to Element {((BudgetModel)income).Name} committed");
         }
 
         private async void ExpensesCommited(object expenses)
         {
-            await apiClient.UpdateExpensesAsync(expensesSelectedOnRowClick.Expenses);
+            await expensesApiClient.UpdateExpensesAsync(expensesSelectedOnRowClick.Expenses);
             await GetExpensesAsync();
-            AddEditionEvent($"RowEditCommit event: Changes to Element {((MonthModel)expenses).Name} committed");
+            AddEditionEvent($"RowEditCommit event: Changes to Element {((BudgetModel)expenses).Name} committed");
         }
 
         private void OpenSubmitIncomeDialog()
@@ -189,7 +189,7 @@ namespace Client.Pages
             DialogService.Show<YearDeleteForm>(@"This action will delete complete year budget plan", closeOnEscapeKey);
         }
 
-        private void ChangeOnRowClick(MonthModel model)
+        private void ChangeOnRowClick(BudgetModel model)
         {
 
         }
@@ -284,7 +284,7 @@ namespace Client.Pages
             return Expenses!.Select(expenses => expenses.MonthlyExpenses).Sum();
         }
 
-        private bool FilterSavings(MonthModel savings)
+        private bool FilterSavings(BudgetModel savings)
         {
             if (string.IsNullOrWhiteSpace(searchString))
                 return true;
@@ -307,7 +307,7 @@ namespace Client.Pages
             return false;
         }
 
-        private bool FilterIncome(MonthModel income)
+        private bool FilterIncome(BudgetModel income)
         {
             if (string.IsNullOrWhiteSpace(searchString))
                 return true;
@@ -328,7 +328,7 @@ namespace Client.Pages
             return false;
         }
 
-        private bool FilterExpenses(MonthModel expenses)
+        private bool FilterExpenses(BudgetModel expenses)
         {
             if (string.IsNullOrWhiteSpace(searchString))
                 return true;

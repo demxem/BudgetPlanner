@@ -1,4 +1,10 @@
-@inject Client.Services.ApiClient apiClient
+@inject Client.Services.IncomeApiClient incomeApiClient
+@inject Client.Services.SavingsApiClient savingsApiClient
+@inject Client.Services.ExpensesApiClient expensesApiClient
+@inject Client.Services.YearApiClient yearsApiClient
+@inject Client.Services.DateApiClient dateApiClient
+@inject Client.Services.MonthsApiClient monthsApiClient
+@inject Client.Services.DetailedBudgetApiClient detailedBudgetApiClient
 @using Client.Models
 @inject ISnackbar Snackbar
 @inject IMessageService MessageService
@@ -24,19 +30,19 @@
     private int _selectedYearId;
     private YearModel? _selectedYear;
     public IList<YearModel>? Years = new List<YearModel>();
-    public IList<MonthModel>? Income = new List<MonthModel>();
-    public IList<MonthModel>? Expenses = new List<MonthModel>();
+    public IList<BudgetModel>? Income = new List<BudgetModel>();
+    public IList<BudgetModel>? Expenses = new List<BudgetModel>();
 
     [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Years = await apiClient.GetYearsAsync();
+        Years = await yearsApiClient.GetYearsAsync();
     }
     public async Task GetYearsAsync()
     {
-        Income = await apiClient.GetIncomeByYearId(_selectedYearId);
-        Expenses = await apiClient.GetExpensesByYearId(_selectedYearId);
+        Income = await incomeApiClient.GetIncomeByYearId(_selectedYearId);
+        Expenses = await expensesApiClient.GetExpensesByYearId(_selectedYearId);
     }
 
     public void BindSelectedYear(YearModel year)
@@ -46,7 +52,7 @@
 
     public async Task DeleteYear()
     {
-        await apiClient.DeleteYearByIdAsync(_selectedYearId);
+        await yearsApiClient.DeleteYearByIdAsync(_selectedYearId);
         StateHasChanged();
         await GetYearsAsync();
     }

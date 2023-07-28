@@ -14,7 +14,14 @@ var apiBaseAddress = "http://localhost:5555";
 builder.Services.AddMudServices();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 
-builder.Services.AddScoped<ApiClient>();
+builder.Services.AddScoped<DetailedBudgetApiClient>();
+builder.Services.AddScoped<ExpensesApiClient>();
+builder.Services.AddScoped<SavingsApiClient>();
+builder.Services.AddScoped<IncomeApiClient>();
+builder.Services.AddScoped<YearApiClient>();
+builder.Services.AddScoped<MonthsApiClient>();
+builder.Services.AddScoped<DateApiClient>();
+
 builder.Services.AddSingleton<SharedState>();
 builder.Services.AddSingleton<IMessageService, MessageService>();
 

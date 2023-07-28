@@ -1,5 +1,12 @@
 @page "/"
-@inject Client.Services.ApiClient apiClient
+@inject Client.Services.IncomeApiClient incomeApiClient
+@inject Client.Services.SavingsApiClient savingsApiClient
+@inject Client.Services.ExpensesApiClient expensesApiClient
+@inject Client.Services.YearApiClient yearsApiClient
+@inject Client.Services.DateApiClient dateApiClient
+@inject Client.Services.MonthsApiClient monthsApiClient
+@inject Client.Services.DetailedBudgetApiClient detailedBudgetApiClient
+
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject Client.Services.SharedState state
@@ -7,20 +14,24 @@
 
 <style>
     select {
+        text-align: center;
         width: 100%;
         padding: 10px;
     }
 
     td {
+        text-align: center;
         border: 1px solid rgb(190, 190, 190);
     }
 
     th {
+        text-align: center;
         border: 1px solid rgb(190, 190, 190);
         padding: 10px;
     }
 
     input {
+        text-align: center;
         padding: 10px;
         width: 100%;
     }
@@ -109,7 +120,7 @@
                                 {
                                     <option value="Employment">Employment</option>
                                     <option value="SideHustle">SideHustle</option>
-                                    <option value="Dividents">Dividents</option>
+                                    <option value="Dividends">Dividends</option>
                                 }
                                 else if (itemType.Equals("Savings"))
                                 {
@@ -132,10 +143,10 @@
                                 }
                             </select>
                         </td>
-                        <td><input type="text" required @bind-value="@itemDetails"></td>
-                        <td><input type="number" required @bind-value="@itemAmount"></td>
+                        <td><input type="text" required="true" @bind-value="@itemDetails"></td>
+                        <td><input type="number" required="true" @bind-value="@itemAmount"></td>
                         <td>@itemBalance</td>
-                        <td><button @onclick="@PostBudgetAsync">Submit</button></td>
+                        <td><button id="submit" @onclick="@PostBudgetAsync">Submit</button></td>
                     </tr>
                     @foreach (var item in Budget)
                     {
@@ -146,7 +157,8 @@
                             <td>@item.Details</td>
                             <td>@item.Amount</td>
                             <td>@item.Balance</td>
-                            <td><input type="button" value="Remove" @onclick="(() => DeleteBudgetAsync(item.Id))"></td>
+                            <td><input id="remove" type="button" value="Remove" @onclick="(() => DeleteBudgetAsync(item))">
+                            </td>
                         </tr>
                     }
                 </table>
@@ -160,14 +172,14 @@
     private string[] Labels = { "Income", "Savings", "Expenses" };
     private DateTime DateOfToday = DateTime.Now;
     private List<DateModel>? Dates = new List<DateModel>();
-    private List<MonthModel>? Months = new List<MonthModel>();
+    private List<BudgetModel>? Months = new List<BudgetModel>();
     private IList<YearModel>? Years = new List<YearModel>();
-    private IList<MonthModel>? IncomeByEachMonth = new List<MonthModel>();
-    private IList<MonthModel>? SavingsByEachMonth = new List<MonthModel>();
-    private IList<MonthModel>? ExpensesByEachMonth = new List<MonthModel>();
+    private IList<BudgetModel>? IncomeByEachMonth = new List<BudgetModel>();
+    private IList<BudgetModel>? SavingsByEachMonth = new List<BudgetModel>();
+    private IList<BudgetModel>? ExpensesByEachMonth = new List<BudgetModel>();
     private IList<IncomeModel>? Income = new List<IncomeModel>();
-    private IList<BudgetModel>? Budget = new List<BudgetModel>();
-    private MonthModel? LatestIncome;
+    private IList<DetailedBudgetModel>? Budget = new List<DetailedBudgetModel>();
+    private BudgetModel? LatestIncome;
     private string? itemType { get; set; } = "Income";
     private string itemCategory { get; set; } = "";
     private float itemAmount { get; set; }
@@ -179,20 +191,31 @@
     private DateTime LatestRecordDate;
 
     private List<string> messages = new List<string>();
+    private enum Action
+    {
+        AddTrackedCategory,
+        RemoveTrackedCategory
+    }
 
+    private enum Type
+    {
+        Income,
+        Savings,
+        Expenses
+    }
     protected override async Task OnInitializedAsync()
     {
-        Dates = await apiClient.GetLatestDateAsync();
-        Budget = await apiClient.GetBudgetAsync();
+        Dates = await dateApiClient.GetLatestDateAsync();
+        Budget = await detailedBudgetApiClient.GetBudgetAsync();
         GetLatestRecordDate();
-        Years = await apiClient.GetYearsAsync();
-        IncomeByEachMonth = await apiClient.GetIncomeByEachMonthAsync();
-        SavingsByEachMonth = await apiClient.GetSavingByEachMonthAsync();
-        ExpensesByEachMonth = await apiClient.GetExpensesByEachMonthAsync();
+        Years = await yearsApiClient.GetYearsAsync();
+        IncomeByEachMonth = await incomeApiClient.GetIncomeByEachMonthAsync();
+        SavingsByEachMonth = await savingsApiClient.GetSavingByEachMonthAsync();
+        ExpensesByEachMonth = await expensesApiClient.GetExpensesByEachMonthAsync();
         GetLatestMonthlyIncome();
         GetLatestMonthlySavings();
         GetLatestMonthlyExpenses();
-        Months = await apiClient.GetMonthsAsync();
+        Months = await monthsApiClient.GetMonthsAsync();
         MessageService.OnMessage += MessageHandler;
     }
 
@@ -217,8 +240,7 @@
 
     private void GetLatestMonthlyIncome()
     {
-
-        LatestIncome = IncomeByEachMonth!.Select(income => income).LastOrDefault(new MonthModel { });
+        LatestIncome = IncomeByEachMonth!.Select(income => income).LastOrDefault(new BudgetModel { });
         Data[0] = LatestIncome.MonthlyIncome;
     }
     private void GetLatestMonthlyExpenses()
@@ -231,8 +253,7 @@
     private void GetLatestMonthlySavings()
     {
         float latestSavings = SavingsByEachMonth!.Where(savings => savings.Id == LatestIncome.Id &&
-        savings.YearId ==
-        LatestIncome.YearId).Select(savings => savings.MonthlySavings).LastOrDefault(0);
+        savings.YearId == LatestIncome.YearId).Select(savings => savings.MonthlySavings).LastOrDefault(0);
         Data[1] = latestSavings;
     }
 
@@ -248,7 +269,7 @@
 
     private async Task GetBudgetAsync()
     {
-        Budget = await apiClient.GetBudgetAsync();
+        Budget = await detailedBudgetApiClient.GetBudgetAsync();
         StateHasChanged();
     }
 
@@ -281,27 +302,189 @@
     private void OnClick(MouseEventArgs args) => Snackbar.Add("Redirecting");
     private void OnTouch(TouchEventArgs args) => Snackbar.Add("Redirecting");
 
-    private void set()
-    {
-        itemType = itemType;
-    }
     private async Task PostBudgetAsync()
     {
-        var budgetModel = new BudgetModel
+        var DetailedBudgetModel = new DetailedBudgetModel
             {
                 Date = date,
                 Type = itemType,
                 Category = itemCategory,
                 Details = itemDetails,
-                Amount = Math.Round(itemAmount, 2)
+                Amount = (float)Math.Round(itemAmount, 2),
+                MonthId = state.SelectedIncome.Income.MonthId,
+                YearId = state.SelectedIncome.Income.YearId,
             };
-        await apiClient.InsertBudgetAsync(budgetModel);
+
+        await detailedBudgetApiClient.InsertBudgetAsync(DetailedBudgetModel);
+        await UpdateTrackedCategoryOnBudgetAdd();
         await GetBudgetAsync();
     }
 
-    private async Task DeleteBudgetAsync(int id)
+    private async Task DeleteBudgetAsync(DetailedBudgetModel item)
     {
-        await apiClient.DeleteBudgetAsync(id);
+        await detailedBudgetApiClient.DeleteBudgetAsync(item.Id);
+        await UpdateTrackedCategoryOnBudgetRemove(item);
         await GetBudgetAsync();
+    }
+
+    private async Task UpdateTrackedCategoryOnBudgetAdd()
+    {
+
+        if (itemType.Equals("Income"))
+        {
+            IncomeModel selected = (IncomeModel)SetTrackedCategoryOnBudgetAdd(Action.AddTrackedCategory).Result;
+            await UpdateTrackedIncomeCategory(selected);
+        }
+        else if (itemType.Equals("Savings"))
+        {
+            SavingsModel selected = (SavingsModel)SetTrackedCategoryOnBudgetAdd(Action.AddTrackedCategory).Result;
+            await UpdateTrackedSavingsCategory(selected);
+        }
+        else
+        {
+            ExpensesModel selected = (ExpensesModel)SetTrackedCategoryOnBudgetAdd(Action.AddTrackedCategory).Result;
+            await UpdateTrackedExpensesCategory(selected);
+        }
+    }
+    private async Task UpdateTrackedCategoryOnBudgetRemove(DetailedBudgetModel item)
+    {
+        if (item.Type.Equals("Income"))
+        {
+            IncomeModel selected = (IncomeModel)SetTrackedCategoryOnBudgetRemove(item).Result;
+            await UpdateTrackedIncomeCategory(selected);
+        }
+        else if (item.Type.Equals("Savings"))
+        {
+            SavingsModel selected = (SavingsModel)SetTrackedCategoryOnBudgetRemove(item).Result;
+            await UpdateTrackedSavingsCategory(selected);
+        }
+        else
+        {
+            ExpensesModel selected = (ExpensesModel)SetTrackedCategoryOnBudgetRemove(item).Result;
+            await UpdateTrackedExpensesCategory(selected);
+        }
+    }
+
+    private async Task<object> SetTrackedCategoryOnBudgetAdd(Action method)
+    {
+        object selected;
+        string trackedCategory = $"Tracked{itemCategory}";
+
+        if (itemType.Equals("Income"))
+        {
+            selected = state.SelectedIncome.Income;
+        }
+        else if (itemType.Equals("Savings"))
+        {
+            selected = state.SelectedSavings.Savings;
+        }
+        else
+        {
+            selected = state.SelectedExpenses.Expenses;
+        }
+
+        foreach (var category in selected.GetType().GetProperties())
+        {
+            if (category.Name.Equals(trackedCategory))
+            {
+                itemAmount += (float)category.GetValue(selected, null);
+                category.SetValue(selected, itemAmount);
+            }
+        }
+        return selected;
+    }
+    private async Task<object> SetTrackedCategoryOnBudgetRemove(DetailedBudgetModel model)
+    {
+        object selected;
+        string trackedCategory = $"Tracked{model.Category}";
+        if (model.Type.Equals("Income"))
+        {
+            selected = state.SelectedIncome.Income;
+        }
+        else if (model.Type.Equals("Savings"))
+        {
+            selected = state.SelectedSavings.Savings;
+        }
+        else
+        {
+            selected = state.SelectedExpenses.Expenses;
+        }
+        foreach (var category in selected.GetType().GetProperties())
+        {
+            if (category.Name.Equals(trackedCategory))
+            {
+                var itemAmount = (float)category.GetValue(selected, null);
+                itemAmount -= model.Amount;
+                category.SetValue(selected, itemAmount);
+            }
+        }
+        return selected;
+    }
+
+    private async Task UpdateTrackedIncomeCategory(IncomeModel selected)
+    {
+        var IncomeModel = new IncomeModel
+            {
+                Id = selected.Id,
+                Employment = selected.Employment,
+                SideHustle = selected.SideHustle,
+                Dividends = selected.Dividends,
+                TrackedEmployment = selected.TrackedEmployment,
+                TrackedSideHustle = selected.TrackedSideHustle,
+                TrackedDividends = selected.TrackedDividends,
+                Date = selected.Date,
+                MonthId = selected.MonthId,
+                YearId = selected.YearId
+            };
+
+        await incomeApiClient.UpdateIncomeAsync(IncomeModel);
+    }
+    private async Task UpdateTrackedSavingsCategory(SavingsModel selected)
+    {
+        var SavingsModel = new SavingsModel
+            {
+                Id = selected.Id,
+                EmergencyFund = selected.EmergencyFund,
+                RetirementAccount = selected.RetirementAccount,
+                Vacation = selected.Vacation,
+                HealthNeeds = selected.HealthNeeds,
+                TrackedEmergencyFund = selected.TrackedEmergencyFund,
+                TrackedRetirementAccount = selected.TrackedRetirementAccount,
+                TrackedVacation = selected.TrackedVacation,
+                TrackedHealthNeeds = selected.TrackedHealthNeeds,
+                Date = selected.Date,
+                MonthId = selected.MonthId,
+                YearId = selected.YearId
+            };
+        await savingsApiClient.UpdateSavingsAsync(SavingsModel);
+    }
+    private async Task UpdateTrackedExpensesCategory(ExpensesModel selected)
+    {
+        var ExpensesModel = new ExpensesModel
+            {
+                Id = selected.Id,
+                Housing = selected.Housing,
+                Groceries = selected.Groceries,
+                Utilities = selected.Utilities,
+                Vacation = selected.Vacation,
+                Transportation = selected.Transportation,
+                Medicine = selected.Medicine,
+                Clothing = selected.Clothing,
+                Media = selected.Media,
+                Insuranses = selected.Insuranses,
+                TrackedHousing = selected.TrackedHousing,
+                TrackedGroceries = selected.TrackedGroceries,
+                TrackedUtilities = selected.TrackedUtilities,
+                TrackedVacation = selected.TrackedVacation,
+                TrackedTransportation = selected.TrackedTransportation,
+                TrackedMedicine = selected.TrackedMedicine,
+                TrackedClothing = selected.TrackedClothing,
+                TrackedMedia = selected.TrackedMedia,
+                TrackedInsuranses = selected.TrackedInsuranses,
+                Date = selected.Date,
+                MonthId = selected.MonthId,
+                YearId = selected.YearId
+            };
+        await expensesApiClient.UpdateExpensesAsync(ExpensesModel);
     }
 }
