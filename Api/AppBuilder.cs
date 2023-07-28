@@ -19,11 +19,11 @@ public static class AppBuilder
         builder.Services.AddTransient<ISavings, Savings>();
         builder.Services.AddTransient<IExpenses, Expenses>();
         builder.Services.AddTransient<IIncome, Income>();
-        builder.Services.AddTransient<IMonth, Month>();
+        builder.Services.AddTransient<IBudget, Budget>();
         builder.Services.AddTransient<IYears, Years>();
         builder.Services.AddTransient<IDate, Date>();
         builder.Services.AddTransient<ICalculations, Calculations>();
-        builder.Services.AddTransient<IBudget, Budget>();
+        builder.Services.AddTransient<IDetailedBudget, DetailedBudget>();
         builder.Services.AddCors();
         builder.Services.AddSwaggerGen();
 
@@ -37,8 +37,8 @@ public static class AppBuilder
         app.RegisterExpensesEndpoints();
         app.RegisterDateEndpoints();
         app.RegisterIncomeEndpoints();
+        app.RegisterDetailedBudgetEndpoints();
         app.RegisterBudgetEndpoints();
-        app.RegisterMonthsEndpoints();
         app.RegisterYearsEndpoints();
         app.RegisterCalculationsEndpoints();
 
