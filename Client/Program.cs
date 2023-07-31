@@ -21,6 +21,7 @@ builder.Services.AddScoped<IncomeApiClient>();
 builder.Services.AddScoped<YearApiClient>();
 builder.Services.AddScoped<MonthsApiClient>();
 builder.Services.AddScoped<DateApiClient>();
+builder.Services.AddScoped<CompletedBudgetApiService>();
 
 builder.Services.AddSingleton<SharedState>();
 builder.Services.AddSingleton<IMessageService, MessageService>();

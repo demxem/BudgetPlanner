@@ -1,50 +1,50 @@
 ﻿<Properties StartupConfiguration="{29874159-3E21-43B8-B3FD-83B4EA3A47BC}|http">
-  <MonoDevelop.Ide.ItemProperties.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Client/Pages/BudgetDashboard.razor">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="DAL/Data/BudgetCompletion.cs">
     <Files>
-      <File FileName="Client/Program.cs" />
-      <File FileName="Api/Modules/MonthModule.cs" />
-      <File FileName="Client/Models/SharedState.cs" Line="1" Column="1" />
-      <File FileName="Client/Services/ApiClient.cs" />
-      <File FileName="Client/Pages/ExpensesSubmitForm.razor" />
-      <File FileName="Client/Pages/IncomeSubmitForm.razor" Line="1" Column="1" />
-      <File FileName="Client/Pages/SavingsSubmitForm.razor" />
-      <File FileName="Client/Pages/YearSubmitForm.razor" />
-      <File FileName="Client/Pages/Budget.razor" />
-      <File FileName="Client/Pages/MainPage.razor" Line="301" Column="51" />
-      <File FileName="Client/Models/BudgetModel.cs" Line="1" Column="1" />
-      <File FileName="Client/Models/DateModel.cs" Line="1" Column="1" />
-      <File FileName="Client/Models/DetailedBudgetModel.cs" Line="1" Column="1" />
-      <File FileName="Client/Models/SavingsModel.cs" Line="1" Column="1" />
-      <File FileName="Client/Models/YearModel.cs" Line="1" Column="1" />
-      <File FileName="DAL/Data/Month.cs" Line="161" Column="10" />
-      <File FileName="Client/Models/IncomeModel.cs" Line="1" Column="1" />
-      <File FileName="Client/Pages/BudgetDashboard.razor" Line="390" Column="6" />
+      <File FileName="DAL/Data/IBudget.cs" Line="9" Column="37" IsPinned="True" />
+      <File FileName="Api/Modules/BudgetModule.cs" Line="35" Column="56" />
+      <File FileName="Api/Program.cs" Line="9" Column="1" />
+      <File FileName="Api/AppBuilder.cs" Line="45" Column="33" />
+      <File FileName="Api/Modules/CompletedBudgetModule.cs" Line="11" Column="47" />
+      <File FileName="DAL/Data/BudgetCompletion.cs" Line="44" Column="1" />
+      <File FileName="DAL/Models/BudgetCompletion.cs" Line="22" Column="42" />
+      <File FileName="DAL/Data/Date.cs" Line="1" Column="1" />
+      <File FileName="DAL/Data/Expenses.cs" Line="1" Column="1" />
+      <File FileName="DAL/Data/IDate.cs" Line="1" Column="1" />
+      <File FileName="DAL/Data/Budget.cs" Line="160" Column="53" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="BudgetPlanner" expanded="True">
-            <Node name="Client">
-              <Node name="Pages" expanded="True">
-                <Node name="BudgetDashboard.razor" selected="True" />
+            <Node name="Api" expanded="True">
+              <Node name="Modules" expanded="True" />
+            </Node>
+            <Node name="DAL">
+              <Node name="Data" expanded="True">
+                <Node name="BudgetCompletion.cs" selected="True" />
               </Node>
+              <Node name="DbAccess" expanded="True" />
+              <Node name="Models" expanded="True" />
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Client PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="94" column="1" />
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="96" column="1" />
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="97" column="1" />
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="98" column="1" />
+      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/DAL/Data/BudgetCompletion.cs" relfile="DAL/Data/BudgetCompletion.cs" line="76" column="1" />
+      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/DAL/Data/BudgetCompletion.cs" relfile="DAL/Data/BudgetCompletion.cs" line="44" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.Client PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
 </Properties>

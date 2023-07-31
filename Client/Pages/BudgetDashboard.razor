@@ -4,6 +4,8 @@
 @inject Client.Services.SavingsApiClient savingsApiClient
 @inject Client.Services.ExpensesApiClient expensesApiClient
 @inject Client.Services.YearApiClient yearsApiClient
+@inject Client.Services.CompletedBudgetApiService budgetCompletion
+@inject Client.Services.MonthsApiClient monthsApiClient
 
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
@@ -76,11 +78,13 @@
                             <td>@TrackedBudgetIncome.Income.Employment</td>
                             <td>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                        aria-valuemin="0" aria-valuemax="100">40%</div>
+                                    <div class="progress-bar" role="progressbar"
+                                        style="width: @BudgetCompletionPercent.CompletedEmployment%"
+                                        aria-valuenow="@BudgetCompletionPercent.CompletedEmployment" aria-valuemin="0"
+                                        aria-valuemax="100">@BudgetCompletionPercent.CompletedEmployment%</div>
                                 </div>
                             </td>
-                            <td></td>
+                            <td>@BudgetCompletion.CompletedEmployment</td>
                             <td></td>
                         </tr>
                         <tr>
@@ -89,11 +93,14 @@
                         <td>@TrackedBudgetIncome.Income.SideHustle</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedSidehustle%"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedSidehustle" aria-valuemin="0"
+                                    aria-valuemax="100">@BudgetCompletionPercent.CompletedSidehustle%
+                                </div>
                             </div>
                         </td>
-                        <td></td>
+                        <td>@BudgetCompletion.CompletedSidehustle</td>
                         <td></td>
                     </tr>
                         <tr>
@@ -102,11 +109,14 @@
                         <td>@TrackedBudgetIncome.Income.Dividends</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedDividends%"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedDividends" aria-valuemin="0"
+                                    aria-valuemax="100">@BudgetCompletionPercent.CompletedDividends%
+                                </div>
                             </div>
                         </td>
-                        <td></td>
+                        <td>@BudgetCompletion.CompletedDividends</td>
                         <td></td>
                     </tr>
                         <tr>
@@ -144,11 +154,16 @@
                             <td>@TrackedBudgetSavings.Savings.EmergencyFund</td>
                             <td>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                        aria-valuemin="0" aria-valuemax="100">40%</div>
+                                    <div class="progress-bar" role="progressbar"
+                                        style="width: @BudgetCompletionPercent.CompletedEmergencyFund%"
+                                        aria-valuenow="@BudgetCompletionPercent.CompletedEmergencyFund" aria-valuemin="0"
+                                        aria-valuemax="100">
+                                        @BudgetCompletionPercent.CompletedEmergencyFund%
+                                    </div>
                                 </div>
                             </td>
-                            <td></td>
+                            <td>@BudgetCompletion.CompletedEmergencyFund
+                            </td>
                             <td></td>
                         </tr>
                         <tr>
@@ -157,8 +172,12 @@
                         <td>@TrackedBudgetSavings.Savings.RetirementAccount</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedRetirementAccount%"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedRetirementAccount"
+                                    aria-valuemin="0" aria-valuemax="100">
+                                    @BudgetCompletionPercent.CompletedRetirementAccount%
+                                </div>
                             </div>
                         </td>
                         <td></td>
@@ -170,11 +189,15 @@
                         <td>@TrackedBudgetSavings.Savings.Vacation</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedSavingsVacation%" aria-valuemin="0"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedSavingsVacation"
+                                    aria-valuemax="100">@BudgetCompletionPercent.CompletedSavingsVacation%
+                                </div>
                             </div>
                         </td>
-                        <td></td>
+                        <td>@BudgetCompletion.CompletedSavingsVacation
+                        </td>
                         <td></td>
                     </tr>
                         <tr>
@@ -183,11 +206,15 @@
                         <td>@TrackedBudgetSavings.Savings.HealthNeeds</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedHealthNeeds%"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedHealthNeeds" aria-valuemin="0"
+                                    aria-valuemax="100">@BudgetCompletionPercent.CompletedHealthNeeds%
+                                </div>
                             </div>
                         </td>
-                        <td></td>
+                        <td>@BudgetCompletion.CompletedHealthNeeds
+                        </td>
                         <td></td>
                     </tr>
                         <tr>
@@ -226,11 +253,14 @@
                             <td>@TrackedBudgetExpenses.Expenses.Housing</td>
                             <td>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                        aria-valuemin="0" aria-valuemax="100">40%</div>
+                                    <div class="progress-bar" role="progressbar"
+                                        style="width:@BudgetCompletionPercent.CompletedHousing%"
+                                        aria-valuenow="@BudgetCompletionPercent.CompletedHousing" aria-valuemin="0"
+                                        aria-valuemax="100">@BudgetCompletionPercent.CompletedHousing%
+                                    </div>
                                 </div>
                             </td>
-                            <td></td>
+                            <td>@BudgetCompletion.CompletedHousing</td>
                             <td></td>
                         </tr>
                         <tr>
@@ -239,11 +269,15 @@
                         <td>@TrackedBudgetExpenses.Expenses.Groceries</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedGroceries%"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedGroceries" aria-valuemin="0"
+                                    aria-valuemax="100">
+                                    @BudgetCompletionPercent.CompletedGroceries%
+                                </div>
                             </div>
                         </td>
-                        <td></td>
+                        <td>@BudgetCompletion.CompletedGroceries</td>
                         <td></td>
                     </tr>
                         <tr>
@@ -252,11 +286,14 @@
                         <td>@TrackedBudgetExpenses.Expenses.Utilities</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedUtilities%"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedUtilities" aria-valuemin="0"
+                                    aria-valuemax="100">@BudgetCompletionPercent.CompletedUtilities%
+                                </div>
                             </div>
                         </td>
-                        <td></td>
+                        <td>@BudgetCompletion.CompletedUtilities</td>
                         <td></td>
                     </tr>
                         <tr>
@@ -265,11 +302,15 @@
                         <td>@TrackedBudgetExpenses.Expenses.Vacation</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedExpensesVacation%"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedExpensesVacation" aria-valuemin="0"
+                                    aria-valuemax="100">@BudgetCompletionPercent.CompletedExpensesVacation%
+                                </div>
                             </div>
                         </td>
-                        <td></td>
+                        <td>@BudgetCompletion.CompletedExpensesVacation
+                        </td>
                         <td></td>
                     </tr>
                         <tr>
@@ -278,11 +319,15 @@
                         <td>@TrackedBudgetExpenses.Expenses.Transportation</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedTransportation%"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedTransportation"
+                                    aria-valuemax="100">@BudgetCompletionPercent.CompletedTransportation%
+                                </div>
                             </div>
                         </td>
-                        <td></td>
+                        <td>@BudgetCompletion.CompletedTransportation
+                        </td>
                         <td></td>
                     </tr>
                         <tr>
@@ -291,11 +336,14 @@
                         <td>@TrackedBudgetExpenses.Expenses.Medicine</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedMedicine%"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedMedicine" aria-valuemin="0"
+                                    aria-valuemax="100">@BudgetCompletionPercent.CompletedMedicine%
+                                </div>
                             </div>
                         </td>
-                        <td></td>
+                        <td>@BudgetCompletion.CompletedMedicine</td>
                         <td></td>
                     </tr>
                         <tr>
@@ -304,11 +352,14 @@
                         <td>@TrackedBudgetExpenses.Expenses.Clothing</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedClothing%"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedClothing" aria-valuemax="100">
+                                    @BudgetCompletionPercent.CompletedClothing%
+                                </div>
                             </div>
                         </td>
-                        <td></td>
+                        <td>@BudgetCompletion.CompletedClothing</td>
                         <td></td>
                     </tr>
                         <tr>
@@ -317,11 +368,14 @@
                         <td>@TrackedBudgetExpenses.Expenses.Media</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedMedia%"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedMedia" aria-valuemax="100">
+                                    @BudgetCompletionPercent.CompletedMedia%
+                                </div>
                             </div>
                         </td>
-                        <td></td>
+                        <td>@BudgetCompletion.CompletedMedia</td>
                         <td></td>
                     </tr>
                         <tr>
@@ -330,11 +384,14 @@
                         <td>@TrackedBudgetExpenses.Expenses.Insuranses</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @size;" aria-valuenow="40"
-                                    aria-valuemin="0" aria-valuemax="100">40%</div>
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: @BudgetCompletionPercent.CompletedInsuranses%"
+                                    aria-valuenow="@BudgetCompletionPercent.CompletedInsuranses" aria-valuemin="0"
+                                    aria-valuemax="100">@BudgetCompletionPercent.CompletedInsuranses%
+                                </div>
                             </div>
                         </td>
-                        <td></td>
+                        <td>@BudgetCompletion.CompletedInsuranses</td>
                         <td></td>
                     </tr>
                         <tr>
@@ -358,7 +415,7 @@
 
 @code
 {
-    private string size = "50%";
+    private int size = 50;
     private BudgetModel? TrackedBudgetIncome;
     private BudgetModel? TrackedBudgetSavings;
     private BudgetModel? TrackedBudgetExpenses;
@@ -367,14 +424,22 @@
     public IEnumerable<BudgetModel>? Income = new List<BudgetModel>();
     private IEnumerable<YearModel>? Years = new List<YearModel>();
     private IEnumerable<BudgetModel>? Months = new List<BudgetModel>();
+    private BudgetCompletionModel BudgetCompletion = new BudgetCompletionModel();
+    private BudgetCompletionModel BudgetCompletionPercent = new BudgetCompletionModel();
+
     private YearModel selectedYear { get; set; } = new YearModel { Name = "" };
 
     protected override async Task OnInitializedAsync()
     {
         Years = await yearsApiClient.GetYearsAsync();
+        Months = await monthsApiClient.GetMonthsAsync();
         TrackedBudgetIncome = await incomeApiClient.GetLatestIncomeAsync();
         TrackedBudgetSavings = await savingsApiClient.GetLatestSavingsAsync();
         TrackedBudgetExpenses = await expensesApiClient.GetLatestExpensesAsync();
+        BudgetCompletion = await budgetCompletion.GetBudgetCompletionByMonthIdAsync(Months.Select(month =>
+        month.Id).LastOrDefault());
+        BudgetCompletionPercent = await budgetCompletion.GetBudgetCompletionByMonthIdInPercentAsync(Months.Select(month =>
+        month.Id).LastOrDefault());
     }
 
     public async Task GetLatestDataByYearIdAsync(ChangeEventArgs e)
@@ -383,12 +448,6 @@
         await GetLatestExpensesByYearIdAsync(e);
         await GetLatestSavingsByYearIdAsync(e);
     }
-    @* public async Task GetLatestDataByMonthIdAsync(ChangeEventArgs e)
-{
-await GetIncomeByMonthIdAsync(e);
-await GetSavingsByMonthIdAsync(e);
-await GetEpxpensesByMonthIdAsync(e);
-} *@
 
     public async Task GetLatestIncomeByYearIdAsync(ChangeEventArgs e)
     {

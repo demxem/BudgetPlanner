@@ -29,7 +29,7 @@ public class Calculations : ICalculations
                             join income as i on m.incomeid = i.id
                             where m.yearid = @YearId
                             group by m.id, i.id
-                            order by m.date; ";
+                            order by m.date;";
 
             var result = await connection.QueryAsync<BudgetModel, IncomeModel, BudgetModel>(sql, (months, income) =>
             {

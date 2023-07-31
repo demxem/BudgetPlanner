@@ -35,7 +35,7 @@ namespace Client.Services
             }
             return new List<YearModel>();
         }
-       
+
         public async Task DeleteYearByIdAsync(int id)
         {
             await httpClient.DeleteAsync($"/years/{id}");
@@ -45,6 +45,6 @@ namespace Client.Services
         {
             await httpClient.PostAsJsonAsync($"/years", year);
         }
-       
+
     }
 }

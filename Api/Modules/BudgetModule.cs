@@ -3,7 +3,7 @@ using DAL.Models;
 
 namespace Api.Modules
 {
-    public static class MonthModule
+    public static class BudgetModule
     {
         public static void RegisterBudgetEndpoints(this IEndpointRouteBuilder endpoints)
         {
@@ -26,7 +26,6 @@ namespace Api.Modules
             endpoints.MapPost("/years/months/incomeByYearId/", InsertIncomeByYearId);
             endpoints.MapDelete("/years/months/{id}", DeleteMonthById);
             endpoints.MapGet("/months/budget", GetBudget);
-            endpoints.MapGet("years/months/completed{id}", GetCompletedBudgetAsyncByYearId);
         }
 
         private static async Task<IResult> GetMonthByYearId(IBudget data, int id)
@@ -221,18 +220,6 @@ namespace Api.Modules
             try
             {
                 await data.DeleteMonthById(id);
-                return Results.Ok();
-            }
-            catch (Exception ex)
-            {
-                return Results.Problem(ex.Message);
-            }
-        }
-        private static async Task<IResult> GetCompletedBudgetAsyncByYearId(IBudget data, int id)
-        {
-            try
-            {
-                await data.GetCompletedBudgetByYearId(id);
                 return Results.Ok();
             }
             catch (Exception ex)

@@ -40,10 +40,10 @@ public class Expenses : IExpenses
     {
         string sql = @"insert into expenses (housing, groceries,utilities,
                                             vacation,transportation,medicine,
-                                            clothing,media,insuranses, trackedhousing, trackedgroceries,trackedutilities,
+                                            clothing,media,insuranses,date,trackedhousing,trackedgroceries,trackedutilities,
                                             trackedvacation,trackedtransportation,trackedmedicine,
                                             trackedclothing,trackedmedia,trackedinsuranses, monthid, yearid)
-                           values (@Housing, @Groceries, @Utilities, @Vacation,@Transportation,@Medicine,@Clothing,@Media,@Insuranses,@TrackedHousing, @TrackedGroceries, @TrackedUtilities, @TrackedVacation,@TrackedTransportation,@TrackedMedicine,@TrackedClothing,@TrackedMedia,@TrackedInsuranses, @MonthId, @YearId);";
+                           values (@Housing, @Groceries, @Utilities, @Vacation,@Transportation,@Medicine,@Clothing,@Media,@Insuranses,@Date,@TrackedHousing, @TrackedGroceries, @TrackedUtilities, @TrackedVacation,@TrackedTransportation,@TrackedMedicine,@TrackedClothing,@TrackedMedia,@TrackedInsuranses, @MonthId, @YearId);";
 
         return _dataAccess.SafeData(sql, new
         {
@@ -57,6 +57,7 @@ public class Expenses : IExpenses
             expenses.Clothing,
             expenses.Media,
             expenses.Insuranses,
+            Date = DateTime.Now,
             expenses.TrackedHousing,
             expenses.TrackedGroceries,
             expenses.TrackedUtilities,
@@ -67,8 +68,7 @@ public class Expenses : IExpenses
             expenses.TrackedMedia,
             expenses.TrackedInsuranses,
             expenses.MonthId,
-            expenses.YearId,
-            Date = DateTime.Now
+            expenses.YearId
         });
     }
 
@@ -85,6 +85,7 @@ public class Expenses : IExpenses
                             clothing = @Clothing,
                             media = @Media,
                             insuranses = @insuranses,
+                            date = @Date,
                             trackedhousing = @TrackedHousing, 
                             trackedgroceries = @TrackedGroceries, 
                             trackedutilities = @TrackedUtilities,
@@ -94,7 +95,6 @@ public class Expenses : IExpenses
                             trackedclothing = @TrackedClothing,
                             trackedmedia = @TrackedMedia,
                             trackedinsuranses = @TrackedInsuranses,
-                            date = @Date,
                             monthid = @MonthId,
                             yearid = @YearId
                         where id = @Id;";

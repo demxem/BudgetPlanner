@@ -31,10 +31,10 @@ namespace Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
             Savings = await savingsApiClient.GetSavingByEachMonthAsync();
             Income = await incomeApiClient.GetIncomeByEachMonthAsync();
             Years = await yearsApiClient.GetYearsAsync();
+            Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
             MessageService.OnMessage += MessageHandler;
         }
 
@@ -187,11 +187,6 @@ namespace Client.Pages
                 CloseOnEscapeKey = true
             };
             DialogService.Show<YearDeleteForm>(@"This action will delete complete year budget plan", closeOnEscapeKey);
-        }
-
-        private void ChangeOnRowClick(BudgetModel model)
-        {
-
         }
 
         //Method for button selector//

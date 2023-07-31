@@ -3,7 +3,7 @@ using DAL.Models;
 
 namespace Api.Modules;
 
-public static class BudgetModule
+public static class DetailedBudgetModule
 {
     public static void RegisterDetailedBudgetEndpoints(this IEndpointRouteBuilder endpoints)
     {

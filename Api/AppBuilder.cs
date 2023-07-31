@@ -24,6 +24,7 @@ public static class AppBuilder
         builder.Services.AddTransient<IDate, Date>();
         builder.Services.AddTransient<ICalculations, Calculations>();
         builder.Services.AddTransient<IDetailedBudget, DetailedBudget>();
+        builder.Services.AddTransient<IBudgetCompletion, BudgetCompletion>();
         builder.Services.AddCors();
         builder.Services.AddSwaggerGen();
 
@@ -41,7 +42,7 @@ public static class AppBuilder
         app.RegisterBudgetEndpoints();
         app.RegisterYearsEndpoints();
         app.RegisterCalculationsEndpoints();
-
+        app.RegisterCompletedBudgetEndpoints();
 
         app.UseCors(builder => builder
                    .AllowAnyOrigin()

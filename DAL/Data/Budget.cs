@@ -354,42 +354,5 @@ public class Budget : IBudget
             await connection.ExecuteAsync(sql, new { Id = id });
         }
     }
-
-    public async Task<IEnumerable<BudgetModel>?> GetCompletedBudgetByYearId(int id)
-    {
-        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
-        {
-
-            string sql = @"select m.id,m.name,m.yearid, (employment - trackedemployment) as CompletedEmployment, 
-                            (sidehustle - trackedsidehustle) as CompletedSidehustle, 
-                            (dividends - trackeddividends) as CompletedDividends,
-                            (housing - trackedhousing) as housingCompleted,(groceries - trackedgroceries) as CompletedGroceries,
-                            (utilities - trackedutilities) as CompletedUtilities,
-                            (s.vacation - s.trackedvacation) as CompletedVacation,
-                            (transportation - trackedtransportation) as CompletedTransportation,
-                            (medicine - trackedmedicine) as CompletedMedicine,
-                            (clothing - trackedclothing) as CompletedClothing,
-                            (media - trackedmedia) as CompletedMedia,
-                            (insuranses - trackedinsuranses) as CompletedInsuranses,
-                            (emergencyfund - trackedemergencyfund) as CompletedEmergencyFund,
-                            (retirementaccount - trackedretirementaccount) as CompletedReritementAccount,
-                            (e.vacation - e.trackedvacation) as CompletedVacation,
-                            (healthneeds - trackedhealthneeds) as CompletedHealthNeeds from months as m
-                            full outer join income as i on m.incomeid = i.id
-                            full outer join savings as s on m.savingsid=s.id
-                            full outer join expenses as e on m.expensesid = e.id
-                            where m.yearid = @id and employment is not null and housing is not null and emergencyfund is not null;";
-
-            var result = await connection.QueryAsync<BudgetModel, IncomeModel, SavingsModel, ExpensesModel, BudgetModel>(sql, (month, income, savings, expenses) =>
-            {
-                month.Income = income;
-                month.Savings = savings;
-                month.Expenses = expenses;
-                return month;
-            }, new { YearId = id });
-
-            return result;
-        }
-    }
 }
 

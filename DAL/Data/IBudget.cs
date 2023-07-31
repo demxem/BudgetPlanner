@@ -22,6 +22,5 @@ public interface IBudget
     Task<BudgetModel> GetExpensesByMonthId(int id);
     Task UpdateMonth(BudgetModel month);
     Task<IEnumerable<BudgetModel>> GetBudget();
-    Task<IEnumerable<BudgetModel>?> GetCompletedBudgetByYearId(int id);
 }
 
