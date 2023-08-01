@@ -32,7 +32,8 @@ public class Budget : IBudget
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            string sql = @"select m.*, sum (i.employment + i.sidehustle + i.dividends) as monthlyIncome, i.* 
+            string sql = @"select m.*, sum (i.employment + i.sidehustle + i.dividends) as monthlyIncome, 
+                            sum (i.trackedemployment + i.trackedsidehustle + i.trackeddividends) as TrackedMonthlyIncome, i.* 
                             from months as m
                             join income as i on m.incomeid = i.id
                             group by m.id, i.id
@@ -78,7 +79,8 @@ public class Budget : IBudget
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            string sql = @"select m.*, sum (s.emergencyfund + s.retirementaccount + s.vacation + s.healthneeds) as monthlySavings, s.* 
+            string sql = @"select m.*, sum (s.emergencyfund + s.retirementaccount + s.vacation + s.healthneeds) as monthlySavings, 
+                            sum (s.trackedemergencyfund + s.trackedretirementaccount + s.trackedvacation + s.trackedhealthneeds) as TrackedMonthlySavings, s.* 
                             from months as m
                             join savings as s on m.savingsid = s.id
                             group by m.id, s.id
@@ -119,7 +121,10 @@ public class Budget : IBudget
         {
             string sql = @"select m.*, sum (e.housing + e.groceries + e.utilities + e.vacation 
                                         + e.transportation + e.medicine + e.clothing + e.media 
-                                        + e.insuranses) as monthlyExpenses, e.* 
+                                        + e.insuranses) as monthlyExpenses, 
+                                        sum (e.trackedhousing + e.trackedgroceries + e.trackedutilities + e.vacation 
+                                        + e.transportation + e.medicine + e.clothing + e.media 
+                                        + e.insuranses) as TrackedMonthlyExpenses, e.* 
                             from months as m
                             join expenses as e on m.expensesid = e.id
                             group by m.id, e.id
@@ -139,7 +144,8 @@ public class Budget : IBudget
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            string sql = @"select m.*, sum (i.employment + i.sidehustle + i.dividends) as monthlyIncome, i.* 
+            string sql = @"select m.*, sum (i.employment + i.sidehustle + i.dividends) as monthlyIncome, 
+                            sum (i.trackedemployment + i.trackedsidehustle + i.trackeddividends) as TrackedMonthlyIncome, i.* 
                             from months as m
                             join income as i on m.incomeid = i.id
                             where m.yearid = @YearId
@@ -159,7 +165,8 @@ public class Budget : IBudget
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            string sql = @"select m.*, sum (i.employment + i.sidehustle + i.dividends) as monthlyIncome, i.* 
+            string sql = @"select m.*, sum (i.employment + i.sidehustle + i.dividends) as monthlyIncome,
+                            sum (i.trackedemployment + i.trackedsidehustle + i.trackeddividends) as TrackedMonthlyIncome, i.* 
                             from months as m
                             join income as i on m.incomeid = i.id
                             where m.id = @MonthId
@@ -180,7 +187,8 @@ public class Budget : IBudget
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            string sql = @"select m.*, sum (s.emergencyfund + s.retirementaccount + s.vacation + s.healthneeds) as monthlySavings, s.* 
+            string sql = @"select m.*, sum (s.emergencyfund + s.retirementaccount + s.vacation + s.healthneeds) as monthlySavings, 
+                            sum (s.trackedemergencyfund + s.trackedretirementaccount + s.trackedvacation + s.trackedhealthneeds) as TrackedMonthlySavings, s.* 
                             from months as m
                             join savings as s on m.savingsid = s.id
                             where m.yearid = @YearId
@@ -200,7 +208,8 @@ public class Budget : IBudget
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
-            string sql = @"select m.*, sum (s.emergencyfund + s.retirementaccount + s.vacation + s.healthneeds) as monthlySavings, s.* 
+            string sql = @"select m.*, sum (s.emergencyfund + s.retirementaccount + s.vacation + s.healthneeds) as monthlySavings, 
+                            sum (s.trackedemergencyfund + s.trackedretirementaccount + s.trackedvacation + s.trackedhealthneeds) as TrackedMonthlySavings, s.* 
                             from months as m
                             join savings as s on m.savingsid = s.id
                             where m.id = @MonthId
@@ -222,7 +231,10 @@ public class Budget : IBudget
         {
             string sql = @"select m.*, sum (e.housing + e.groceries + e.utilities + e.vacation 
                                         + e.transportation + e.medicine + e.clothing + e.media 
-                                        + e.insuranses) as monthlyExpenses, e.* 
+                                        + e.insuranses) as monthlyExpenses, 
+                                        sum (e.trackedhousing + e.trackedgroceries + e.trackedutilities + e.vacation 
+                                        + e.transportation + e.medicine + e.clothing + e.media 
+                                        + e.insuranses) as TrackedMsonthlyExpenses, e.* 
                             from months as m
                             join expenses as e on m.expensesid = e.id
                             where m.yearid = @YearId
@@ -244,7 +256,10 @@ public class Budget : IBudget
         {
             string sql = @"select m.*, sum (e.housing + e.groceries + e.utilities + e.vacation 
                                         + e.transportation + e.medicine + e.clothing + e.media 
-                                        + e.insuranses) as monthlyExpenses, e.* 
+                                        + e.insuranses) as monthlyExpenses,
+                                        sum (e.trackedhousing + e.trackedgroceries + e.trackedutilities + e.vacation 
+                                        + e.transportation + e.medicine + e.clothing + e.media 
+                                        + e.insuranses) as TrackedMonthlyExpenses, e.* 
                             from months as m
                             join expenses as e on m.expensesid = e.id
                             where m.id = @MonthId

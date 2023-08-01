@@ -2,23 +2,21 @@ namespace DAL.Models
 {
     public class BudgetCompletionModel
     {
-        public int MonthId { get; set; }
-        public int YearId { get; set; }
-        public float CompletedEmployment { get; set; }
-        public float CompletedSidehustle { get; set; }
-        public float CompletedDividends { get; set; }
-        public float CompletedHousing { get; set; }
-        public float CompletedGroceries { get; set; }
-        public float CompletedUtilities { get; set; }
-        public float CompletedExpensesVacation { get; set; }
-        public float CompletedTransportation { get; set; }
-        public float CompletedMedicine { get; set; }
-        public float CompletedClothing { get; set; }
-        public float CompletedMedia { get; set; }
-        public float CompletedInsuranses { get; set; }
-        public float CompletedEmergencyFund { get; set; }
-        public float CompletedRetirementAccount { get; set; }
-        public float CompletedSavingsVacation { get; set; }
-        public float CompletedHealthNeeds { get; set; }
+        public decimal IncomeCompletedEmployment { get; set; }
+        public decimal IncomeCompletedSidehustle { get; set; }
+        public decimal IncomeCompletedDividends { get; set; }
+        public decimal ExpensesCompletedHousing { get; set; }
+        public decimal ExpensesCompletedGroceries { get; set; }
+        public decimal ExpensesCompletedUtilities { get; set; }
+        public decimal ExpensesCompletedVacation { get; set; }
+        public decimal ExpensesCompletedTransportation { get; set; }
+        public decimal ExpensesCompletedMedicine { get; set; }
+        public decimal ExpensesCompletedClothing { get; set; }
+        public decimal ExpensesCompletedMedia { get; set; }
+        public decimal ExpensesCompletedInsuranses { get; set; }
+        public decimal SavingsCompletedEmergencyFund { get; set; }
+        public decimal SavingsCompletedRetirementAccount { get; set; }
+        public decimal SavingsCompletedVacation { get; set; }
+        public decimal SavingsCompletedHealthNeeds { get; set; }
     }
 }

@@ -201,7 +201,7 @@ namespace Client.Pages
             CalculateYearlySavings();
         }
 
-        public float CalculateYearlyUndistributedIncome()
+        public decimal CalculateYearlyUndistributedIncome()
         {
             var totalIncome = CalculateYearlyIncome();
             var totalSavings = CalculateYearlySavings();
@@ -210,7 +210,7 @@ namespace Client.Pages
             return undistributedIncome;
         }
 
-        public float CalculateMonthlyUndistributedIncome()
+        public decimal CalculateMonthlyUndistributedIncome()
         {
             var montlhlyIncome = CalculateMonthlyIncome();
             var monthlySavings = CalculateMonthlySavings();
@@ -219,7 +219,7 @@ namespace Client.Pages
             return undistributedMonthlyIncome;
         }
 
-        public float CalculateMonthlyIncome()
+        public decimal CalculateMonthlyIncome()
         {
             if (activeTabNumber == 0)
             {
@@ -234,7 +234,7 @@ namespace Client.Pages
             return Income!.Where(income => income!.Name!.Equals(expensesSelectedOnRowClick.Name)).Select(income => income.MonthlyIncome).FirstOrDefault(0);
         }
 
-        public float CalculateMonthlySavings()
+        public decimal CalculateMonthlySavings()
         {
             if (activeTabNumber == 0)
             {
@@ -249,7 +249,7 @@ namespace Client.Pages
             return Savings!.Where(savings => savings!.Name!.Equals(expensesSelectedOnRowClick.Name)).Select(savings => savings.MonthlySavings).FirstOrDefault(0);
         }
 
-        public float CalculateMonthlyExpenses()
+        public decimal CalculateMonthlyExpenses()
         {
             if (activeTabNumber == 0)
             {
@@ -264,17 +264,17 @@ namespace Client.Pages
             return Expenses!.Where(expenses => expenses.Equals(expensesSelectedOnRowClick)).Select(expenses => expenses.MonthlyExpenses).FirstOrDefault(0);
         }
 
-        public float CalculateYearlyIncome()
+        public decimal CalculateYearlyIncome()
         {
             return Income!.Select(income => income.MonthlyIncome).Sum();
         }
 
-        public float CalculateYearlySavings()
+        public decimal CalculateYearlySavings()
         {
             return Savings!.Select(savings => savings.MonthlySavings).Sum();
         }
 
-        public float CalculateYearlyExpenses()
+        public decimal CalculateYearlyExpenses()
         {
             return Expenses!.Select(expenses => expenses.MonthlyExpenses).Sum();
         }

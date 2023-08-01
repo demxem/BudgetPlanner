@@ -182,7 +182,7 @@
     private BudgetModel? LatestIncome;
     private string? itemType { get; set; } = "Income";
     private string itemCategory { get; set; } = "";
-    private float itemAmount { get; set; }
+    private decimal itemAmount { get; set; }
     private DateTime date { get; set; } = DateTime.Now;
     private string itemDetails { get; set; } = "";
 
@@ -241,20 +241,20 @@
     private void GetLatestMonthlyIncome()
     {
         LatestIncome = IncomeByEachMonth!.Select(income => income).LastOrDefault(new BudgetModel { });
-        Data[0] = LatestIncome.MonthlyIncome;
+        Data[0] = Decimal.ToDouble(LatestIncome.MonthlyIncome);
     }
     private void GetLatestMonthlyExpenses()
     {
-        float latestExpenses = ExpensesByEachMonth!.Where(expenses => expenses.Id == LatestIncome.Id &&
+        decimal latestExpenses = ExpensesByEachMonth!.Where(expenses => expenses.Id == LatestIncome.Id &&
         expenses.YearId ==
         LatestIncome.YearId).Select(expenses => expenses.MonthlyExpenses).LastOrDefault(0);
-        Data[2] = latestExpenses;
+        Data[2] = Decimal.ToDouble(latestExpenses);
     }
     private void GetLatestMonthlySavings()
     {
-        float latestSavings = SavingsByEachMonth!.Where(savings => savings.Id == LatestIncome.Id &&
+        decimal latestSavings = SavingsByEachMonth!.Where(savings => savings.Id == LatestIncome.Id &&
         savings.YearId == LatestIncome.YearId).Select(savings => savings.MonthlySavings).LastOrDefault(0);
-        Data[1] = latestSavings;
+        Data[1] = Decimal.ToDouble(latestSavings);
     }
 
     private double GetLatestTrackedUndistributedIncome()
@@ -281,9 +281,9 @@
 
     private void SetDataOnSelect()
     {
-        Data[0] = state.SelectedIncome!.MonthlyIncome;
-        Data[1] = state.SelectedSavings!.MonthlySavings;
-        Data[2] = state.SelectedExpenses!.MonthlyExpenses;
+        Data[0] = Decimal.ToDouble(state.SelectedIncome!.MonthlyIncome);
+        Data[1] = Decimal.ToDouble(state.SelectedSavings!.MonthlySavings);
+        Data[2] = Decimal.ToDouble(state.SelectedExpenses!.MonthlyExpenses);
     }
 
     public string CalculateUndistributedIcome()
@@ -310,7 +310,7 @@
                 Type = itemType,
                 Category = itemCategory,
                 Details = itemDetails,
-                Amount = (float)Math.Round(itemAmount, 2),
+                Amount = (decimal)Math.Round(itemAmount, 2),
                 MonthId = state.SelectedIncome.Income.MonthId,
                 YearId = state.SelectedIncome.Income.YearId,
             };
@@ -387,7 +387,7 @@
         {
             if (category.Name.Equals(trackedCategory))
             {
-                itemAmount += (float)category.GetValue(selected, null);
+                itemAmount += (decimal)category.GetValue(selected, null);
                 category.SetValue(selected, itemAmount);
             }
         }
@@ -413,7 +413,7 @@
         {
             if (category.Name.Equals(trackedCategory))
             {
-                var itemAmount = (float)category.GetValue(selected, null);
+                var itemAmount = (decimal)category.GetValue(selected, null);
                 itemAmount -= model.Amount;
                 category.SetValue(selected, itemAmount);
             }

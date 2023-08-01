@@ -20,7 +20,7 @@ public class Calculations : ICalculations
         _config = config;
     }
 
-    public async Task<float> GetYearlyIncome(int Id)
+    public async Task<decimal> GetYearlyIncome(int Id)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
@@ -42,7 +42,7 @@ public class Calculations : ICalculations
         }
     }
 
-    public async Task<float> GetYearlySavings(int Id)
+    public async Task<decimal> GetYearlySavings(int Id)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
@@ -64,7 +64,7 @@ public class Calculations : ICalculations
         }
     }
 
-    public async Task<float> GetYearlyExpenses(int Id)
+    public async Task<decimal> GetYearlyExpenses(int Id)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
@@ -89,7 +89,7 @@ public class Calculations : ICalculations
         }
     }
 
-    public async Task<float> GetMonthlyIncome(int Id)
+    public async Task<decimal> GetMonthlyIncome(int Id)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
@@ -109,7 +109,7 @@ public class Calculations : ICalculations
             return result.Select(income => income.MonthlyIncome).FirstOrDefault();
         }
     }
-    public async Task<float> GetMonthlySavings(int Id)
+    public async Task<decimal> GetMonthlySavings(int Id)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
@@ -129,7 +129,7 @@ public class Calculations : ICalculations
             return result.Select(savings => savings.MonthlySavings).FirstOrDefault();
         }
     }
-    public async Task<float> GetMonthlyExpenses(int Id)
+    public async Task<decimal> GetMonthlyExpenses(int Id)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
@@ -152,7 +152,7 @@ public class Calculations : ICalculations
         }
     }
 
-    public async Task<float> GetYearlyUndistributedIncome(int Id)
+    public async Task<decimal> GetYearlyUndistributedIncome(int Id)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
@@ -177,16 +177,16 @@ public class Calculations : ICalculations
                 return months;
             }, new { YearId = Id });
 
-            float yearlyIncome = result.Select(income => income.MonthlyIncome).Sum();
-            float yearlySavings = result.Select(savings => savings.MonthlySavings).Sum();
-            float yearlyExpenses = result.Select(expenses => expenses.MonthlyExpenses).Sum();
-            float undistributedIncome = yearlyIncome - (yearlySavings + yearlyExpenses);
+            decimal yearlyIncome = result.Select(income => income.MonthlyIncome).Sum();
+            decimal yearlySavings = result.Select(savings => savings.MonthlySavings).Sum();
+            decimal yearlyExpenses = result.Select(expenses => expenses.MonthlyExpenses).Sum();
+            decimal undistributedIncome = yearlyIncome - (yearlySavings + yearlyExpenses);
 
             return undistributedIncome;
         }
     }
 
-    public async Task<float> GetMonthlyUndistributedIncome(int id)
+    public async Task<decimal> GetMonthlyUndistributedIncome(int id)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
@@ -211,11 +211,11 @@ public class Calculations : ICalculations
                 return months;
             }, new { Id = id });
 
-            float monthlyIncome = result.Select(income => income.MonthlyIncome).FirstOrDefault();
-            float monthlySavings = result.Select(savings => savings.MonthlySavings).FirstOrDefault();
-            float monthlyExpenses = result.Select(expenses => expenses.MonthlyExpenses).FirstOrDefault();
+            decimal monthlyIncome = result.Select(income => income.MonthlyIncome).FirstOrDefault();
+            decimal monthlySavings = result.Select(savings => savings.MonthlySavings).FirstOrDefault();
+            decimal monthlyExpenses = result.Select(expenses => expenses.MonthlyExpenses).FirstOrDefault();
 
-            float undistributedMonthlyIncome = monthlyIncome - (monthlySavings + monthlyExpenses);
+            decimal undistributedMonthlyIncome = monthlyIncome - (monthlySavings + monthlyExpenses);
 
             return undistributedMonthlyIncome;
         }

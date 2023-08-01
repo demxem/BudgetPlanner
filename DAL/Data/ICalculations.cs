@@ -2,14 +2,14 @@ namespace DAL.Data;
 
 public interface ICalculations
 {
-    Task<float> GetMonthlyExpenses(int Id);
-    Task<float> GetMonthlyIncome(int Id);
-    Task<float> GetMonthlySavings(int Id);
-    Task<float> GetYearlyExpenses(int Id);
-    Task<float> GetYearlyIncome(int Id);
-    Task<float> GetYearlySavings(int Id);
-    Task<float> GetYearlyUndistributedIncome(int Id);
-    Task<float> GetMonthlyUndistributedIncome(int Id);
+    Task<decimal> GetMonthlyExpenses(int Id);
+    Task<decimal> GetMonthlyIncome(int Id);
+    Task<decimal> GetMonthlySavings(int Id);
+    Task<decimal> GetYearlyExpenses(int Id);
+    Task<decimal> GetYearlyIncome(int Id);
+    Task<decimal> GetYearlySavings(int Id);
+    Task<decimal> GetYearlyUndistributedIncome(int Id);
+    Task<decimal> GetMonthlyUndistributedIncome(int Id);
 
 
 }

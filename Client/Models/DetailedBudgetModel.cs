@@ -6,9 +6,9 @@ namespace Client.Models
         public DateTime Date { get; set; }
         public string Type { get; set; } = "";
         public string Category { get; set; } = "";
-        public float Amount { get; set; }
+        public decimal Amount { get; set; }
         public string Details { get; set; } = "";
-        public float Balance { get; set; }
+        public decimal Balance { get; set; }
         public int MonthId { get; set; }
         public int YearId { get; set; }
     }

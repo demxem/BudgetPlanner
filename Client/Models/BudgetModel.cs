@@ -7,9 +7,12 @@ public class BudgetModel
     public int SavingsId { get; set; }
     public int ExpensesId { get; set; }
     public string? Name { get; set; }
-    public float MonthlyIncome { get; set; }
-    public float MonthlySavings { get; set; }
-    public float MonthlyExpenses { get; set; }
+    public decimal MonthlyIncome { get; set; }
+    public decimal MonthlySavings { get; set; }
+    public decimal MonthlyExpenses { get; set; }
+    public decimal TrackedMonthlyIncome { get; set; }
+    public decimal TrackedMonthlySavings { get; set; }
+    public decimal TrackedMonthlyExpenses { get; set; }
     public SavingsModel? Savings { get; set; }
     public ExpensesModel? Expenses { get; set; }
     public IncomeModel? Income { get; set; }
