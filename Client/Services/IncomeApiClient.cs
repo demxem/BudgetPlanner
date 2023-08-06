@@ -109,7 +109,11 @@ namespace Client.Services
             {
                 Console.WriteLine(ex.Message.ToString());
             }
-            return new BudgetModel();
+
+            return new BudgetModel()
+            {
+                Income = new IncomeModel()
+            };
         }
 
         public async Task UpdateIncomeAsync(IncomeModel? item)

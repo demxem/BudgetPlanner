@@ -56,6 +56,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvWWVhclN1Ym1pdEZvcm0ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Volumes/Mac/Projects/BudgetPlanner/Client/Services/BudgetPlanning.razor]
+build_metadata.AdditionalFiles.TargetPath = U2VydmljZXMvQnVkZ2V0UGxhbm5pbmcucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Volumes/Mac/Projects/BudgetPlanner/Client/Shared/MyNavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL015TmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 

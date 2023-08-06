@@ -16,7 +16,7 @@ public class Income : IIncome
     {
         string sql = @"select id, employment, sidehustle, dividends, date, monthid, yearid
                        from income
-                       order by date;";
+                       order by date asc;";
 
         return _dataAccess.LoadData<IncomeModel, dynamic>(sql, new { });
     }

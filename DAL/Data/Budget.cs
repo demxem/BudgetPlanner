@@ -21,7 +21,7 @@ public class Budget : IBudget
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
             string sql = @"select * from months 
-                            order by date;";
+                            order by number Asc;";
 
             var result = await connection.QueryAsync<BudgetModel>(sql);
             return result;

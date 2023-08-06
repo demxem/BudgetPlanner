@@ -110,7 +110,20 @@ namespace Client.Services
             {
                 Console.WriteLine(ex.Message.ToString());
             }
-            return new BudgetModel();
+            return new BudgetModel()
+            {
+                Savings = new SavingsModel()
+                {
+                    EmergencyFund = 0,
+                    RetirementAccount = 0,
+                    Vacation = 0,
+                    HealthNeeds = 0,
+                    TrackedEmergencyFund = 0,
+                    TrackedRetirementAccount = 0,
+                    TrackedVacation = 0,
+                    TrackedHealthNeeds = 0
+                }
+            };
         }
 
         public async Task UpdateSavingsAsync(SavingsModel? item)

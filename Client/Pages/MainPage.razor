@@ -39,6 +39,28 @@
     td {
         text-align: center;
     }
+
+    th[scope='budget-header'] {
+        background-color: grey;
+    }
+
+    table {
+        border-collapse: collapse;
+        border: 2px solid rgb(200, 200, 200);
+        letter-spacing: 1px;
+        font-family: sans-serif;
+        font-size: 0.8rem;
+    }
+
+    #container {
+        height: 400px;
+        overflow-y: scroll;
+        position: relative;
+    }
+
+    #stretcher {
+        height: 600px;
+    }
 </style>
 <MudGrid>
     <MudItem xs="3">
@@ -73,99 +95,103 @@
         </MudCard>
     </MudItem>
 </MudGrid>
-<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
-    <MudGrid>
-        <MudItem xs="12" sm="4">
-            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
-                <div class="inline-block">
-                    <MudButton @onclick="@OpenSubmitForm" Variant="Variant.Filled" Color="Color.Primary">Select Year
-                    </MudButton>
-                </div>
-                <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@Data"
-                    InputLabels="@Labels">
-                    <CustomGraphics>
-                        <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
-                            fill="blue" font-family="Helvetica" font-size="3">Income</text>
-                        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                            fill="blue" font-family="Helvetica" font-size="5">@CalculateUndistributedIcome()</text>
-                    </CustomGraphics>
-                </MudChart>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
-                <table>
-                    <tr>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Category</th>
-                        <th>Details</th>
-                        <th>Amount</th>
-                        <th>Balance</th>
-                        <th>Submit</th>
-                    </tr>
-                    <tr>
-                        <td><input type="datetime-local" required @bind-value="@date"></td>
-                        <td>
-                            <select name="Type" @onchange="((ChangeEventArgs e) => itemType = e.Value.ToString())">
-                                <option value="Income">Income</option>
-                                <option value="Savings">Savings</option>
-                                <option value="Expenses">Expenses</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="Category"
-                            @onchange="((ChangeEventArgs e) => itemCategory = e.Value.ToString())">
-                                @if (itemType.Equals("Income"))
-                                {
-                                    <option value="Employment">Employment</option>
-                                    <option value="SideHustle">SideHustle</option>
-                                    <option value="Dividends">Dividends</option>
-                                }
-                                else if (itemType.Equals("Savings"))
-                                {
-                                    <option value="EmergencyFund">EmergencyFund</option>
-                                    <option value="RetirementAccount">RetirementAccount</option>
-                                    <option value="Vacation">Vacation</option>
-                                    <option value="HealthNeeds">HealthNeeds</option>
-                                }
-                                else if (itemType.Equals("Expenses"))
-                                {
-                                    <option value="Housing">Housing</option>
-                                    <option value="Groceries">Groceries</option>
-                                    <option value="Utilities">Utilities</option>
-                                    <option value="Vacation">Vacation</option>
-                                    <option value="Transportation">Transportation</option>
-                                    <option value="Medicine">Medicine</option>
-                                    <option value="Clothing">Clothing</option>
-                                    <option value="Media">Media</option>
-                                    <option value="Insurances">Insurances</option>
-                                }
-                            </select>
-                        </td>
-                        <td><input type="text" required="true" @bind-value="@itemDetails"></td>
-                        <td><input type="number" required="true" @bind-value="@itemAmount"></td>
-                        <td>@itemBalance</td>
-                        <td><button id="submit" @onclick="@PostBudgetAsync">Submit</button></td>
-                    </tr>
-                    @foreach (var item in Budget)
-                    {
+@* <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False"> *@
+<MudGrid>
+    <MudItem xs="12" sm="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+            <div class="inline-block">
+                <MudButton @onclick="@OpenSubmitForm" Variant="Variant.Filled" Color="Color.Primary">Select Year
+                </MudButton>
+            </div>
+            <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@Data" InputLabels="@Labels">
+                <CustomGraphics>
+                    <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
+                        fill="blue" font-family="Helvetica" font-size="3">Income</text>
+                    <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                        fill="blue" font-family="Helvetica" font-size="5">@CalculateUndistributedIcome()</text>
+                </CustomGraphics>
+            </MudChart>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+            <div id="container">
+                <div id="stretcher">
+                    <table>
                         <tr>
-                            <td>@item.Date</td>
-                            <td>@item.Type</td>
-                            <td>@item.Category</td>
-                            <td>@item.Details</td>
-                            <td>@item.Amount</td>
-                            <td>@item.Balance</td>
-                            <td><input id="remove" type="button" value="Remove" @onclick="(() => DeleteBudgetAsync(item))">
-                            </td>
+                            <th scope="budget-header">Date</th>
+                            <th scope="budget-header">Type</th>
+                            <th scope="budget-header">Category</th>
+                            <th scope="budget-header">Details</th>
+                            <th scope="budget-header">Amount</th>
+                            <th scope="budget-header">Balance</th>
+                            <th scope="budget-header">Submit</th>
                         </tr>
-                    }
-                </table>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+                        <tr>
+                            <td><input type="datetime-local" required @bind-value="@date"></td>
+                            <td>
+                                <select name="Type" @onchange="((ChangeEventArgs e) => itemType = e.Value.ToString())">
+                                    <option value="Income">Income</option>
+                                    <option value="Savings">Savings</option>
+                                    <option value="Expenses">Expenses</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="Category"
+                                @onchange="((ChangeEventArgs e) => itemCategory = e.Value.ToString())">
+                                    @if (itemType.Equals("Income"))
+                                    {
+                                        <option value="Employment">Employment</option>
+                                        <option value="SideHustle">SideHustle</option>
+                                        <option value="Dividends">Dividends</option>
+                                    }
+                                    else if (itemType.Equals("Savings"))
+                                    {
+                                        <option value="EmergencyFund">EmergencyFund</option>
+                                        <option value="RetirementAccount">RetirementAccount</option>
+                                        <option value="Vacation">Vacation</option>
+                                        <option value="HealthNeeds">HealthNeeds</option>
+                                    }
+                                    else if (itemType.Equals("Expenses"))
+                                    {
+                                        <option value="Housing">Housing</option>
+                                        <option value="Groceries">Groceries</option>
+                                        <option value="Utilities">Utilities</option>
+                                        <option value="Vacation">Vacation</option>
+                                        <option value="Transportation">Transportation</option>
+                                        <option value="Medicine">Medicine</option>
+                                        <option value="Clothing">Clothing</option>
+                                        <option value="Media">Media</option>
+                                        <option value="Insurances">Insurances</option>
+                                    }
+                                </select>
+                            </td>
+                            <td><input type="text" required="true" @bind-value="@itemDetails"></td>
+                            <td><input type="number" required="true" @bind-value="@itemAmount"></td>
+                            <td>@itemBalance</td>
+                            <td><button id="submit" @onclick="@PostBudgetAsync">Submit</button></td>
+                        </tr>
+                        @foreach (var item in Budget)
+                        {
+                            <tr>
+                                <td>@item.Date</td>
+                                <td>@item.Type</td>
+                                <td>@item.Category</td>
+                                <td>@item.Details</td>
+                                <td>@item.Amount</td>
+                                <td>@item.Balance</td>
+                                <td><input id="remove" type="button" value="Remove"
+                                    @onclick="(() => DeleteBudgetAsync(item))">
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+@* </MudContainer> *@
 
 @code {
     private double[] Data = new double[3];
