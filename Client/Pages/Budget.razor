@@ -48,7 +48,7 @@
                 <MudTable Items="@Income" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
                     Filter="new Func<BudgetModel ,bool>(FilterIncome)" @bind-SelectedItem="incomeSelectedOnRowClick"
                     SortLabel="Sort By" CommitEditTooltip="Commit Edit"
-                    OnCommitEditClick="@(() => Snackbar.Add("Changes Are Commited To Your Budget"))"
+                    OnCommitEdiftClick="@(() => Snackbar.Add("Changes Are Commited To Your Budget"))"
                     RowEditCommit="IncomeCommited" IsEditRowSwitchingBlocked="@blockSwitch"
                     ApplyButtonPosition="@applyButtonPosition" EditButtonPosition="@editButtonPosition"
                     EditTrigger="@editTrigger">
