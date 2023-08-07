@@ -6,7 +6,6 @@
 @inject Client.Services.DateApiClient dateApiClient
 @inject Client.Services.MonthsApiClient monthsApiClient
 @inject Client.Services.DetailedBudgetApiClient detailedBudgetApiClient
-
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject Client.Services.SharedState state
@@ -62,6 +61,7 @@
         height: 600px;
     }
 </style>
+
 <MudGrid>
     <MudItem xs="3">
         <MudCard Outlined="true">
@@ -70,7 +70,7 @@
                 <MudText Typo="Typo.body2">@DateOfToday</MudText>
             </MudCardContent>
             <MudCardActions>
-                <MudMenu Label="Plan Your Budget" Variant="Variant.Filled" Color="Color.Primary">
+                <MudMenu Label="Plan Your Budget" Variant="Variant.Filled" Color="MudBlazor.Color.Primary">
                     <MudMenuItem href="/budget" OnClick="OnClick">Savings</MudMenuItem>
                     <MudMenuItem href="/budget" OnClick="OnClick">Income</MudMenuItem>
                     <MudMenuItem href="/budget" OnClick="OnClick">Expenses</MudMenuItem>
@@ -100,10 +100,14 @@
     <MudItem xs="12" sm="4">
         <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
             <div class="inline-block">
-                <MudButton @onclick="@OpenSubmitForm" Variant="Variant.Filled" Color="Color.Primary">Select Year
+                <MudButton @onclick="@OpenSubmitForm" Variant="Variant.Filled" Color="MudBlazor.Color.Primary">
+                    Select
+
+                    Year
                 </MudButton>
             </div>
-            <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@Data" InputLabels="@Labels">
+            <MudChart ChartType="MudBlazor.ChartType.Donut" Width="300px" Height="300px" InputData="@Data"
+                InputLabels="@Labels">
                 <CustomGraphics>
                     <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle"
                         fill="blue" font-family="Helvetica" font-size="3">Income</text>
@@ -180,7 +184,8 @@
                                 <td>@item.Details</td>
                                 <td>@item.Amount</td>
                                 <td>@item.Balance</td>
-                                <td><input id="remove" type="button" value="Remove"
+                                <td>
+                                    <input id="remove" type="button" value="Remove"
                                     @onclick="(() => DeleteBudgetAsync(item))">
                                 </td>
                             </tr>
@@ -190,8 +195,26 @@
             </div>
         </MudPaper>
     </MudItem>
+
+    <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+        <MudItem xs="12" sm="4">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+                @if (IncomePieChart != null)
+                {
+                    <ApexChart TItem="PieChartModel" Title="Value">
+                        <ApexPointSeries TItem="PieChartModel" Items="IncomePieChart" Name="Value"
+                            SeriesType="SeriesType.Pie" XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))"
+                            OrderByDescending="e=>e.Y" PointColor="e=> GetPointColor(e)" ShowDataLabels />
+
+                     </ApexChart>
+                }
+            </MudPaper>
+        </MudItem>
+    </MudContainer>
 </MudGrid>
 @* </MudContainer> *@
+
+
 
 @code {
     private double[] Data = new double[3];
@@ -206,6 +229,7 @@
     private IList<IncomeModel>? Income = new List<IncomeModel>();
     private IList<DetailedBudgetModel>? Budget = new List<DetailedBudgetModel>();
     private BudgetModel? LatestIncome;
+    private IncomeModel? LastMonthIncome;
     private string? itemType { get; set; } = "Income";
     private string itemCategory { get; set; } = "";
     private decimal itemAmount { get; set; }
@@ -217,6 +241,9 @@
     private DateTime LatestRecordDate;
 
     private List<string> messages = new List<string>();
+    public List<PieChartModel>? IncomePieChart { get; set; }
+    private ApexChartOptions<PieChartModel> options { get; set; } = new();
+
     private enum Action
     {
         AddTrackedCategory,
@@ -231,18 +258,22 @@
     }
     protected override async Task OnInitializedAsync()
     {
+        IncomeByEachMonth = await incomeApiClient.GetIncomeByEachMonthAsync();
+        LastMonthIncome = IncomeByEachMonth.Select(x => x.Income).LastOrDefault();
+        IncomePieChart = SetIncomePieChart();
         Dates = await dateApiClient.GetLatestDateAsync();
         Budget = await detailedBudgetApiClient.GetBudgetAsync();
         GetLatestRecordDate();
         Years = await yearsApiClient.GetYearsAsync();
-        IncomeByEachMonth = await incomeApiClient.GetIncomeByEachMonthAsync();
         SavingsByEachMonth = await savingsApiClient.GetSavingByEachMonthAsync();
         ExpensesByEachMonth = await expensesApiClient.GetExpensesByEachMonthAsync();
+        Income = await incomeApiClient.GetIncomeAsync();
         GetLatestMonthlyIncome();
         GetLatestMonthlySavings();
         GetLatestMonthlyExpenses();
         Months = await monthsApiClient.GetMonthsAsync();
         MessageService.OnMessage += MessageHandler;
+        options.DataLabels = new DataLabels { DropShadow = new DropShadow { Enabled = false } };
     }
 
     private void Dispose()
@@ -512,5 +543,31 @@
                 YearId = selected.YearId
             };
         await expensesApiClient.UpdateExpensesAsync(ExpensesModel);
+    }
+
+    private List<PieChartModel> SetIncomePieChart()
+    {
+        List<PieChartModel> Chart = new List<PieChartModel>();
+        Chart.Add(new PieChartModel { Name = "Employment", Value = LastMonthIncome.Employment });
+        Chart.Add(new PieChartModel { Name = "Dividends", Value = LastMonthIncome.Dividends });
+        Chart.Add(new PieChartModel { Name = "SideHustle", Value = LastMonthIncome.SideHustle });
+        Chart.Add(new PieChartModel { Name = "Employment", Value = LastMonthIncome.Employment });
+        Chart.Add(new PieChartModel { Name = "Dividends", Value = LastMonthIncome.Dividends });
+        Chart.Add(new PieChartModel { Name = "SideHustle", Value = LastMonthIncome.SideHustle });
+        return Chart;
+    }
+    private string GetPointColor(PieChartModel model)
+    {
+        switch (model.Name)
+        {
+            case "Employment":
+                return "#e3001b";
+            case "SideHustle":
+                return "#005ba3";
+            case "Dividends":
+                return "#ffd500";
+            default:
+                return "#87775d";
+        }
     }
 }

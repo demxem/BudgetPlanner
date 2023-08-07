@@ -7,6 +7,7 @@
   "linkerEnabled": false,
   "resources": {
     "assembly": {
+      "Blazor-ApexCharts.dll": "sha256-vD+aye1Fgd+VIvLfp6UlYTJsiXm9bcXkf+K\/t4zUa4s=",
       "Microsoft.AspNetCore.Authorization.dll": "sha256-mCdoYFMD\/36a\/UfpotOOonKmoH+fl6fDMmHgSgBD6FA=",
       "Microsoft.AspNetCore.Components.dll": "sha256-7TrleCNmQK4C3K1Yhssb5zd8eygqiL15FpmZWgUrVnA=",
       "Microsoft.AspNetCore.Components.Forms.dll": "sha256-RUKf9M+RHyBj5BIkxAp9V5vbrs3Xk3XNL4KCG9h+t\/Q=",
@@ -41,7 +42,7 @@
       "Microsoft.Win32.Registry.dll": "sha256-\/nNLXqJoEZQXZPCBl8kBW4gnjLTG4jGF+YAzjYkDEvQ=",
       "System.AppContext.dll": "sha256-QmLXJ91ElELQQ+dXBz0KvUC4wCdXUVhnsLN\/UGtVoOU=",
       "System.Buffers.dll": "sha256-7ZKG7raloLzDA\/5k\/8l7oHXtFjtR3II4g9DYRzMQDwg=",
-      "System.Collections.Concurrent.dll": "sha256-ZMWef7Lt+7esv8U3Tt100jdSKCHkCm3jFi02J0JI6gg=",
+      "System.Collections.Concurrent.dll": "sha256-V6rlR+z\/80hpXTD4nLPA2\/TJEYPm\/PkqIcLPy30ur3g=",
       "System.Collections.Immutable.dll": "sha256-\/xpcxITaCSfz8FZaC32o9Y9wu6Syyv9nsRHbgxNYKmc=",
       "System.Collections.NonGeneric.dll": "sha256-qcU1HcpzvcMqr4N2Fo3cviNPQ5XHNX\/AErBDa3IyNJg=",
       "System.Collections.Specialized.dll": "sha256-KbxcZSht1pU5LMVXHINUxk8Z9VwRObA96fZ1T31vgdk=",
@@ -202,13 +203,13 @@
       "mscorlib.dll": "sha256-t1RT9mknsQ54H+sVa1vtMhjv3D8ZjiAGoLzHvuIObPw=",
       "netstandard.dll": "sha256-5SHKPh1PcuJjq4lIo7ymdIyhb9d3++oMAjr46auhUSc=",
       "System.Private.CoreLib.dll": "sha256-eH+XIsCUG5oZ0k8AIzNtRLTCLiV\/8Zv0RFCPMsIkdYY=",
-      "Client.dll": "sha256-p32KavsV5QJb2z55OTxOOELMhDYOizV\/CiqLyvmVBRQ="
+      "Client.dll": "sha256-bba1PIERjsF3XPULmAztDPifCcERLdVSPzTGLyBmQN0="
     },
     "extensions": null,
     "lazyAssembly": null,
     "libraryInitializers": null,
     "pdb": {
-      "Client.pdb": "sha256-YqKEb7lZc\/D2sOrAWMRqpSAWvbrmMVMquVuIf2mnVBc="
+      "Client.pdb": "sha256-LDF3J9Vb5oMCukTZcLNyQcSgAmIrPADXG8EX3aSe5FE="
     },
     "runtime": {
       "dotnet.7.0.9.bf6th78dva.js": "sha256-dUIY5Mz0ozZWqtTfBb7ArJKbdh5IIp8BXeq6UjK4u\/c=",

@@ -1,4 +1,5 @@
 using DAL.ComplexData;
+using DAL.Data;
 using DAL.Models;
 
 namespace Api.Modules
@@ -26,6 +27,7 @@ namespace Api.Modules
             endpoints.MapPost("/years/months/incomeByYearId/", InsertIncomeByYearId);
             endpoints.MapDelete("/years/months/{id}", DeleteMonthById);
             endpoints.MapGet("/months/budget", GetBudget);
+            endpoints.MapGet("/months/PieChart", GetPieChartIncome);
         }
 
         private static async Task<IResult> GetMonthByYearId(IBudget data, int id)
@@ -221,6 +223,17 @@ namespace Api.Modules
             {
                 await data.DeleteMonthById(id);
                 return Results.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        }
+        private static async Task<IResult> GetPieChartIncome(IPieChart data)
+        {
+            try
+            {
+                return Results.Ok(await data.GetPieChartIncome());
             }
             catch (Exception ex)
             {

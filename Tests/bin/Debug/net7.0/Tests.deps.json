@@ -18,6 +18,18 @@
           "Tests.dll": {}
         }
       },
+      "Blazor-ApexCharts/0.9.21-beta": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "7.0.8",
+          "Microsoft.AspNetCore.Components.Web": "7.0.8"
+        },
+        "runtime": {
+          "lib/net6.0/Blazor-ApexCharts.dll": {
+            "assemblyVersion": "0.9.21.0",
+            "fileVersion": "0.9.21.0"
+          }
+        }
+      },
       "coverlet.collector/3.2.0": {},
       "Microsoft.AspNetCore.Authorization/7.0.8": {
         "dependencies": {
@@ -1323,6 +1335,7 @@
       "xunit.runner.visualstudio/2.4.5": {},
       "Client/1.0.0": {
         "dependencies": {
+          "Blazor-ApexCharts": "0.9.21-beta",
           "Microsoft.AspNetCore.Components.WebAssembly": "7.0.8",
           "MudBlazor": "6.5.0",
           "Newtonsoft.Json": "13.0.3"
@@ -1338,6 +1351,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Blazor-ApexCharts/0.9.21-beta": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QJB5V2pKzegDmHtS8zL0rB7FFSxFSt3jwsXF3+Wy2iN8Sx1R/laDnROV2iegOyzUce30UZUpqSm3Ibs/dQZmow==",
+      "path": "blazor-apexcharts/0.9.21-beta",
+      "hashPath": "blazor-apexcharts.0.9.21-beta.nupkg.sha512"
     },
     "coverlet.collector/3.2.0": {
       "type": "package",

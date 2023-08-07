@@ -25,6 +25,7 @@ public static class AppBuilder
         builder.Services.AddTransient<ICalculations, Calculations>();
         builder.Services.AddTransient<IDetailedBudget, DetailedBudget>();
         builder.Services.AddTransient<IBudgetCompletion, BudgetCompletion>();
+        builder.Services.AddTransient<IPieChart, PieChart>();
         builder.Services.AddCors();
         builder.Services.AddSwaggerGen();
 

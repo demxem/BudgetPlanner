@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "OE+xQQs7iwV1tivDW1wp7sdoqNDNljCEbn3wQ1ovGvFlNGEGxi/ERaaXEFL3UNHdtIlSUjMf1bo6ZRcT1bRnsw==",
+  "dgSpecHash": "mZonIFM9nnG7aYZOsz1YodxOG0/ryXnbHOE9LUrkFgQCpO/W6C83joB9pwRBIhBJ1/QelheXttNoAH14Cb0BAQ==",
   "success": true,
   "projectFilePath": "/Volumes/Mac/Projects/BudgetPlanner/Client/Client.csproj",
   "expectedPackageFiles": [
+    "/Users/dmitryterentyev/.nuget/packages/blazor-apexcharts/0.9.21-beta/blazor-apexcharts.0.9.21-beta.nupkg.sha512",
     "/Users/dmitryterentyev/.nuget/packages/microsoft.aspnetcore.authorization/7.0.8/microsoft.aspnetcore.authorization.7.0.8.nupkg.sha512",
     "/Users/dmitryterentyev/.nuget/packages/microsoft.aspnetcore.components/7.0.8/microsoft.aspnetcore.components.7.0.8.nupkg.sha512",
     "/Users/dmitryterentyev/.nuget/packages/microsoft.aspnetcore.components.analyzers/7.0.8/microsoft.aspnetcore.components.analyzers.7.0.8.nupkg.sha512",

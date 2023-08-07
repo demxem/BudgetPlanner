@@ -31,6 +31,25 @@ namespace Client.Services
             }
             return new List<IncomeModel>();
         }
+        public async Task<List<PieChartModel>?> GetIncomePieChartAsync()
+        {
+            try
+            {
+                var response = await httpClient.GetAsync("/months/PieChart");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var income = await response.Content.ReadFromJsonAsync<List<PieChartModel>>();
+
+                    return income;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return new List<PieChartModel>();
+        }
 
         public async Task<List<BudgetModel>?> GetIncomeByEachMonthAsync()
         {

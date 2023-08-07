@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "QK2faRHBOn7ClvaZvlVtVISBnIGeCz5KEF3It2dfdNo=",
+  "Hash": "RTT2NKnovLQvif2w0yuS5CBOaQGDHrmxkhBNCJQPjSY=",
   "Source": "Client",
   "BasePath": "/",
   "Mode": "Root",
@@ -16,6 +16,57 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "/Users/dmitryterentyev/.nuget/packages/blazor-apexcharts/0.9.21-beta/staticwebassets/css/apexcharts.css",
+      "SourceId": "Blazor-ApexCharts",
+      "SourceType": "Package",
+      "ContentRoot": "/Users/dmitryterentyev/.nuget/packages/blazor-apexcharts/0.9.21-beta/staticwebassets/",
+      "BasePath": "_content/Blazor-ApexCharts",
+      "RelativePath": "css/apexcharts.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/Users/dmitryterentyev/.nuget/packages/blazor-apexcharts/0.9.21-beta/staticwebassets/css/apexcharts.css"
+    },
+    {
+      "Identity": "/Users/dmitryterentyev/.nuget/packages/blazor-apexcharts/0.9.21-beta/staticwebassets/js/apex-charts.min.js",
+      "SourceId": "Blazor-ApexCharts",
+      "SourceType": "Package",
+      "ContentRoot": "/Users/dmitryterentyev/.nuget/packages/blazor-apexcharts/0.9.21-beta/staticwebassets/",
+      "BasePath": "_content/Blazor-ApexCharts",
+      "RelativePath": "js/apex-charts.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Always",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/Users/dmitryterentyev/.nuget/packages/blazor-apexcharts/0.9.21-beta/staticwebassets/js/apex-charts.min.js"
+    },
+    {
+      "Identity": "/Users/dmitryterentyev/.nuget/packages/blazor-apexcharts/0.9.21-beta/staticwebassets/js/blazor-apex-charts.js",
+      "SourceId": "Blazor-ApexCharts",
+      "SourceType": "Package",
+      "ContentRoot": "/Users/dmitryterentyev/.nuget/packages/blazor-apexcharts/0.9.21-beta/staticwebassets/",
+      "BasePath": "_content/Blazor-ApexCharts",
+      "RelativePath": "js/blazor-apex-charts.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/Users/dmitryterentyev/.nuget/packages/blazor-apexcharts/0.9.21-beta/staticwebassets/js/blazor-apex-charts.js"
+    },
     {
       "Identity": "/Users/dmitryterentyev/.nuget/packages/mudblazor/6.5.0/staticwebassets/MudBlazor.min.css",
       "SourceId": "MudBlazor",
@@ -49,6 +100,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/Users/dmitryterentyev/.nuget/packages/mudblazor/6.5.0/staticwebassets/MudBlazor.min.js"
+    },
+    {
+      "Identity": "/Volumes/Mac/Projects/BudgetPlanner/Client/bin/Debug/net7.0/wwwroot/_framework/Blazor-ApexCharts.dll",
+      "SourceId": "Client",
+      "SourceType": "Computed",
+      "ContentRoot": "/Volumes/Mac/Projects/BudgetPlanner/Client/bin/Debug/net7.0/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "_framework/Blazor-ApexCharts.dll",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "BlazorWebAssemblyResource",
+      "AssetTraitValue": "runtime",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "/Users/dmitryterentyev/.nuget/packages/blazor-apexcharts/0.9.21-beta/lib/net6.0/Blazor-ApexCharts.dll"
     },
     {
       "Identity": "/Volumes/Mac/Projects/BudgetPlanner/Client/bin/Debug/net7.0/wwwroot/_framework/blazor.boot.json",
@@ -4571,6 +4639,23 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "/Volumes/Mac/Projects/BudgetPlanner/Client/bin/Debug/net7.0/wwwroot/_framework/icudt_CJK.dat"
+    },
+    {
+      "Identity": "/Volumes/Mac/Projects/BudgetPlanner/Client/obj/Debug/net7.0/build-gz/dbGld4pX.gz",
+      "SourceId": "Client",
+      "SourceType": "Computed",
+      "ContentRoot": "/Volumes/Mac/Projects/BudgetPlanner/Client/bin/Debug/net7.0/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "_framework/Blazor-ApexCharts.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "RelatedAsset": "/Volumes/Mac/Projects/BudgetPlanner/Client/bin/Debug/net7.0/wwwroot/_framework/Blazor-ApexCharts.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "/Volumes/Mac/Projects/BudgetPlanner/Client/bin/Debug/net7.0/wwwroot/_framework/Blazor-ApexCharts.dll"
     },
     {
       "Identity": "/Volumes/Mac/Projects/BudgetPlanner/Client/obj/Debug/net7.0/build-gz/dCqbw9Gb.gz",

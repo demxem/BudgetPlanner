@@ -126,3 +126,4 @@
 /Volumes/Mac/Projects/BudgetPlanner/Tests/bin/Debug/net7.0/System.IO.Pipelines.dll
 /Volumes/Mac/Projects/BudgetPlanner/Tests/bin/Debug/net7.0/Client.dll
 /Volumes/Mac/Projects/BudgetPlanner/Tests/bin/Debug/net7.0/Client.pdb
+/Volumes/Mac/Projects/BudgetPlanner/Tests/bin/Debug/net7.0/Blazor-ApexCharts.dll

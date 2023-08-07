@@ -232,9 +232,9 @@ public class Budget : IBudget
             string sql = @"select m.*, sum (e.housing + e.groceries + e.utilities + e.vacation 
                                         + e.transportation + e.medicine + e.clothing + e.media 
                                         + e.insuranses) as monthlyExpenses, 
-                                        sum (e.trackedhousing + e.trackedgroceries + e.trackedutilities + e.vacation 
-                                        + e.transportation + e.medicine + e.clothing + e.media 
-                                        + e.insuranses) as TrackedMsonthlyExpenses, e.* 
+                                        sum (e.trackedhousing + e.trackedgroceries + e.trackedutilities + e.trackedvacation 
+                                        + e.trackedtransportation + e.trackedmedicine + e.trackedclothing + e.trackedmedia 
+                                        + e.trackedinsuranses) as TrackedMsonthlyExpenses, e.* 
                             from months as m
                             join expenses as e on m.expensesid = e.id
                             where m.yearid = @YearId
@@ -257,9 +257,9 @@ public class Budget : IBudget
             string sql = @"select m.*, sum (e.housing + e.groceries + e.utilities + e.vacation 
                                         + e.transportation + e.medicine + e.clothing + e.media 
                                         + e.insuranses) as monthlyExpenses,
-                                        sum (e.trackedhousing + e.trackedgroceries + e.trackedutilities + e.vacation 
-                                        + e.transportation + e.medicine + e.clothing + e.media 
-                                        + e.insuranses) as TrackedMonthlyExpenses, e.* 
+                                        sum (e.trackedhousing + e.trackedgroceries + e.trackedutilities + e.trackedvacation 
+                                        + e.trackedtransportation + e.trackedmedicine + e.trackedclothing + e.trackedmedia 
+                                        + e.trackedinsuranses) as TrackedMonthlyExpenses, e.* 
                             from months as m
                             join expenses as e on m.expensesid = e.id
                             where m.id = @MonthId

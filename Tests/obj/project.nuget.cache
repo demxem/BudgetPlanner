@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "NKDvnTk96wSABQEGO3lOus9UgS/nX1wH0Ca0xd5iuOYeF8hNZshIdIWCAsyhIq8jlu6CeXwaKvqKRoQ3lj1fKQ==",
+  "dgSpecHash": "FyN9DSTX2NccGc2iTxoqAryGZoU+HCNjPetPBExE5NLRUB4Un1YzzB52jIvLTezogEywnS6z00mBKEULbAMANw==",
   "success": true,
   "projectFilePath": "/Volumes/Mac/Projects/BudgetPlanner/Tests/Tests.csproj",
   "expectedPackageFiles": [
+    "/Users/dmitryterentyev/.nuget/packages/blazor-apexcharts/0.9.21-beta/blazor-apexcharts.0.9.21-beta.nupkg.sha512",
     "/Users/dmitryterentyev/.nuget/packages/coverlet.collector/3.2.0/coverlet.collector.3.2.0.nupkg.sha512",
     "/Users/dmitryterentyev/.nuget/packages/microsoft.aspnetcore.authorization/7.0.8/microsoft.aspnetcore.authorization.7.0.8.nupkg.sha512",
     "/Users/dmitryterentyev/.nuget/packages/microsoft.aspnetcore.components/7.0.8/microsoft.aspnetcore.components.7.0.8.nupkg.sha512",

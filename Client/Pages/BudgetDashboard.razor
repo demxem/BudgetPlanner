@@ -14,42 +14,60 @@
 
 
 <style>
-    td,
+    body {
+        background-color: #e4d6a1f7;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100vh;
+    }
+
+    .container {
+        padding: 0%;
+        margin: 0%;
+        width: 100%;
+        overflow: auto;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    td {
+        text-align: center;
+        border: 1px solid rgb(190, 190, 190);
+    }
+
     th {
         text-align: center;
         border: 1px solid rgb(190, 190, 190);
-        padding: 10px;
+        padding: 5px;
     }
 
     th[scope='income-row'] {
-        background-color: rgb(54, 240, 54);
+        background-color: rgba(187, 171, 229);
     }
 
     th[scope='expenses-row'] {
-        background-color: rgb(213, 100, 119);
+        background-color: rgb(251, 180, 192);
     }
 
     th[scope='savings-row'] {
-        background-color: rgb(77, 170, 236);
+        background-color: rgb(135, 189, 228);
     }
 
-    td[scope='totalIncome-row'] {
-        font-weight: bold;
-        font-style: italic;
+    td[scope='income-col'] {
+        background-color: rgb(187, 171, 229);
     }
 
-    td[scope='totalSavings-row'] {
-        font-weight: bold;
-        font-style: italic;
+    td[scope='expenses-col'] {
+        background-color: rgb(251, 180, 192);
     }
 
-    td[scope='totalExpenses-row'] {
-        font-weight: bold;
-        font-style: italic;
+    td[scope='savings-col'] {
+        background-color: rgb(187, 225, 253);
     }
 
-    .progress {
-        height: 20px;
+    td[scope='progress-col'] {
+        padding: 0%;
     }
 
     table {
@@ -64,23 +82,45 @@
         font-size: 0.9rem;
         padding: 2px 5px;
     }
+
+    .tables {
+        display: grid;
+        gap: 1.8rem;
+        grid-template-columns: 12rem, auto, 23rem;
+
+    }
+
+    .charts {
+        height: 40%;
+        width: 40%;
+        display: flex;
+        gap: 1.8rem;
+        flex-direction: column;
+    }
+
+    .progress {
+        height: 100%;
+        width: 100%;
+        border-radius: 0px 0px 0px 0px;
+        background-color: white;
+    }
 </style>
 
-<header>
-    <p>
-    <div class="incline-block">
-        <div class="d-flex" style="max-width:100px;">
-            <MudDatePicker Label="Budget Year" @bind-Date="selectedPeriod" MinDate="@datePicker.MinimalPeriodInterval"
-                MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync" />
-        </div>
-    </div>
-    </p>
-</header>
+@* <header>
+<p>
+<div class="incline-block">
+<div class="d-flex" style="max-width:100px;">
+<MudDatePicker Label="Budget Year" @bind-Date="selectedPeriod" MinDate="@datePicker.MinimalPeriodInterval"
+MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync" />
+</div>
+</div>
+</p>
+</header> *@
 
-<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
-    <MudGrid Spacing="1">
-        <MudItem xs="12" sm="6">
-            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+<body>
+    <div class=container>
+        <div class="tables">
+            <div class="income-tab">
                 <table>
                     <tr>
                         <th scope="income-row">Income</th>
@@ -96,7 +136,7 @@
                             <td>Employment</td>
                             <td>@TrackedBudgetIncome.Income.TrackedEmployment</td>
                             <td>@TrackedBudgetIncome.Income.Employment</td>
-                            <td>
+                            <td scope="progress-col">
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar"
                                         style="width: @BudgetCompletionPercent.IncomeCompletedEmployment%"
@@ -127,7 +167,7 @@
                         <td>SideHustle</td>
                         <td>@TrackedBudgetIncome.Income.TrackedSideHustle</td>
                         <td>@TrackedBudgetIncome.Income.SideHustle</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.IncomeCompletedSidehustle%"
@@ -158,7 +198,7 @@
                         <td>Dividents</td>
                         <td>@TrackedBudgetIncome.Income.TrackedDividends</td>
                         <td>@TrackedBudgetIncome.Income.Dividends</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.IncomeCompletedDividends%"
@@ -199,10 +239,8 @@
                         <h1>loading...</h1>
                     }
                 </table>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+            </div>
+            <div class="table-2">
                 <table>
                     <tr>
                         <th scope="savings-row">Savings</th>
@@ -215,10 +253,10 @@
                     @if (TrackedBudgetSavings != null)
                     {
                         <tr>
-                            <td>EmergencyFund</td>
+                            <td>Em.Fund</td>
                             <td>@TrackedBudgetSavings.Savings.TrackedEmergencyFund</td>
                             <td>@TrackedBudgetSavings.Savings.EmergencyFund</td>
-                            <td>
+                            <td scope="progress-col">
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar"
                                         style="width: @BudgetCompletionPercent.SavingsCompletedEmergencyFund%"
@@ -246,16 +284,17 @@
                             }
                         </tr>
                         <tr>
-                        <td>RetirementAccount</td>
+                        <td>Ret.Account</td>
                         <td>@TrackedBudgetSavings.Savings.TrackedRetirementAccount</td>
                         <td>@TrackedBudgetSavings.Savings.RetirementAccount</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.SavingsCompletedRetirementAccount%"
                                     aria-valuenow="@BudgetCompletionPercent.SavingsCompletedRetirementAccount"
                                     aria-valuemin="0" aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.SavingsCompletedRetirementAccount, 2)%
+                                    @Decimal.Round(BudgetCompletionPercent.SavingsCompletedRetirementAccount,
+                                    2)%
                                 </div>
                             </div>
                         </td>
@@ -280,7 +319,7 @@
                         <td>Vacation</td>
                         <td>@TrackedBudgetSavings.Savings.TrackedVacation</td>
                         <td>@TrackedBudgetSavings.Savings.Vacation</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.SavingsCompletedVacation%" aria-valuemin="0"
@@ -311,7 +350,7 @@
                         <td>HealthNeeds</td>
                         <td>@TrackedBudgetSavings.Savings.TrackedHealthNeeds</td>
                         <td>@TrackedBudgetSavings.Savings.HealthNeeds</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.SavingsCompletedHealthNeeds%"
@@ -352,10 +391,8 @@
                         <h1>loading...</h1>
                     }
                 </table>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+            </div>
+            <div class="table-3">
                 <table>
                     <tr>
                         <th scope="expenses-row">Expenses</th>
@@ -371,7 +408,7 @@
                             <td>Housing</td>
                             <td>@TrackedBudgetExpenses.Expenses.TrackedHousing</td>
                             <td>@TrackedBudgetExpenses.Expenses.Housing</td>
-                            <td>
+                            <td scope="progress-col">
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar"
                                         style="width: @BudgetCompletionPercent.ExpensesCompletedHousing%"
@@ -402,7 +439,7 @@
                         <td>Groceries</td>
                         <td>@TrackedBudgetExpenses.Expenses.TrackedGroceries</td>
                         <td>@TrackedBudgetExpenses.Expenses.Groceries</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.ExpensesCompletedGroceries%"
@@ -433,7 +470,7 @@
                         <td>Utilities</td>
                         <td>@TrackedBudgetExpenses.Expenses.TrackedUtilities</td>
                         <td>@TrackedBudgetExpenses.Expenses.Utilities</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.ExpensesCompletedUtilities%"
@@ -464,7 +501,7 @@
                         <td>Vacation</td>
                         <td>@TrackedBudgetExpenses.Expenses.TrackedVacation</td>
                         <td>@TrackedBudgetExpenses.Expenses.Vacation</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.ExpensesCompletedVacation%"
@@ -495,7 +532,7 @@
                         <td>Transportation</td>
                         <td>@TrackedBudgetExpenses.Expenses.TrackedTransportation</td>
                         <td>@TrackedBudgetExpenses.Expenses.Transportation</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.ExpensesCompletedTransportation%"
@@ -526,7 +563,7 @@
                         <td>Medicine</td>
                         <td>@TrackedBudgetExpenses.Expenses.TrackedMedicine</td>
                         <td>@TrackedBudgetExpenses.Expenses.Medicine</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.ExpensesCompletedMedicine%"
@@ -557,7 +594,7 @@
                         <td>Clothing</td>
                         <td>@TrackedBudgetExpenses.Expenses.TrackedClothing</td>
                         <td>@TrackedBudgetExpenses.Expenses.Clothing</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.ExpensesCompletedClothing%"
@@ -588,7 +625,7 @@
                         <td>Media</td>
                         <td>@TrackedBudgetExpenses.Expenses.TrackedMedia</td>
                         <td>@TrackedBudgetExpenses.Expenses.Media</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.ExpensesCompletedMedia%"
@@ -618,7 +655,7 @@
                         <td>Insuranses</td>
                         <td>@TrackedBudgetExpenses.Expenses.TrackedInsuranses</td>
                         <td>@TrackedBudgetExpenses.Expenses.Insuranses</td>
-                        <td>
+                        <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: @BudgetCompletionPercent.ExpensesCompletedInsuranses%"
@@ -659,10 +696,47 @@
                         <h1>loading...</h1>
                     }
                 </table>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+            </div>
+        </div>
+
+        <div class="charts">
+            <div class="income-chart">
+                @if (TrackedIncomePieChart != null)
+                {
+                    <ApexChart TItem="PieChartModel" Title="Value">
+                        <ApexPointSeries TItem="PieChartModel" Items="TrackedIncomePieChart" Name="Value"
+                            SeriesType="SeriesType.Pie" XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))"
+                            OrderByDescending="e=>e.Y" PointColor="e=> GetPointColor(e)" ShowDataLabels />
+
+                     </ApexChart>
+                }
+            </div>
+            <div class="income-chart">
+                @if (TrackedSavingsPieChart != null)
+                {
+                    <ApexChart TItem="PieChartModel" Title="Value">
+                        <ApexPointSeries TItem="PieChartModel" Items="TrackedSavingsPieChart" Name="Value"
+                            SeriesType="SeriesType.Pie" XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))"
+                            OrderByDescending="e=>e.Y" PointColor="e=> GetPointColor(e)" ShowDataLabels />
+                     </ApexChart>
+                }
+            </div>
+            <div class="expenses-chart">
+                @if (TrackedExpensesPieChart != null)
+                {
+                    <ApexChart TItem="PieChartModel" Title="Value">
+                        <ApexPointSeries TItem="PieChartModel" Items="TrackedExpensesPieChart" Name="Value"
+                            SeriesType="SeriesType.Pie" XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))"
+                            OrderByDescending="e=>e.Y" PointColor="e=> GetPointColor(e)" ShowDataLabels />
+
+                     </ApexChart>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+
+
 
 @code
 {
@@ -676,6 +750,10 @@
     private BudgetModel? TrackedBudgetIncome;
     private BudgetModel? TrackedBudgetSavings;
     private BudgetModel? TrackedBudgetExpenses;
+    private List<PieChartModel> TrackedIncomePieChart { get; set; }
+    private List<PieChartModel> TrackedSavingsPieChart { get; set; }
+    private List<PieChartModel> TrackedExpensesPieChart { get; set; }
+
     private IEnumerable<BudgetModel>? Expenses = new List<BudgetModel>();
     private IEnumerable<BudgetModel>? Savings = new List<BudgetModel>();
     public IEnumerable<BudgetModel>? Income = new List<BudgetModel>();
@@ -692,8 +770,11 @@
         Years = await yearsApiClient.GetYearsAsync();
         Months = await monthsApiClient.GetMonthsAsync();
         TrackedBudgetIncome = await incomeApiClient.GetLatestIncomeAsync();
+        TrackedIncomePieChart = SetIncomePieChart();
         TrackedBudgetSavings = await savingsApiClient.GetLatestSavingsAsync();
+        TrackedSavingsPieChart = SetSavingsPieChart();
         TrackedBudgetExpenses = await expensesApiClient.GetLatestExpensesAsync();
+        TrackedExpensesPieChart = SetExpensesPieChart();
         BudgetCompletion = await budgetCompletion.GetBudgetCompletionByMonthIdAsync(Months.Select(month =>
         month.Id).LastOrDefault());
         BudgetCompletionPercent = await budgetCompletion.GetBudgetCompletionByMonthIdInPercentAsync(Months.Select(month =>
@@ -711,6 +792,7 @@
         await GetExpensesByMonthIdAsync(monthId);
         await GetIncomeByMonthIdAsync(monthId);
         await GetSavingsByMonthIdAsync(monthId);
+        SetIncomePieChart();
         CountTotalRemainingAndExcessBudget();
     }
 
@@ -776,6 +858,85 @@
                     trackedExcessExpenses += Math.Abs(category);
                 }
             }
+        }
+    }
+    private List<PieChartModel> SetIncomePieChart()
+    {
+        List<PieChartModel> Chart = new List<PieChartModel>();
+        Chart.Add(new PieChartModel { Name = "TrackedEmployment", Value = TrackedBudgetIncome.Income.TrackedEmployment });
+        Chart.Add(new PieChartModel { Name = "TrackedDividends", Value = TrackedBudgetIncome.Income.Dividends });
+        Chart.Add(new PieChartModel { Name = "TrackedSideHustle", Value = TrackedBudgetIncome.Income.TrackedSideHustle });
+        return Chart;
+    }
+    private List<PieChartModel> SetSavingsPieChart()
+    {
+        List<PieChartModel> Chart = new List<PieChartModel>();
+        Chart.Add(new PieChartModel
+            {
+                Name = "TrackedEmergencyFund",
+                Value = TrackedBudgetSavings.Savings.TrackedEmergencyFund
+            });
+        Chart.Add(new PieChartModel
+            {
+                Name = "TrackedRetirementAccount",
+                Value =
+            TrackedBudgetSavings.Savings.TrackedRetirementAccount
+            });
+        Chart.Add(new PieChartModel { Name = "TrackedVacation", Value = TrackedBudgetSavings.Savings.TrackedVacation });
+        Chart.Add(new PieChartModel { Name = "TrackedHealthNeeds", Value = TrackedBudgetSavings.Savings.TrackedHealthNeeds });
+
+        return Chart;
+    }
+    private List<PieChartModel> SetExpensesPieChart()
+    {
+        List<PieChartModel> Chart = new List<PieChartModel>();
+        Chart.Add(new PieChartModel { Name = "TrackedHousing", Value = TrackedBudgetExpenses.Expenses.TrackedHousing });
+        Chart.Add(new PieChartModel { Name = "TrackedGroceries", Value = TrackedBudgetExpenses.Expenses.TrackedGroceries });
+        Chart.Add(new PieChartModel { Name = "TrackedUtilities", Value = TrackedBudgetExpenses.Expenses.TrackedUtilities });
+        Chart.Add(new PieChartModel { Name = "TrackedVacation", Value = TrackedBudgetExpenses.Expenses.TrackedVacation });
+        Chart.Add(new PieChartModel
+            {
+                Name = "TrackedTransportation",
+                Value = TrackedBudgetExpenses.Expenses.TrackedTransportation
+            });
+        Chart.Add(new PieChartModel { Name = "TrackedMedicine", Value = TrackedBudgetExpenses.Expenses.TrackedMedicine });
+        Chart.Add(new PieChartModel { Name = "TrackedClothing", Value = TrackedBudgetExpenses.Expenses.TrackedClothing });
+        Chart.Add(new PieChartModel { Name = "TrackedMedia", Value = TrackedBudgetExpenses.Expenses.TrackedMedia });
+        Chart.Add(new PieChartModel { Name = "TrackedInsuranses", Value = TrackedBudgetExpenses.Expenses.TrackedInsuranses });
+
+        return Chart;
+    }
+
+
+
+    private string GetPointColor(PieChartModel model)
+    {
+        switch (model.Name)
+        {
+            case "TrackedEmployment":
+                return "#e3001b";
+            case "TrackedSideHustle":
+                return "#005ba3";
+            case "TrackedDividends":
+                return "#ffd500";
+            case "TrackedEmergencyFund":
+                return "#e3001b";
+            case "TrackedRetirementAccount":
+                return "#005ba3";
+            case "TrackedVacation":
+                return "#ffd500";
+            case "TrackedHealthNeeds":
+                return "#00783c";
+            case "TrackedHousing":
+                return "#e3001b";
+            case "TrackedGroceries":
+                return "#005ba3";
+            case "TrackedUtilities":
+                return "#ffd500";
+            case "TrackedMedicine":
+                return "#00783c";
+            default:
+                return "#87775d";
         }
     }
 }

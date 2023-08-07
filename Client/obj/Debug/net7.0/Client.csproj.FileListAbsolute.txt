@@ -842,3 +842,7 @@
 /Volumes/Mac/Projects/BudgetPlanner/Client/obj/Debug/net7.0/build-gz/cIZPvfBG.gz
 /Volumes/Mac/Projects/BudgetPlanner/Client/obj/Debug/net7.0/build-gz/o4B2vZN6.gz
 /Volumes/Mac/Projects/BudgetPlanner/Client/obj/Debug/net7.0/build-gz/OMeUdsH9.gz
+/Volumes/Mac/Projects/BudgetPlanner/Client/bin/Debug/net7.0/wwwroot/_framework/Blazor-ApexCharts.dll
+/Volumes/Mac/Projects/BudgetPlanner/Client/bin/Debug/net7.0/wwwroot/_framework/Blazor-ApexCharts.dll.gz
+/Volumes/Mac/Projects/BudgetPlanner/Client/bin/Debug/net7.0/Blazor-ApexCharts.dll
+/Volumes/Mac/Projects/BudgetPlanner/Client/obj/Debug/net7.0/build-gz/dbGld4pX.gz

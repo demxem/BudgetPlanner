@@ -1,29 +1,26 @@
 ﻿<Properties StartupConfiguration="{083D3D22-870D-4943-86DE-62FB7FCA5281}|http">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Client/Pages/BudgetDashboard.razor">
+  <MonoDevelop.Ide.ItemProperties.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.ItemProperties.Client PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Client/Pages/MainPage.razor">
     <Files>
-      <File FileName="DAL/Data/IBudget.cs" Line="9" Column="37" IsPinned="True" />
-      <File FileName="Api/Modules/BudgetModule.cs" />
-      <File FileName="Api/Program.cs" />
-      <File FileName="Api/AppBuilder.cs" />
-      <File FileName="Api/Modules/CompletedBudgetModule.cs" />
-      <File FileName="DAL/Data/BudgetCompletion.cs" Line="44" Column="1" />
-      <File FileName="DAL/Data/Date.cs" />
-      <File FileName="DAL/Data/Expenses.cs" />
-      <File FileName="DAL/Data/IDate.cs" />
-      <File FileName="DAL/Data/Budget.cs" />
-      <File FileName="Client/Pages/BudgetDashboard.razor" Line="822" Column="24" />
+      <File FileName="Client/Pages/MainPage.razor" Line="196" Column="20" />
+      <File FileName="Client/Services/DateApiClient.cs" Line="33" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="BudgetPlanner" expanded="True" selected="True" />
+          <Node name="BudgetPlanner">
+            <Node name="Client">
+              <Node name="Pages" expanded="True" />
+              <Node name="Services" expanded="True" />
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.ItemProperties.Client PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="94" column="1" />
@@ -38,8 +35,9 @@
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetDashboard.razor" relfile="Client/Pages/BudgetDashboard.razor" line="821" column="1" />
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetDashboard.razor" relfile="Client/Pages/BudgetDashboard.razor" line="825" column="1" />
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetDashboard.razor" relfile="Client/Pages/BudgetDashboard.razor" line="826" column="1" />
+      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/MainPage.razor" relfile="Client/Pages/MainPage.razor" line="263" column="1" />
+      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/MainPage.razor" relfile="Client/Pages/MainPage.razor" line="569" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MultiItemStartupConfigurations />
 </Properties>

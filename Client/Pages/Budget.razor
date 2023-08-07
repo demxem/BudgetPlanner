@@ -20,7 +20,7 @@
     }
 
     th {
-        background-color: rgb(255, 192, 255);
+        background-color: rgb(247, 178, 247);
     }
 </style>
 <header>
@@ -35,8 +35,10 @@
                     }
             </MudSelect>
         </div>
-        <MudButton @onclick="OpenSubmitYearDialog" Variant="Variant.Filled" Color="Color.Primary">Add Year</MudButton>
-        <MudButton @onclick="OpenDeleteYearDialog" Variant="Variant.Filled" Color="Color.Error">Delete Year</MudButton>
+        <MudButton @onclick="OpenSubmitYearDialog" Variant="Variant.Filled" Color="MudBlazor.Color.Primary">Add Year
+        </MudButton>
+        <MudButton @onclick="OpenDeleteYearDialog" Variant="Variant.Filled" Color="MudBlazor.Color.Error">Delete Year
+        </MudButton>
     </div>
     </p>
 </header>
@@ -137,7 +139,8 @@
                  </MudTable>
              </MudText>
              <div class="inline-block">
-                 <MudButton @onclick="OpenSubmitIncomeDialog" Variant="Variant.Filled" Color="Color.Primary">Add Income
+                 <MudButton @onclick="OpenSubmitIncomeDialog" Variant="Variant.Filled" Color="MudBlazor.Color.Primary">
+                     Add Income
                  </MudButton>
              </div>
          </MudTabPanel>
@@ -244,7 +247,8 @@
                  </MudTable>
              </MudText>
              <div class="inline-block">
-                 <MudButton @onclick="OpenSubmitSavingsDialog" Variant="Variant.Filled" Color="Color.Primary">Add Savings
+                 <MudButton @onclick="OpenSubmitSavingsDialog" Variant="Variant.Filled" Color="MudBlazor.Color.Primary">
+                     Add Savings
                  </MudButton>
              </div>
          </MudTabPanel>
@@ -394,7 +398,8 @@
                  </MudTable>
              </MudText>
              <div class="inline-block">
-                 <MudButton @onclick="OpenSubmitExpensesDialog" Variant="Variant.Filled" Color="Color.Primary">Add
+                 <MudButton @onclick="OpenSubmitExpensesDialog" Variant="Variant.Filled" Color="MudBlazor.Color.Primary">
+                     Add
                      Expenses</MudButton>
              </div>
          </MudTabPanel>
