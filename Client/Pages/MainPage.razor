@@ -142,7 +142,7 @@
                             </td>
                             <td>
                                 <select name="Category"
-                                @onchange="((ChangeEventArgs e) => itemCategory = e.Value.ToString())">
+                                    @onchange="((ChangeEventArgs e) => itemCategory = e.Value.ToString())">
                                     @if (itemType.Equals("Income"))
                                     {
                                         <option value="Employment">Employment</option>
@@ -186,7 +186,7 @@
                                 <td>@item.Balance</td>
                                 <td>
                                     <input id="remove" type="button" value="Remove"
-                                    @onclick="(() => DeleteBudgetAsync(item))">
+                                        @onclick="(() => DeleteBudgetAsync(item))">
                                 </td>
                             </tr>
                         }
@@ -206,7 +206,7 @@
                             SeriesType="SeriesType.Pie" XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))"
                             OrderByDescending="e=>e.Y" PointColor="e=> GetPointColor(e)" ShowDataLabels />
 
-                     </ApexChart>
+                    </ApexChart>
                 }
             </MudPaper>
         </MudItem>

@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Client;
 using MudBlazor.Services;
 using Client.Services;
-using Client.Models;
+using Client;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -26,5 +25,7 @@ builder.Services.AddScoped<CompletedBudgetApiService>();
 builder.Services.AddScoped<DatePicker>();
 builder.Services.AddSingleton<SharedState>();
 builder.Services.AddSingleton<IMessageService, MessageService>();
+builder.Services.AddSingleton<ChartPicker>();
+
 
 await builder.Build().RunAsync();

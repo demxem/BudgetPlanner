@@ -11,29 +11,15 @@
 @inject NavigationManager UriHelper
 @inject IMessageService MessageService
 @inject DatePicker datePicker
+@inject ChartPicker chart
+
 
 
 <style>
-    body {
-        background-color: #e4d6a1f7;
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        height: 100vh;
-    }
-
-    .container {
-        padding: 0%;
-        margin: 0%;
-        width: 100%;
-        overflow: auto;
-        display: flex;
-        align-items: flex-start;
-    }
-
     td {
         text-align: center;
         border: 1px solid rgb(190, 190, 190);
+        padding: 1px;
     }
 
     th {
@@ -41,6 +27,7 @@
         border: 1px solid rgb(190, 190, 190);
         padding: 5px;
     }
+
 
     th[scope='income-row'] {
         background-color: rgba(187, 171, 229);
@@ -54,6 +41,10 @@
         background-color: rgb(135, 189, 228);
     }
 
+    th[scope='dash-th'] {
+        background-color: rgb(232, 202, 163);
+    }
+
     td[scope='income-col'] {
         background-color: rgb(187, 171, 229);
     }
@@ -62,7 +53,7 @@
         background-color: rgb(251, 180, 192);
     }
 
-    td[scope='savings-col'] {
+    s td[scope='savings-col'] {
         background-color: rgb(187, 225, 253);
     }
 
@@ -70,9 +61,13 @@
         padding: 0%;
     }
 
+    td[scope='dash-td'] {
+        background-color: rgb(241, 224, 200);
+    }
+
     table {
         border-collapse: collapse;
-        border: 2px solid rgb(200, 200, 200);
+        border: 2pxsolidrgb(200, 200, 200);
         letter-spacing: 1px;
         font-family: sans-serif;
         font-size: 0.8rem;
@@ -80,22 +75,7 @@
 
     select {
         font-size: 0.9rem;
-        padding: 2px 5px;
-    }
-
-    .tables {
-        display: grid;
-        gap: 1.8rem;
-        grid-template-columns: 12rem, auto, 23rem;
-
-    }
-
-    .charts {
-        height: 40%;
-        width: 40%;
-        display: flex;
-        gap: 1.8rem;
-        flex-direction: column;
+        padding: 2px5px;
     }
 
     .progress {
@@ -104,22 +84,131 @@
         border-radius: 0px 0px 0px 0px;
         background-color: white;
     }
+
+    .start-dashboard {
+        font-style: none;
+        font-variant: small-caps;
+        font-weight: bold;
+        font-size: 24px;
+        line-height: none;
+        font-family: cursive;
+    }
+
+    #dash {
+        align-items: center;
+        font-size: 15px;
+    }
+
+    #dashMonth {
+        align-items: center;
+        font-size: 30px;
+    }
+
+    #dash-body {
+        font-style: none;
+        font-variant: small-caps;
+        font-weight: normal;
+        font-size: 24px;
+        line-height: none;
+        font-family: cursive;
+    }
 </style>
 
-@* <header>
-<p>
-<div class="incline-block">
-<div class="d-flex" style="max-width:100px;">
-<MudDatePicker Label="Budget Year" @bind-Date="selectedPeriod" MinDate="@datePicker.MinimalPeriodInterval"
-MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync" />
-</div>
-</div>
-</p>
-</header> *@
+<MudGrid>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-16 ma-2" Outlined="true" Square="true" Height="100%">
+            <div class="start-dashboard">
+                <div class="incline-block">
+                    <div class="d-flex" style="max-width:100px;">
+                        <MudDatePicker @bind-Date="selectedPeriod" MinDate="@datePicker.MinimalPeriodInterval"
+                            MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync" />
+                    </div>
+                </div>
+                <label id="dashMonth">
+                    @datePicker.DashBoardSelectedMonth
+                </label>
+            </div>
+            <p>
+                <label id="dash">
+                    --BudgetDashBoard--
+                </label>
+            </p>
+            <thead>
+                <tr>
+                    <th colspan="2" scope="dash-th">
+                        OVERVIEW
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="dash-body">
+                <tr>
+                    <td scope="dash-td">
+                        Start Date
+                    </td>
+                    <td>
+                        @datePicker.MinDashboardDate
+                    </td>
+                </tr>
+                <tr>
+                    <td scope="dash-td">
+                        End Date
+                    </td>
+                    <td>
+                        @datePicker.MaxDashboardDate
+                    </td>
+                </tr>
+                <tr>
+                    <td scope="dash-td">
+                        Starting Balance
+                    </td>
+                    @if (TrackedBudgetIncome != null)
+                    {
+                        <td>
+                            @(TrackedBudgetIncome.Income.TrackedEmployment +
+                                @TrackedBudgetIncome.Income.TrackedSideHustle +
+                                @TrackedBudgetIncome.Income.TrackedDividends)
+                        </td>
+                    }
+                </tr>
+            </tbody>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-16 ma-2" Outlined="true" Square="true">
+            <div class="savings-chart">
+                @if (TrackedGroupBarChart != null && ActualGroupBarChart != null)
+                {
+                    <ApexChart TItem="PieChartModel" Title="Tracked (vs Budget)" @ref="apexChart" Options=options>
+                        <ApexPointSeries TItem="PieChartModel" Items="TrackedGroupBarChart" Name="Tracked"
+                            XValue="@(e => e.Name)" SeriesType="SeriesType.Bar" YAggregate="@(e => e.Sum(e => e.Value))"
+                            OrderByDescending="e=>e.Y" Color="#bbabe5" />
 
-<body>
-    <div class=container>
-        <div class="tables">
+                        <ApexPointSeries TItem="PieChartModel" Items="ActualGroupBarChart" Name="Planned"
+                            SeriesType="SeriesType.Bar" XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))"
+                            OrderByDescending="e=>e.Y" Color="#fbb4c0" />
+                    </ApexChart>
+                }
+            </div>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-16 ma-2" Outlined="true" Square="true" Height="100%">
+            <div class="tracked-group-chart">
+                @if (TrackedGroupBarChart != null)
+                {
+                    <ApexChart TItem="PieChartModel" Title="Breakdown" @ref="apexChartPie">
+                        <ApexPointSeries TItem="PieChartModel" Items="TrackedGroupBarChart" Name="Breakdown"
+                            SeriesType="SeriesType.Pie" XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))"
+                            OrderByDescending="e=>e.Y" PointColor="e=> chart.GetPointColor(e)" ShowDataLabels />
+                     </ApexChart>
+                }
+            </div>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+<MudGrid>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-16 ma-2" Outlined="false" Square="true" Height="100%">
             <div class="income-tab">
                 <table>
                     <tr>
@@ -240,6 +329,10 @@ MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync"
                     }
                 </table>
             </div>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-16 ma-2" Outlined="false" Square="true" Height="100%">
             <div class="table-2">
                 <table>
                     <tr>
@@ -253,7 +346,7 @@ MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync"
                     @if (TrackedBudgetSavings != null)
                     {
                         <tr>
-                            <td>Em.Fund</td>
+                            <td>EmergencyFund</td>
                             <td>@TrackedBudgetSavings.Savings.TrackedEmergencyFund</td>
                             <td>@TrackedBudgetSavings.Savings.EmergencyFund</td>
                             <td scope="progress-col">
@@ -284,7 +377,7 @@ MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync"
                             }
                         </tr>
                         <tr>
-                        <td>Ret.Account</td>
+                        <td>RetirementAccount</td>
                         <td>@TrackedBudgetSavings.Savings.TrackedRetirementAccount</td>
                         <td>@TrackedBudgetSavings.Savings.RetirementAccount</td>
                         <td scope="progress-col">
@@ -392,6 +485,11 @@ MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync"
                     }
                 </table>
             </div>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-16 ma-2" Outlined="false" Square="true" Height="100%">
             <div class="table-3">
                 <table>
                     <tr>
@@ -697,46 +795,9 @@ MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync"
                     }
                 </table>
             </div>
-        </div>
-
-        <div class="charts">
-            <div class="income-chart">
-                @if (TrackedIncomePieChart != null)
-                {
-                    <ApexChart TItem="PieChartModel" Title="Value">
-                        <ApexPointSeries TItem="PieChartModel" Items="TrackedIncomePieChart" Name="Value"
-                            SeriesType="SeriesType.Pie" XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))"
-                            OrderByDescending="e=>e.Y" PointColor="e=> GetPointColor(e)" ShowDataLabels />
-
-                     </ApexChart>
-                }
-            </div>
-            <div class="income-chart">
-                @if (TrackedSavingsPieChart != null)
-                {
-                    <ApexChart TItem="PieChartModel" Title="Value">
-                        <ApexPointSeries TItem="PieChartModel" Items="TrackedSavingsPieChart" Name="Value"
-                            SeriesType="SeriesType.Pie" XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))"
-                            OrderByDescending="e=>e.Y" PointColor="e=> GetPointColor(e)" ShowDataLabels />
-                     </ApexChart>
-                }
-            </div>
-            <div class="expenses-chart">
-                @if (TrackedExpensesPieChart != null)
-                {
-                    <ApexChart TItem="PieChartModel" Title="Value">
-                        <ApexPointSeries TItem="PieChartModel" Items="TrackedExpensesPieChart" Name="Value"
-                            SeriesType="SeriesType.Pie" XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))"
-                            OrderByDescending="e=>e.Y" PointColor="e=> GetPointColor(e)" ShowDataLabels />
-
-                     </ApexChart>
-                }
-            </div>
-        </div>
-    </div>
-</body>
-
-
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 
 @code
 {
@@ -753,47 +814,58 @@ MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync"
     private List<PieChartModel> TrackedIncomePieChart { get; set; }
     private List<PieChartModel> TrackedSavingsPieChart { get; set; }
     private List<PieChartModel> TrackedExpensesPieChart { get; set; }
-
+    private PieChartModel[]? TrackedGroupBarChart = new PieChartModel[3]
+    {
+new PieChartModel { Name = "Income", Value = 0 },
+new PieChartModel { Name = "Expenses", Value = 0 },
+new PieChartModel { Name = "Savings", Value = 0 }
+    };
+    private PieChartModel[]? ActualGroupBarChart = new PieChartModel[3]
+    {
+new PieChartModel { Name = "Income", Value = 0 },
+new PieChartModel { Name = "Expenses", Value = 0 },
+new PieChartModel { Name = "Savings", Value = 0 }
+    };
+    ApexChartOptions<PieChartModel> options;
     private IEnumerable<BudgetModel>? Expenses = new List<BudgetModel>();
     private IEnumerable<BudgetModel>? Savings = new List<BudgetModel>();
     public IEnumerable<BudgetModel>? Income = new List<BudgetModel>();
     private IEnumerable<YearModel>? Years = new List<YearModel>();
     private IEnumerable<BudgetModel>? Months = new List<BudgetModel>();
-
     private BudgetCompletionModel BudgetCompletion = new BudgetCompletionModel();
     private BudgetCompletionModel BudgetCompletionPercent = new BudgetCompletionModel();
+    private ApexChart<PieChartModel> apexChart;
+    private ApexChart<PieChartModel> apexChartPie;
     private DateTime? selectedPeriod = DateTime.Today;
-
 
     protected override async Task OnInitializedAsync()
     {
+        options = chart.SetOptionsForBarChart(options);
         Years = await yearsApiClient.GetYearsAsync();
         Months = await monthsApiClient.GetMonthsAsync();
         TrackedBudgetIncome = await incomeApiClient.GetLatestIncomeAsync();
-        TrackedIncomePieChart = SetIncomePieChart();
         TrackedBudgetSavings = await savingsApiClient.GetLatestSavingsAsync();
-        TrackedSavingsPieChart = SetSavingsPieChart();
         TrackedBudgetExpenses = await expensesApiClient.GetLatestExpensesAsync();
-        TrackedExpensesPieChart = SetExpensesPieChart();
         BudgetCompletion = await budgetCompletion.GetBudgetCompletionByMonthIdAsync(Months.Select(month =>
         month.Id).LastOrDefault());
         BudgetCompletionPercent = await budgetCompletion.GetBudgetCompletionByMonthIdInPercentAsync(Months.Select(month =>
         month.Id).LastOrDefault());
         CountTotalRemainingAndExcessBudget();
         datePicker.SetMinAndMaxYearPeriodForCalendar(Years);
+        datePicker.SetDashboardIntervals(selectedPeriod);
     }
-
 
     public async Task GetDataByMonthIdAsync()
     {
         int monthId = datePicker.FindMonthId(selectedPeriod, Years, Months);
         BudgetCompletion = await budgetCompletion.GetBudgetCompletionByMonthIdAsync(monthId);
         BudgetCompletionPercent = await budgetCompletion.GetBudgetCompletionByMonthIdInPercentAsync(monthId);
-        await GetExpensesByMonthIdAsync(monthId);
         await GetIncomeByMonthIdAsync(monthId);
+        await GetExpensesByMonthIdAsync(monthId);
         await GetSavingsByMonthIdAsync(monthId);
-        SetIncomePieChart();
+        await UpdateChartsAsync();
         CountTotalRemainingAndExcessBudget();
+        datePicker.SetDashboardIntervals(selectedPeriod);
     }
 
     public async Task GetSavingsByMonthIdAsync(int monthId)
@@ -810,6 +882,20 @@ MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync"
     {
         TrackedBudgetExpenses = await expensesApiClient.GetExpensesByMonthIdAsync(monthId);
         StateHasChanged();
+    }
+
+    private async Task UpdateChartsAsync()
+    {
+        var trackedResult = chart.SetTrackedGroupBarChart(TrackedBudgetIncome, TrackedBudgetSavings, TrackedBudgetExpenses);
+        Array.Copy(trackedResult, TrackedGroupBarChart, 3);
+        var groupResult = chart.SetActualGroupBarChart(TrackedBudgetIncome, TrackedBudgetSavings, TrackedBudgetExpenses);
+        Array.Copy(groupResult, ActualGroupBarChart, 3);
+
+        if (apexChart == null || apexChartPie == null)
+            return;
+
+        await apexChart.UpdateSeriesAsync();
+        await apexChartPie.UpdateSeriesAsync();
     }
 
     public void CountTotalRemainingAndExcessBudget()
@@ -830,114 +916,26 @@ MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync"
                 {
                     trackedRemainingIncome += category;
                 }
-                else if (category <= 0)
-                {
-                    trackedExcessIncome += Math.Abs(category);
-                }
+                else if (category <= 0) { trackedExcessIncome += Math.Abs(category); }
             }
-
             if (item.Name.Contains("Savings"))
             {
-                if (category >= 0)
+                if
+                (category >= 0)
                 {
                     trackedRemainingSavings += category;
                 }
-                else if (category <= 0)
-                {
-                    trackedExcessSavings += Math.Abs(category);
-                }
+                else if (category <= 0) { trackedExcessSavings += Math.Abs(category); }
             }
             if (item.Name.Contains("Expenses"))
             {
-                if (category >= 0)
+                if
+                (category >= 0)
                 {
                     trackedRemainingExpenses += category;
                 }
-                else if (category <= 0)
-                {
-                    trackedExcessExpenses += Math.Abs(category);
-                }
+                else if (category <= 0) { trackedExcessExpenses += Math.Abs(category); }
             }
         }
     }
-    private List<PieChartModel> SetIncomePieChart()
-    {
-        List<PieChartModel> Chart = new List<PieChartModel>();
-        Chart.Add(new PieChartModel { Name = "TrackedEmployment", Value = TrackedBudgetIncome.Income.TrackedEmployment });
-        Chart.Add(new PieChartModel { Name = "TrackedDividends", Value = TrackedBudgetIncome.Income.Dividends });
-        Chart.Add(new PieChartModel { Name = "TrackedSideHustle", Value = TrackedBudgetIncome.Income.TrackedSideHustle });
-        return Chart;
-    }
-    private List<PieChartModel> SetSavingsPieChart()
-    {
-        List<PieChartModel> Chart = new List<PieChartModel>();
-        Chart.Add(new PieChartModel
-            {
-                Name = "TrackedEmergencyFund",
-                Value = TrackedBudgetSavings.Savings.TrackedEmergencyFund
-            });
-        Chart.Add(new PieChartModel
-            {
-                Name = "TrackedRetirementAccount",
-                Value =
-            TrackedBudgetSavings.Savings.TrackedRetirementAccount
-            });
-        Chart.Add(new PieChartModel { Name = "TrackedVacation", Value = TrackedBudgetSavings.Savings.TrackedVacation });
-        Chart.Add(new PieChartModel { Name = "TrackedHealthNeeds", Value = TrackedBudgetSavings.Savings.TrackedHealthNeeds });
-
-        return Chart;
-    }
-    private List<PieChartModel> SetExpensesPieChart()
-    {
-        List<PieChartModel> Chart = new List<PieChartModel>();
-        Chart.Add(new PieChartModel { Name = "TrackedHousing", Value = TrackedBudgetExpenses.Expenses.TrackedHousing });
-        Chart.Add(new PieChartModel { Name = "TrackedGroceries", Value = TrackedBudgetExpenses.Expenses.TrackedGroceries });
-        Chart.Add(new PieChartModel { Name = "TrackedUtilities", Value = TrackedBudgetExpenses.Expenses.TrackedUtilities });
-        Chart.Add(new PieChartModel { Name = "TrackedVacation", Value = TrackedBudgetExpenses.Expenses.TrackedVacation });
-        Chart.Add(new PieChartModel
-            {
-                Name = "TrackedTransportation",
-                Value = TrackedBudgetExpenses.Expenses.TrackedTransportation
-            });
-        Chart.Add(new PieChartModel { Name = "TrackedMedicine", Value = TrackedBudgetExpenses.Expenses.TrackedMedicine });
-        Chart.Add(new PieChartModel { Name = "TrackedClothing", Value = TrackedBudgetExpenses.Expenses.TrackedClothing });
-        Chart.Add(new PieChartModel { Name = "TrackedMedia", Value = TrackedBudgetExpenses.Expenses.TrackedMedia });
-        Chart.Add(new PieChartModel { Name = "TrackedInsuranses", Value = TrackedBudgetExpenses.Expenses.TrackedInsuranses });
-
-        return Chart;
-    }
-
-
-
-    private string GetPointColor(PieChartModel model)
-    {
-        switch (model.Name)
-        {
-            case "TrackedEmployment":
-                return "#e3001b";
-            case "TrackedSideHustle":
-                return "#005ba3";
-            case "TrackedDividends":
-                return "#ffd500";
-            case "TrackedEmergencyFund":
-                return "#e3001b";
-            case "TrackedRetirementAccount":
-                return "#005ba3";
-            case "TrackedVacation":
-                return "#ffd500";
-            case "TrackedHealthNeeds":
-                return "#00783c";
-            case "TrackedHousing":
-                return "#e3001b";
-            case "TrackedGroceries":
-                return "#005ba3";
-            case "TrackedUtilities":
-                return "#ffd500";
-            case "TrackedMedicine":
-                return "#00783c";
-            default:
-                return "#87775d";
-        }
-    }
 }
-
