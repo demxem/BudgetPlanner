@@ -6,6 +6,11 @@
 @inject Client.Services.ExpensesApiClient expensesApiClient
 @inject Client.Services.DatePicker datePicker
 
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject NavigationManager UriHelper
+@inject IMessageService MessageService
+
 
 <style>
     td {
@@ -87,6 +92,10 @@
     </div>
     </p>
 </header>
+<MudButton @onclick="OpenSubmitYearDialog" Variant="Variant.Filled" Color="MudBlazor.Color.Primary">Add Year
+</MudButton>
+<MudButton @onclick="OpenDeleteYearDialog" Variant="Variant.Filled" Color="MudBlazor.Color.Error">Delete Year
+</MudButton>
 
 <div class="container-1">
     <table>
@@ -273,6 +282,7 @@
     private IEnumerable<BudgetModel> Savings = new List<BudgetModel>();
     private IEnumerable<BudgetModel> Expenses = new List<BudgetModel>();
     private DateTime? selectedPeriod = DateTime.Now;
+    private List<string> messages = new List<string>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -283,6 +293,24 @@
         Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
         datePicker.SetMinAndMaxYearPeriodForCalendar(Years);
         yearId = Years.Select(year => year.Id).LastOrDefault();
+        MessageService.OnMessage += MessageHandler;
+    }
+    public void Dispose()
+    {
+        MessageService.OnMessage -= MessageHandler;
+    }
+
+    private async void MessageHandler(string message)
+    {
+        if (message != null)
+            messages.Add(message);
+        else
+            messages.Clear();
+        StateHasChanged();
+        if (message!.Equals("YearPosted") || message.Equals("yearDeleted"))
+        {
+            Years = await yearApiClient.GetYearsAsync();
+        }
     }
 
     public async Task GetDataByMonthIdAsync()
@@ -465,5 +493,22 @@
         await monthsApiClient.UpdateMonthAsync(month);
         Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
         Months = await monthsApiClient.GetMonthsAsync();
+    }
+    private void OpenSubmitYearDialog()
+    {
+        DialogOptions closeOnEscapeKey = new DialogOptions()
+            {
+                CloseOnEscapeKey = true
+            };
+        DialogService.Show<YearSubmitForm>("Add Year", closeOnEscapeKey);
+    }
+
+    private void OpenDeleteYearDialog()
+    {
+        DialogOptions closeOnEscapeKey = new DialogOptions()
+            {
+                CloseOnEscapeKey = true
+            };
+        DialogService.Show<YearDeleteForm>(@"This action will delete complete year budget plan", closeOnEscapeKey);
     }
 }

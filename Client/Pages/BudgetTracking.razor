@@ -281,6 +281,8 @@ new PieChartModel { Name = "TrackedInsuranses", Value = 0 }
     protected override async Task OnInitializedAsync()
     {
         options = chart.SetOptionsForBarChart(options);
+        Dates = await dateApiClient.GetLatestDateAsync();
+        GetLatestRecordDate();
         Years = await yearsApiClient.GetYearsAsync();
         Months = await monthsApiClient.GetMonthsAsync();
         Income = await incomeApiClient.GetLatestIncomeAsync();
