@@ -14,19 +14,17 @@ public class TestClient
         var monthApiClient = new MonthsApiClient(new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 
         //Action
-        IEnumerable<YearModel> years = await yearApiClient.GetYearsAsync();
-        IEnumerable<BudgetModel> months = await monthApiClient.GetMonthsAsync();
+        IEnumerable<YearModel>? years = await yearApiClient.GetYearsAsync();
+        IEnumerable<BudgetModel>? months = await monthApiClient.GetMonthsAsync();
 
         DateTime? date = new DateTime(2023, 07, 20);
 
-        var monthIdResult = datePicker.FindMonthId(date, years, months);
-        var yearIdResult = datePicker.FindYearId(date, years, months);
+        var monthIdResult = datePicker.FindMonthId(date, years!, months!);
+        var yearIdResult = datePicker.FindYearId(date, years!, months!);
 
         //Assert
         Assert.Equal(16, monthIdResult);
         Assert.Equal(17, yearIdResult);
-        Assert.NotNull(monthIdResult);
-        Assert.NotNull(yearIdResult);
     }
 
 

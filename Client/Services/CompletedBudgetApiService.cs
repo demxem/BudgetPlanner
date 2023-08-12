@@ -30,7 +30,7 @@ namespace Client.Services
             return new List<BudgetCompletionModel>();
         }
 
-        public async Task<BudgetCompletionModel>? GetBudgetCompletionByMonthIdAsync(int id)
+        public async Task<BudgetCompletionModel?> GetBudgetCompletionByMonthIdAsync(int id)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace Client.Services
             }
             return new BudgetCompletionModel();
         }
-        public async Task<BudgetCompletionModel>? GetBudgetCompletionByMonthIdInPercentAsync(int id)
+        public async Task<BudgetCompletionModel?> GetBudgetCompletionByMonthIdInPercentAsync(int id)
         {
             try
             {

@@ -1,17 +1,23 @@
 ﻿<Properties StartupConfiguration="{083D3D22-870D-4943-86DE-62FB7FCA5281}|http">
   <MonoDevelop.Ide.ItemProperties.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.ItemProperties.Client PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Client/Pages/MainPage.razor">
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Client/Pages/BudgetDashboard.razor">
     <Files>
-      <File FileName="Client/Pages/MainPage.razor" Line="196" Column="20" />
       <File FileName="Client/Services/DateApiClient.cs" Line="33" Column="1" />
+      <File FileName="Client/Program.cs" Line="7" Column="44" />
+      <File FileName="Client/Pages/YearSubmitForm.razor" Line="1" Column="1" />
+      <File FileName="Client/Pages/YearDeleteForm.razor" Line="1" Column="1" />
+      <File FileName="Client/Pages/SavingsSubmitForm.razor" Line="1" Column="1" />
+      <File FileName="Client/Pages/BudgetDashboard.razor" Line="860" Column="65" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="BudgetPlanner">
-            <Node name="Client">
+          <Node name="BudgetPlanner" expanded="True">
+            <Node name="Client" expanded="True">
               <Node name="Pages" expanded="True" />
               <Node name="Services" expanded="True" />
             </Node>
@@ -20,7 +26,6 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="94" column="1" />
@@ -29,15 +34,9 @@
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/IncomeSubmitForm.razor" relfile="Client/Pages/IncomeSubmitForm.razor" line="98" column="1" />
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/DAL/Data/BudgetCompletion.cs" relfile="DAL/Data/BudgetCompletion.cs" line="76" column="1" />
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/DAL/Data/BudgetCompletion.cs" relfile="DAL/Data/BudgetCompletion.cs" line="44" column="1" />
-      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetDashboard.razor" relfile="Client/Pages/BudgetDashboard.razor" line="746" column="1" />
-      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetDashboard.razor" relfile="Client/Pages/BudgetDashboard.razor" line="818" column="1" />
-      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetDashboard.razor" relfile="Client/Pages/BudgetDashboard.razor" line="823" column="1" />
-      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetDashboard.razor" relfile="Client/Pages/BudgetDashboard.razor" line="821" column="1" />
-      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetDashboard.razor" relfile="Client/Pages/BudgetDashboard.razor" line="825" column="1" />
-      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetDashboard.razor" relfile="Client/Pages/BudgetDashboard.razor" line="826" column="1" />
+      <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetDashboard.razor" relfile="Client/Pages/BudgetDashboard.razor" line="747" column="1" />
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/MainPage.razor" relfile="Client/Pages/MainPage.razor" line="263" column="1" />
       <Breakpoint file="/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/MainPage.razor" relfile="Client/Pages/MainPage.razor" line="569" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MultiItemStartupConfigurations />
 </Properties>

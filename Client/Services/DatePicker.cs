@@ -16,7 +16,7 @@ public class DatePicker
 
     public void ParseDate(ChangeEventArgs e)
     {
-        var userInputDate = e.Value.ToString();
+        var userInputDate = e?.Value?.ToString();
         DateTime date;
         var result = DateTime.TryParse(userInputDate, out date);
         if (result == true)
@@ -42,15 +42,15 @@ public class DatePicker
 
     public int FindYearId(DateTime? selectedDate, IEnumerable<YearModel> years, IEnumerable<BudgetModel> months)
     {
-        string year = selectedDate.Value.Year.ToString();
-        int yearid = years.Where(y => y.Name.Equals(year)).Select(y => y.Id).FirstOrDefault();
+        string year = selectedDate!.Value.Year.ToString();
+        int yearid = years.Where(y => y.Name!.Equals(year)).Select(y => y.Id).FirstOrDefault();
 
         return yearid;
     }
 
     public void SetDashboardIntervals(DateTime? selectedDate)
     {
-        var monthYear = selectedDate.Value.ToString(new CultureInfo("en-US").DateTimeFormat.YearMonthPattern);
+        var monthYear = selectedDate!.Value.ToString(new CultureInfo("en-US").DateTimeFormat.YearMonthPattern);
         string[] splitDate = monthYear.Split(" ");
         DashBoardSelectedMonth = splitDate[0].Replace(" ", "");
 
@@ -68,23 +68,23 @@ public class DatePicker
     public int FindMonthId(DateTime? selectedDate, IEnumerable<YearModel> years, IEnumerable<BudgetModel> months)
     {
 
-        string date = selectedDate.Value.ToString(new CultureInfo("en-US").DateTimeFormat.YearMonthPattern);
+        string date = selectedDate!.Value.ToString(new CultureInfo("en-US").DateTimeFormat.YearMonthPattern);
         string[] splitDate = date.Split(" ");
         string year = splitDate[1].Replace(" ", "");
         string month = splitDate[0].Replace(" ", "");
 
-        int yearid = years.Where(y => y.Name.Equals(year)).Select(y => y.Id).FirstOrDefault();
-        int monthId = months.Where(m => m.YearId == yearid && m.Name.Equals(month)).Select(m => m.Id).FirstOrDefault();
+        int yearid = years.Where(y => y.Name!.Equals(year)).Select(y => y.Id).FirstOrDefault();
+        int monthId = months.Where(m => m.YearId == yearid && m.Name!.Equals(month)).Select(m => m.Id).FirstOrDefault();
 
         return monthId;
     }
 
     public void SetMinAndMaxYearPeriodForCalendar(IEnumerable<YearModel> Years)
     {
-        int minYear = Int32.Parse(Years.Select(year => year.Name).FirstOrDefault());
+        int minYear = Int32.Parse(Years.Select(year => year.Name).FirstOrDefault()!);
         MinimalPeriodInterval = new DateTime(minYear, 01, 01);
 
-        int maxYear = Int32.Parse(Years.Select(year => year.Name).LastOrDefault());
+        int maxYear = Int32.Parse(Years.Select(year => year.Name).LastOrDefault()!);
         MaximumPeriodInteval = new DateTime(maxYear, 12, 31);
     }
 }

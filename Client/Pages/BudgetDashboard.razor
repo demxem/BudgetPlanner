@@ -14,7 +14,6 @@
 @inject ChartPicker chart
 
 
-
 <style>
     td {
         text-align: center;
@@ -164,7 +163,7 @@
                     @if (TrackedBudgetIncome != null)
                     {
                         <td>
-                            @(TrackedBudgetIncome.Income.TrackedEmployment +
+                            @(TrackedBudgetIncome!.Income!.TrackedEmployment +
                                 @TrackedBudgetIncome.Income.TrackedSideHustle +
                                 @TrackedBudgetIncome.Income.TrackedDividends)
                         </td>
@@ -223,19 +222,19 @@
                     {
                         <tr>
                             <td>Employment</td>
-                            <td>@TrackedBudgetIncome.Income.TrackedEmployment</td>
+                            <td>@TrackedBudgetIncome!.Income!.TrackedEmployment</td>
                             <td>@TrackedBudgetIncome.Income.Employment</td>
                             <td scope="progress-col">
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar"
-                                        style="width: @BudgetCompletionPercent.IncomeCompletedEmployment%"
+                                        style="width: @BudgetCompletionPercent!.IncomeCompletedEmployment%"
                                         aria-valuenow="@BudgetCompletionPercent.IncomeCompletedEmployment" aria-valuemin="0"
                                         aria-valuemax="100">
                                         @Decimal.Round(BudgetCompletionPercent.IncomeCompletedEmployment, 2)%
                                     </div>
                                 </div>
                             </td>
-                            @if (@BudgetCompletion.IncomeCompletedEmployment >= 0)
+                            @if (@BudgetCompletion!.IncomeCompletedEmployment >= 0)
                             {
                                 <td>@BudgetCompletion.IncomeCompletedEmployment</td>
                             }
@@ -347,19 +346,19 @@
                     {
                         <tr>
                             <td>EmergencyFund</td>
-                            <td>@TrackedBudgetSavings.Savings.TrackedEmergencyFund</td>
+                            <td>@TrackedBudgetSavings!.Savings!.TrackedEmergencyFund</td>
                             <td>@TrackedBudgetSavings.Savings.EmergencyFund</td>
                             <td scope="progress-col">
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar"
-                                        style="width: @BudgetCompletionPercent.SavingsCompletedEmergencyFund%"
+                                        style="width: @BudgetCompletionPercent!.SavingsCompletedEmergencyFund%"
                                         aria-valuenow="@BudgetCompletionPercent.SavingsCompletedEmergencyFund"
                                         aria-valuemin="0" aria-valuemax="100">
                                         @Decimal.Round(BudgetCompletionPercent.SavingsCompletedEmergencyFund, 2)%
                                     </div>
                                 </div>
                             </td>
-                            @if (@BudgetCompletion.SavingsCompletedEmergencyFund >= 0)
+                            @if (@BudgetCompletion!.SavingsCompletedEmergencyFund >= 0)
                             {
                                 <td>@BudgetCompletion.SavingsCompletedEmergencyFund</td>
                             }
@@ -504,19 +503,19 @@
                     {
                         <tr>
                             <td>Housing</td>
-                            <td>@TrackedBudgetExpenses.Expenses.TrackedHousing</td>
+                            <td>@TrackedBudgetExpenses!.Expenses!.TrackedHousing</td>
                             <td>@TrackedBudgetExpenses.Expenses.Housing</td>
                             <td scope="progress-col">
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar"
-                                        style="width: @BudgetCompletionPercent.ExpensesCompletedHousing%"
+                                        style="width: @BudgetCompletionPercent!.ExpensesCompletedHousing%"
                                         aria-valuenow="@BudgetCompletionPercent.ExpensesCompletedHousing" aria-valuemin="0"
                                         aria-valuemax="100">
                                         @Decimal.Round(BudgetCompletionPercent.ExpensesCompletedHousing, 2)%
                                     </div>
                                 </div>
                             </td>
-                            @if (@BudgetCompletion.ExpensesCompletedHousing >= 0)
+                            @if (@BudgetCompletion!.ExpensesCompletedHousing >= 0)
                             {
                                 <td>@BudgetCompletion.ExpensesCompletedHousing</td>
                             }
@@ -782,8 +781,8 @@
                         </tr>
                         <tr>
                         <td scope="totalExpenses-row">Total</td>
-                        <td scope="totalExpenses-row">@TrackedBudgetExpenses.TrackedMonthlyExpenses</td>
-                        <td scope="totalExpenses-row">@TrackedBudgetExpenses.MonthlyExpenses</td>
+                        <td scope="totalExpenses-row">@TrackedBudgetExpenses?.TrackedMonthlyExpenses</td>
+                        <td scope="totalExpenses-row">@TrackedBudgetExpenses?.MonthlyExpenses</td>
                         <td scope="totalExpenses-row">%</td>
                         <td scope="totalExpenses-row">@trackedRemainingExpenses</td>
                         <td scope="totalExpenses-row">@trackedExcessExpenses</td>
@@ -808,12 +807,13 @@
     private decimal trackedExcessSavings = 0;
     private decimal trackedExcessExpenses = 0;
 
-    private BudgetModel? TrackedBudgetIncome;
-    private BudgetModel? TrackedBudgetSavings;
-    private BudgetModel? TrackedBudgetExpenses;
-    private List<PieChartModel> TrackedIncomePieChart { get; set; }
-    private List<PieChartModel> TrackedSavingsPieChart { get; set; }
-    private List<PieChartModel> TrackedExpensesPieChart { get; set; }
+    private BudgetModel? TrackedBudgetIncome { get; set; }
+    private BudgetModel? TrackedBudgetSavings { get; set; }
+    private BudgetModel? TrackedBudgetExpenses { get; set; }
+    private List<PieChartModel>? TrackedIncomePieChart { get; set; }
+    private List<PieChartModel>? TrackedSavingsPieChart { get; set; }
+    private List<PieChartModel>? TrackedExpensesPieChart { get; set; }
+
     private PieChartModel[]? TrackedGroupBarChart = new PieChartModel[3]
     {
 new PieChartModel { Name = "Income", Value = 0 },
@@ -826,38 +826,38 @@ new PieChartModel { Name = "Income", Value = 0 },
 new PieChartModel { Name = "Expenses", Value = 0 },
 new PieChartModel { Name = "Savings", Value = 0 }
     };
-    ApexChartOptions<PieChartModel> options;
+    ApexChartOptions<PieChartModel>? options;
     private IEnumerable<BudgetModel>? Expenses = new List<BudgetModel>();
     private IEnumerable<BudgetModel>? Savings = new List<BudgetModel>();
     public IEnumerable<BudgetModel>? Income = new List<BudgetModel>();
     private IEnumerable<YearModel>? Years = new List<YearModel>();
     private IEnumerable<BudgetModel>? Months = new List<BudgetModel>();
-    private BudgetCompletionModel BudgetCompletion = new BudgetCompletionModel();
-    private BudgetCompletionModel BudgetCompletionPercent = new BudgetCompletionModel();
-    private ApexChart<PieChartModel> apexChart;
-    private ApexChart<PieChartModel> apexChartPie;
+    private BudgetCompletionModel? BudgetCompletion = new BudgetCompletionModel();
+    private BudgetCompletionModel? BudgetCompletionPercent = new BudgetCompletionModel();
+    private ApexChart<PieChartModel>? apexChart;
+    private ApexChart<PieChartModel>? apexChartPie;
     private DateTime? selectedPeriod = DateTime.Today;
 
     protected override async Task OnInitializedAsync()
     {
-        options = chart.SetOptionsForBarChart(options);
+        options = chart.SetOptionsForBarChart(options!);
         Years = await yearsApiClient.GetYearsAsync();
         Months = await monthsApiClient.GetMonthsAsync();
         TrackedBudgetIncome = await incomeApiClient.GetLatestIncomeAsync();
         TrackedBudgetSavings = await savingsApiClient.GetLatestSavingsAsync();
         TrackedBudgetExpenses = await expensesApiClient.GetLatestExpensesAsync();
-        BudgetCompletion = await budgetCompletion.GetBudgetCompletionByMonthIdAsync(Months.Select(month =>
+        BudgetCompletion = await budgetCompletion.GetBudgetCompletionByMonthIdAsync(Months!.Select(month =>
         month.Id).LastOrDefault());
-        BudgetCompletionPercent = await budgetCompletion.GetBudgetCompletionByMonthIdInPercentAsync(Months.Select(month =>
+        BudgetCompletionPercent = await budgetCompletion.GetBudgetCompletionByMonthIdInPercentAsync(Months!.Select(month =>
         month.Id).LastOrDefault());
         CountTotalRemainingAndExcessBudget();
-        datePicker.SetMinAndMaxYearPeriodForCalendar(Years);
+        datePicker.SetMinAndMaxYearPeriodForCalendar(Years!);
         datePicker.SetDashboardIntervals(selectedPeriod);
     }
 
     public async Task GetDataByMonthIdAsync()
     {
-        int monthId = datePicker.FindMonthId(selectedPeriod, Years, Months);
+        int monthId = datePicker.FindMonthId(selectedPeriod, Years!, Months!);
         BudgetCompletion = await budgetCompletion.GetBudgetCompletionByMonthIdAsync(monthId);
         BudgetCompletionPercent = await budgetCompletion.GetBudgetCompletionByMonthIdInPercentAsync(monthId);
         await GetIncomeByMonthIdAsync(monthId);
@@ -886,10 +886,10 @@ new PieChartModel { Name = "Savings", Value = 0 }
 
     private async Task UpdateChartsAsync()
     {
-        var trackedResult = chart.SetTrackedGroupBarChart(TrackedBudgetIncome, TrackedBudgetSavings, TrackedBudgetExpenses);
-        Array.Copy(trackedResult, TrackedGroupBarChart, 3);
-        var groupResult = chart.SetActualGroupBarChart(TrackedBudgetIncome, TrackedBudgetSavings, TrackedBudgetExpenses);
-        Array.Copy(groupResult, ActualGroupBarChart, 3);
+        var trackedResult = chart.SetTrackedGroupBarChart(TrackedBudgetIncome!, TrackedBudgetSavings!, TrackedBudgetExpenses!);
+        Array.Copy(trackedResult, TrackedGroupBarChart!, 3);
+        var groupResult = chart.SetActualGroupBarChart(TrackedBudgetIncome!, TrackedBudgetSavings!, TrackedBudgetExpenses!);
+        Array.Copy(groupResult, ActualGroupBarChart!, 3);
 
         if (apexChart == null || apexChartPie == null)
             return;
@@ -907,9 +907,9 @@ new PieChartModel { Name = "Savings", Value = 0 }
         trackedExcessSavings = 0;
         trackedExcessExpenses = 0;
 
-        foreach (var item in BudgetCompletion.GetType().GetProperties())
+        foreach (var item in BudgetCompletion!.GetType().GetProperties())
         {
-            decimal category = (decimal)item.GetValue(BudgetCompletion, null);
+            decimal category = (decimal)item.GetValue(BudgetCompletion, null)!;
             if (item.Name.Contains("Income"))
             {
                 if (category >= 0)

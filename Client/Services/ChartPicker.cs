@@ -7,8 +7,8 @@ namespace Client.Services
     {
         public List<PieChartModel> SetIncomePieChart(BudgetModel income)
         {
-            List<PieChartModel> Chart = new List<PieChartModel>();
-            Chart.Add(new PieChartModel { Name = "TrackedEmployment", Value = income.Income.TrackedEmployment });
+            List<PieChartModel>? Chart = new List<PieChartModel>();
+            Chart.Add(new PieChartModel { Name = "TrackedEmployment", Value = income!.Income!.TrackedEmployment });
             Chart.Add(new PieChartModel { Name = "TrackedDividends", Value = income.Income.Dividends });
             Chart.Add(new PieChartModel { Name = "TrackedSideHustle", Value = income.Income.TrackedSideHustle });
             return Chart;
@@ -20,7 +20,7 @@ namespace Client.Services
             Chart.Add(new PieChartModel
             {
                 Name = "TrackedEmergencyFund",
-                Value = savings.Savings.TrackedEmergencyFund
+                Value = savings!.Savings!.TrackedEmergencyFund
             });
             Chart.Add(new PieChartModel
             {
@@ -36,7 +36,7 @@ namespace Client.Services
         public PieChartModel[] SetExpensesPieChart(BudgetModel expenses)
         {
             PieChartModel[] Chart = new PieChartModel[9];
-            Chart[0] = new PieChartModel { Name = "TrackedHousing", Value = expenses.Expenses.TrackedHousing };
+            Chart[0] = new PieChartModel { Name = "TrackedHousing", Value = expenses!.Expenses!.TrackedHousing };
             Chart[1] = new PieChartModel { Name = "TrackedGroceries", Value = expenses.Expenses.TrackedGroceries };
             Chart[2] = new PieChartModel { Name = "TrackedUtilities", Value = expenses.Expenses.TrackedUtilities };
             Chart[3] = new PieChartModel { Name = "TrackedVacation", Value = expenses.Expenses.TrackedVacation };

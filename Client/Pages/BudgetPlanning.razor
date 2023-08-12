@@ -101,7 +101,7 @@
     <table>
         <tr>
             <th scope="income-row">Income</th>
-            @foreach (var month in Income)
+            @foreach (var month in Income!)
             {
                 <th scope="income-row">@month.Name</th>
             }
@@ -110,7 +110,7 @@
             <td scope="income-col">Employment</td>
             @foreach (var category in Income)
             {
-                <td scope="income-col"><input type="number" value="@category.Income.Employment"
+                <td scope="income-col"><input type="number" value="@category!.Income!.Employment"
                     @onchange="@(e => EditIncome(e, category.Income, "Employment"))"></td>
             }
         </tr>
@@ -118,7 +118,7 @@
             <td scope="income-col">SideHustle</td>
             @foreach (var category in Income)
             {
-                <td scope="income-col"><input type="number" value="@category.Income.SideHustle"
+                <td scope="income-col"><input type="number" value="@category!.Income!.SideHustle"
                     @onchange="@(e => EditIncome(e, category.Income, "SideHustle"))"></td>
             }
         </tr>
@@ -126,7 +126,7 @@
             <td scope="income-col">Dividends</td>
             @foreach (var category in Income)
             {
-                <td scope="income-col"><input type="number" value="@category.Income.Dividends"
+                <td scope="income-col"><input type="number" value="@category!.Income!.Dividends"
                     @onchange="@(e => EditIncome(e, category.Income, "Dividends"))"></td>
             }
         </tr>
@@ -141,7 +141,7 @@
     <table>
         <tr>
             <th scope="savings-row">Savings</th>
-            @foreach (var month in Savings)
+            @foreach (var month in Savings!)
             {
                 <th scope="savings-row">@month.Name</th>
             }
@@ -150,7 +150,7 @@
             <td scope="savings-col">EmergencyFund</td>
             @foreach (var category in Savings)
             {
-                <td scope="savings-col"><input type="number" value="@category.Savings.EmergencyFund"
+                <td scope="savings-col"><input type="number" value="@category!.Savings!.EmergencyFund"
                     @onchange="@(e => EditSavings(e, category.Savings, "EmergencyFund"))"></td>
             }
         </tr>
@@ -158,7 +158,7 @@
             <td scope="savings-col">RetirementAccount</td>
             @foreach (var category in Savings)
             {
-                <td scope="savings-col"><input type="number" value="@category.Savings.RetirementAccount"
+                <td scope="savings-col"><input type="number" value="@category!.Savings!.RetirementAccount"
                     @onchange="@(e => EditSavings(e, category.Savings, "RetirementAccount"))"></td>
             }
         </tr>
@@ -166,7 +166,7 @@
             <td scope="savings-col">Vacation</td>
             @foreach (var category in Savings)
             {
-                <td scope="savings-col"><input type="number" value="@category.Savings.Vacation"
+                <td scope="savings-col"><input type="number" value="@category!.Savings!.Vacation"
                     @onchange="@(e => EditSavings(e, category.Savings, "Vacation"))"></td>
             }
         </tr>
@@ -174,7 +174,7 @@
             <td scope="savings-col">HealthNeeds</td>
             @foreach (var category in Savings)
             {
-                <td scope="savings-col"><input type="number" value="@category.Savings.HealthNeeds"
+                <td scope="savings-col"><input type="number" value="@category!.Savings!.HealthNeeds"
                     @onchange="@(e => EditSavings(e, category.Savings, "HealthNeeds"))"></td>
             }
         </tr>
@@ -189,7 +189,7 @@
     <table>
         <tr>
             <th scope="expenses-row">Expenses</th>
-            @foreach (var month in Expenses)
+            @foreach (var month in Expenses!)
             {
                 <th scope="expenses-row">@month.Name</th>
             }
@@ -198,7 +198,7 @@
             <td scope="expenses-col">Housing</td>
             @foreach (var category in Expenses)
             {
-                <td scope="expenses-col"><input type="number" value="@category.Expenses.Housing"
+                <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Housing"
                     @onchange="@(e => EditExpenses(e, category.Expenses, "HealthNeeds"))"></td>
             }
         </tr>
@@ -206,7 +206,7 @@
             <td scope="expenses-col">Groceries</td>
             @foreach (var category in Expenses)
             {
-                <td scope="expenses-col"><input type="number" value="@category.Expenses.Groceries"
+                <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Groceries"
                     @onchange="@(e => EditExpenses(e, category.Expenses, "Groceries"))"></td>
             }
         </tr>
@@ -214,7 +214,7 @@
             <td scope="expenses-col">Utilities</td>
             @foreach (var category in Expenses)
             {
-                <td scope="expenses-col"><input type="number" value="@category.Expenses.Utilities"
+                <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Utilities"
                     @onchange="@(e => EditExpenses(e, category.Expenses, "Utilities"))"></td>
             }
         </tr>
@@ -222,7 +222,7 @@
             <td scope="expenses-col">Vacation</td>
             @foreach (var category in Expenses)
             {
-                <td scope="expenses-col"><input type="number" value="@category.Expenses.Vacation"
+                <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Vacation"
                     @onchange="@(e => EditExpenses(e, category.Expenses, "Vacation"))"></td>
             }
         </tr>
@@ -230,7 +230,7 @@
             <td scope="expenses-col">Transportation</td>
             @foreach (var category in Expenses)
             {
-                <td scope="expenses-col"><input type="number" value="@category.Expenses.Transportation"
+                <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Transportation"
                     @onchange="@(e => EditExpenses(e, category.Expenses, "Transportation"))"></td>
             }
         </tr>
@@ -238,7 +238,7 @@
             <td scope="expenses-col">Medicine</td>
             @foreach (var category in Expenses)
             {
-                <td scope="expenses-col"><input type="number" value="@category.Expenses.Medicine"
+                <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Medicine"
                     @onchange="@(e => EditExpenses(e, category.Expenses, "Medicine"))"></td>
             }
         </tr>
@@ -246,7 +246,7 @@
             <td scope="expenses-col">Clothing</td>
             @foreach (var category in Expenses)
             {
-                <td scope="expenses-col"><input type="number" value="@category.Expenses.Clothing"
+                <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Clothing"
                     @onchange="@(e => EditExpenses(e, category.Expenses, "Clothing"))"></td>
             }
         </tr>
@@ -254,7 +254,7 @@
             <td scope="expenses-col">Media</td>
             @foreach (var category in Expenses)
             {
-                <td scope="expenses-col"><input type="number" value="@category.Expenses.Media"
+                <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Media"
                     @onchange="@(e => EditExpenses(e, category.Expenses, "Media"))"></td>
             }
         </tr>
@@ -262,7 +262,7 @@
             <td scope="expenses-col">Insuranses</td>
             @foreach (var category in Expenses)
             {
-                <td scope="expenses-col"><input type="number" value="@category.Expenses.Insuranses"
+                <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Insuranses"
                     @onchange="@(e => EditExpenses(e, category.Expenses, "Insuranses"))"></td>
             }
         </tr>
@@ -274,15 +274,14 @@
 </div>
 
 @code {
-    private decimal selected;
     private int yearId;
-    private IEnumerable<YearModel> Years = new List<YearModel>();
-    private IEnumerable<BudgetModel> Months = new List<BudgetModel>();
-    private IEnumerable<BudgetModel> Income = new List<BudgetModel>();
-    private IEnumerable<BudgetModel> Savings = new List<BudgetModel>();
-    private IEnumerable<BudgetModel> Expenses = new List<BudgetModel>();
+    private IEnumerable<YearModel>? Years = new List<YearModel>();
+    private IEnumerable<BudgetModel>? Months = new List<BudgetModel>();
+    private IEnumerable<BudgetModel>? Income = new List<BudgetModel>();
+    private IEnumerable<BudgetModel>? Savings = new List<BudgetModel>();
+    private IEnumerable<BudgetModel>? Expenses = new List<BudgetModel>();
     private DateTime? selectedPeriod = DateTime.Now;
-    private List<string> messages = new List<string>();
+    private List<string?> messages = new List<string?>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -291,13 +290,13 @@
         Income = await incomeApiClient.GetIncomeByEachMonthAsync();
         Savings = await savingsApiClient.GetSavingByEachMonthAsync();
         Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
-        datePicker.SetMinAndMaxYearPeriodForCalendar(Years);
-        yearId = Years.Select(year => year.Id).LastOrDefault();
-        MessageService.OnMessage += MessageHandler;
+        datePicker.SetMinAndMaxYearPeriodForCalendar(Years!);
+        yearId = Years!.Select(year => year.Id).LastOrDefault();
+        MessageService.OnMessage += MessageHandler!;
     }
     public void Dispose()
     {
-        MessageService.OnMessage -= MessageHandler;
+        MessageService.OnMessage -= MessageHandler!;
     }
 
     private async void MessageHandler(string message)
@@ -315,7 +314,7 @@
 
     public async Task GetDataByMonthIdAsync()
     {
-        yearId = datePicker.FindYearId(selectedPeriod, Years, Months);
+        yearId = datePicker.FindYearId(selectedPeriod, Years!, Months!);
         await GetExpensesByYearIdAsync(yearId);
         await GetIncomeByYearIdAsync(yearId);
         await GetSavingsByYearIdAsync(yearId);
@@ -339,7 +338,7 @@
 
     public async Task EditIncome(ChangeEventArgs e, IncomeModel model, string propertyName)
     {
-        string value = e.Value.ToString();
+        string? value = e?.Value?.ToString();
         decimal selectedValue;
         Decimal.TryParse(value, out selectedValue);
 
@@ -357,7 +356,7 @@
 
     public async Task EditSavings(ChangeEventArgs e, SavingsModel model, string propertyName)
     {
-        string value = e.Value.ToString();
+        string? value = e?.Value?.ToString();
         decimal selectedValue;
         Decimal.TryParse(value, out selectedValue);
 
@@ -375,7 +374,7 @@
 
     public async Task EditExpenses(ChangeEventArgs e, ExpensesModel model, string propertyName)
     {
-        string value = e.Value.ToString();
+        string? value = e?.Value?.ToString();
         decimal selectedValue;
         Decimal.TryParse(value, out selectedValue);
 
@@ -393,7 +392,7 @@
 
     public async Task AddIncome()
     {
-        int monthId = Months.Where(m => m.YearId == yearId && m.IncomeId == 0).Select(m => m.Id).FirstOrDefault();
+        int monthId = Months!.Where(m => m.YearId == yearId && m.IncomeId == 0).Select(m => m.Id).FirstOrDefault();
         IncomeModel IncomeModel = new IncomeModel
             {
                 YearId = yearId,
@@ -406,7 +405,7 @@
 
     public async Task AddSavings()
     {
-        int monthId = Months.Where(m => m.YearId == yearId && m.SavingsId == 0).Select(m => m.Id).FirstOrDefault();
+        int monthId = Months!.Where(m => m.YearId == yearId && m.SavingsId == 0).Select(m => m.Id).FirstOrDefault();
         SavingsModel SavingsModel = new SavingsModel
             {
                 YearId = yearId,
@@ -419,7 +418,7 @@
 
     public async Task AddExpenses()
     {
-        int monthId = Months.Where(m => m.YearId == yearId && m.ExpensesId == 0).Select(m => m.Id).FirstOrDefault();
+        int monthId = Months!.Where(m => m.YearId == yearId && m.ExpensesId == 0).Select(m => m.Id).FirstOrDefault();
         ExpensesModel ExpensesModel = new ExpensesModel
             {
                 YearId = yearId,
@@ -432,8 +431,8 @@
 
     public async Task RemoveIncome()
     {
-        List<IncomeModel> income = await incomeApiClient.GetIncomeAsync();
-        int incomeId = income.Select(income => income.Id).LastOrDefault();
+        List<IncomeModel>? income = await incomeApiClient.GetIncomeAsync();
+        int incomeId = income!.Select(income => income.Id).LastOrDefault();
         await incomeApiClient.DeleteIncomeByIdAsync(incomeId);
         Income = await incomeApiClient.GetIncomeByEachMonthAsync();
         Months = await monthsApiClient.GetMonthsAsync();
@@ -441,8 +440,8 @@
     }
     public async Task RemoveSavings()
     {
-        List<SavingsModel> savings = await savingsApiClient.GetSavingsAsync();
-        int savingsId = savings.Select(savings => savings.Id).LastOrDefault();
+        List<SavingsModel>? savings = await savingsApiClient.GetSavingsAsync();
+        int savingsId = savings!.Select(savings => savings.Id).LastOrDefault();
         await savingsApiClient.DeleteSavingsByIdAsync(savingsId);
         Savings = await savingsApiClient.GetSavingByEachMonthAsync();
         Months = await monthsApiClient.GetMonthsAsync();
@@ -450,8 +449,8 @@
     }
     public async Task RemoveExpenses()
     {
-        List<ExpensesModel> expenses = await expensesApiClient.GetExpensesAsync();
-        int expensesId = expenses.Select(expenses => expenses.Id).LastOrDefault();
+        List<ExpensesModel>? expenses = await expensesApiClient.GetExpensesAsync();
+        int expensesId = expenses!.Select(expenses => expenses.Id).LastOrDefault();
         await expensesApiClient.DeleteExpensesByIdAsync(expensesId);
         Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
         Months = await monthsApiClient.GetMonthsAsync();
@@ -460,8 +459,8 @@
 
     public async Task UpdateMonthOnIncomePostAsync()
     {
-        BudgetModel? month = Months.Where(m => m.YearId == yearId && m.IncomeId == 0).Select(m => m).FirstOrDefault();
-        List<IncomeModel> income = await incomeApiClient.GetIncomeAsync();
+        BudgetModel? month = Months!.Where(m => m.YearId == yearId && m.IncomeId == 0).Select(m => m).FirstOrDefault();
+        List<IncomeModel>? income = await incomeApiClient.GetIncomeAsync();
 
         month!.IncomeId = income!.Where(income => income.MonthId == month.Id && income.YearId ==
         yearId).Select(income => income.Id).FirstOrDefault();
@@ -472,8 +471,8 @@
     }
     public async Task UpdateMonthOnSavingsPostAsync()
     {
-        BudgetModel? month = Months.Where(m => m.YearId == yearId && m.SavingsId == 0).Select(m => m).FirstOrDefault();
-        List<SavingsModel> savings = await savingsApiClient.GetSavingsAsync();
+        BudgetModel? month = Months!.Where(m => m.YearId == yearId && m.SavingsId == 0).Select(m => m).FirstOrDefault();
+        List<SavingsModel>? savings = await savingsApiClient.GetSavingsAsync();
 
         month!.SavingsId = savings!.Where(savings => savings.MonthId == month.Id && savings.YearId ==
         yearId).Select(savings => savings.Id).FirstOrDefault();
@@ -484,8 +483,8 @@
     }
     public async Task UpdateMonthOnExpensesPostAsync()
     {
-        BudgetModel? month = Months.Where(m => m.YearId == yearId && m.ExpensesId == 0).Select(m => m).FirstOrDefault();
-        List<ExpensesModel> expenses = await expensesApiClient.GetExpensesAsync();
+        BudgetModel? month = Months!.Where(m => m.YearId == yearId && m.ExpensesId == 0).Select(m => m).FirstOrDefault();
+        List<ExpensesModel>? expenses = await expensesApiClient.GetExpensesAsync();
 
         month!.ExpensesId = expenses!.Where(expenses => expenses.MonthId == month.Id && expenses.YearId ==
         yearId).Select(expenses => expenses.Id).FirstOrDefault();
