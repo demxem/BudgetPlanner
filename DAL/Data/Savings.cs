@@ -87,7 +87,10 @@ public class Savings : ISavings
 
     public async Task DeleteSavings(int id)
     {
-        string sql = @"delete 
+        string sql = @"with delete_budget as(
+                        delete from budget
+                       where monthid = (select monthid from savings where id = @id) AND type='Savings')
+                        delete 
                        from savings
                        where Id = @Id;
                        update months

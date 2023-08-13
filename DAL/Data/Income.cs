@@ -72,8 +72,10 @@ public class Income : IIncome
 
     public async Task DeleteIncomeById(int id)
     {
-        string sql = @"delete 
-                       from income
+        string sql = @" with delete_budget as (
+                        delete from budget
+                       where monthid = (select monthid from income where id = @id) AND type='Income')
+                       delete from income
                        where id = @id;
                     update months
                     set incomeid = 0

@@ -199,7 +199,7 @@
             @foreach (var category in Expenses)
             {
                 <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Housing"
-                    @onchange="@(e => EditExpenses(e, category.Expenses, "HealthNeeds"))"></td>
+                    @onchange="@(e => EditExpenses(e, category.Expenses, "Housing"))"></td>
             }
         </tr>
         <tr>
@@ -393,6 +393,8 @@
     public async Task AddIncome()
     {
         int monthId = Months!.Where(m => m.YearId == yearId && m.IncomeId == 0).Select(m => m.Id).FirstOrDefault();
+        if (Months!.Where(m => m.Name!.Contains("December")).Select(m => m.IncomeId != 0).First())
+            return;
         IncomeModel IncomeModel = new IncomeModel
             {
                 YearId = yearId,
@@ -406,6 +408,8 @@
     public async Task AddSavings()
     {
         int monthId = Months!.Where(m => m.YearId == yearId && m.SavingsId == 0).Select(m => m.Id).FirstOrDefault();
+        if (Months!.Where(m => m.Name!.Contains("December")).Select(m => m.SavingsId != 0).First())
+            return;
         SavingsModel SavingsModel = new SavingsModel
             {
                 YearId = yearId,
@@ -419,6 +423,8 @@
     public async Task AddExpenses()
     {
         int monthId = Months!.Where(m => m.YearId == yearId && m.ExpensesId == 0).Select(m => m.Id).FirstOrDefault();
+        if (Months!.Where(m => m.Name!.Contains("December")).Select(m => m.ExpensesId != 0).First())
+            return;
         ExpensesModel ExpensesModel = new ExpensesModel
             {
                 YearId = yearId,

@@ -12,27 +12,41 @@ public class DatePicker
     public string MinDashboardDate = "";
     public string MaxDashboardDate = "";
     public string DashBoardSelectedMonth = "";
-    public string Date = "";
+    public string SelectedDate = "";
+    public int DaysInMonth = 1;
+    public bool ParserResult = false;
 
-    public void ParseDate(ChangeEventArgs e)
+    public void ParseDate(ChangeEventArgs e, List<YearModel> years, DateTime? selectedDate)
     {
         var userInputDate = e?.Value?.ToString();
+
+        int selectedYear = selectedDate!.Value.Year;
+        int selectedMonth = selectedDate.Value.Month;
+        DaysInMonth = DateTime.DaysInMonth(selectedYear, selectedMonth);
+
         DateTime date;
+
         var result = DateTime.TryParse(userInputDate, out date);
         if (result == true)
         {
-            Date = date.ToString("MMMM dd, yyyy");
+            SelectedDate = new DateTime(selectedYear, selectedMonth, date.Day).ToString("MMMM dd, yyyy");
+            string[] splitDate = SelectedDate.Split(" ");
+            SelectedDate = splitDate[0].Replace(" ", "");
+            ParserResult = result;
         }
         else
         {
-            Date = DateTime.Now.ToString("MMMM dd, yyyy");
+            SelectedDate = DateTime.Now.ToString("MMMM dd, yyyy");
+            string[] splitDate = SelectedDate.Split(" ");
+            SelectedDate = splitDate[0].Replace(" ", "");
+            ParserResult = result;
         }
     }
 
     public DateTime GetDate()
     {
         DateTime date;
-        var result = DateTime.TryParse(Date, out date);
+        var result = DateTime.TryParse(SelectedDate, out date);
         if (result == true)
         {
             return date;
@@ -77,6 +91,26 @@ public class DatePicker
         int monthId = months.Where(m => m.YearId == yearid && m.Name!.Equals(month)).Select(m => m.Id).FirstOrDefault();
 
         return monthId;
+    }
+
+    public int FindMonthIdByParsedDate(IEnumerable<YearModel> years, IEnumerable<BudgetModel> months)
+    {
+        string[] splitDate = SelectedDate.Split(" ");
+        string month = splitDate[0].Replace(" ", "");
+        string year = splitDate[2].Replace(",", "");
+
+        int yearid = years.Where(y => y.Name!.Equals(year)).Select(y => y.Id).FirstOrDefault();
+        int monthId = months.Where(m => m.YearId == yearid && m.Name!.Equals(month)).Select(m => m.Id).FirstOrDefault();
+
+        return monthId;
+    }
+    public int FindYearIdByParsedDate(IEnumerable<YearModel> years, IEnumerable<BudgetModel> months)
+    {
+        string[] splitDate = SelectedDate.Split(" ");
+        string year = splitDate[2].Replace(",", "");
+        int yearid = years.Where(y => y.Name!.Equals(year)).Select(y => y.Id).FirstOrDefault();
+
+        return yearid;
     }
 
     public void SetMinAndMaxYearPeriodForCalendar(IEnumerable<YearModel> Years)

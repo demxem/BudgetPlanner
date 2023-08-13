@@ -32,6 +32,26 @@ namespace Client.Services
             return new List<DetailedBudgetModel>();
         }
 
+        public async Task<List<DetailedBudgetModel?>> GetBudgetByMonthIdAsync(int id)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"/years/months/budget/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var budget = await response.Content.ReadFromJsonAsync<List<DetailedBudgetModel>>();
+
+                    return budget!;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            return new List<DetailedBudgetModel?>();
+        }
+
         public async Task InsertBudgetAsync(DetailedBudgetModel budget)
         {
             try

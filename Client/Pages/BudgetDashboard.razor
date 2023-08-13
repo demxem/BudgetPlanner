@@ -820,13 +820,12 @@ new PieChartModel { Name = "Income", Value = 0 },
 new PieChartModel { Name = "Expenses", Value = 0 },
 new PieChartModel { Name = "Savings", Value = 0 }
     };
-    private PieChartModel[]? ActualGroupBarChart = new PieChartModel[3]
-    {
+    private PieChartModel[]? ActualGroupBarChart = new PieChartModel[3]{
 new PieChartModel { Name = "Income", Value = 0 },
 new PieChartModel { Name = "Expenses", Value = 0 },
 new PieChartModel { Name = "Savings", Value = 0 }
-    };
-    ApexChartOptions<PieChartModel>? options;
+};
+    private ApexChartOptions<PieChartModel>? options;
     private IEnumerable<BudgetModel>? Expenses = new List<BudgetModel>();
     private IEnumerable<BudgetModel>? Savings = new List<BudgetModel>();
     public IEnumerable<BudgetModel>? Income = new List<BudgetModel>();
@@ -910,13 +909,17 @@ new PieChartModel { Name = "Savings", Value = 0 }
         foreach (var item in BudgetCompletion!.GetType().GetProperties())
         {
             decimal category = (decimal)item.GetValue(BudgetCompletion, null)!;
+
             if (item.Name.Contains("Income"))
             {
                 if (category >= 0)
                 {
                     trackedRemainingIncome += category;
                 }
-                else if (category <= 0) { trackedExcessIncome += Math.Abs(category); }
+                else if (category <= 0)
+                {
+                    trackedExcessIncome += Math.Abs(category);
+                }
             }
             if (item.Name.Contains("Savings"))
             {
@@ -925,7 +928,10 @@ new PieChartModel { Name = "Savings", Value = 0 }
                 {
                     trackedRemainingSavings += category;
                 }
-                else if (category <= 0) { trackedExcessSavings += Math.Abs(category); }
+                else if (category <= 0)
+                {
+                    trackedExcessSavings += Math.Abs(category);
+                }
             }
             if (item.Name.Contains("Expenses"))
             {
@@ -934,7 +940,10 @@ new PieChartModel { Name = "Savings", Value = 0 }
                 {
                     trackedRemainingExpenses += category;
                 }
-                else if (category <= 0) { trackedExcessExpenses += Math.Abs(category); }
+                else if (category <= 0)
+                {
+                    trackedExcessExpenses += Math.Abs(category);
+                }
             }
         }
     }

@@ -94,7 +94,7 @@ public class BudgetCompletion : IBudgetCompletion
                             (e.trackedclothing/NULLIF(e.clothing, 0) * 100) as ExpensesCompletedClothing,
                             (e.trackedmedia/NULLIF(e.media, 0) * 100) as ExpensesCompletedMedia,
                             (e.trackedinsuranses/NULLIF(e.insuranses, 0) * 100) as ExpensesCompletedInsuranses,
-                            (s.emergencyfund/NULLIF(s.emergencyfund, 0) * 100) as SavingsCompletedEmergencyFund,
+                            (s.trackedemergencyfund/NULLIF(s.emergencyfund, 0) * 100) as SavingsCompletedEmergencyFund,
                             (s.trackedretirementaccount/NULLIF(s.retirementaccount, 0) * 100) as SavingsCompletedRetirementAccount,
                             (s.trackedvacation/NULLIF(s.vacation, 0) * 100) as SavingsCompletedVacation,
                             (s.trackedhealthneeds/NULLIF(s.healthneeds, 0) * 100) as SavingsCompletedHealthNeeds 

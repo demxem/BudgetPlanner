@@ -72,6 +72,10 @@
     #details-input {
         width: 850px;
     }
+
+    #date-col {
+        width: 200px;
+    }
 </style>
 
 
@@ -137,8 +141,7 @@
                             </tr>
                         </thead>
                         <tr>
-                            <td><input type="text" value="@datePicker.Date" @onchange="@(e => datePicker.ParseDate(e))">
-                            </td>
+                            <td id="date-col">@selectedPeriod!.Value.ToString("MMMM dd, yyyy")</td>
                             <td>
                                 <select class="form-select form-select-sm" aria-label=".form-select-sm example"
                                 @onchange="((ChangeEventArgs e) => itemType = e?.Value?.ToString())">
@@ -188,19 +191,15 @@
                         @foreach (var item in Budget!)
                         {
                             <tr>
-                                <td>@item.Date.ToString("MMMM dd, yyyy")</td>
+                                <td>@item!.Date.ToString("MMMM dd, yyyy")</td>
                                 <td>@item.Type</td>
                                 <td>@item.Category</td>
                                 <td>@item.Details</td>
                                 <td>@item.Amount</td>
                                 <td>@item.Balance</td>
-                                @* <td>
-                            <input id="remove" type="button" value="Remove"
-                            @onclick="(() => DeleteBudgetAsync(item))">
-                            </td> *@
                                 <td>
                                     <MudButton Variant="Variant.Filled" Size="Size.Small"
-                                    @onclick="(() => DeleteBudgetAsync(item))">Rem
+                                    @onclick="() => DeleteBudgetAsync(item)">Rem
                                     </MudButton>
                                 </td>
                             </tr>
@@ -210,58 +209,29 @@
             </div>
         </MudPaper>
     </MudItem>
-    @* <MudItem xs="12" sm="4">
-    <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
-    @if (ExpensesPieChart != null)
-    {
-    <ApexChart TItem="PieChartModel" Title="Value" @ref="apexChart">
-    <ApexPointSeries TItem="PieChartModel" Items="ExpensesPieChart" Name="Value" SeriesType="SeriesType.Pie"
-    XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))" OrderByDescending="e=>e.Y"
-    PointColor="e=> chart.GetPointColor(e)" ShowDataLabels />
-    </ApexChart>
-    }
-    </MudPaper>
-    </MudItem> *@
 </MudGrid>
 
 
 @code {
-    private DateTime? selectedPeriod = DateTime.Today;
-    private double[] Data = new double[3];
-    private string[] Labels = { "Income", "Savings", "Expenses" };
+    private DateTime? selectedPeriod = DateTime.Now;
     private DateTime DateOfToday = DateTime.Now;
     private List<DateModel>? Dates = new List<DateModel>();
     private List<BudgetModel>? Months = new List<BudgetModel>();
-    private IList<YearModel>? Years = new List<YearModel>();
+    private List<YearModel>? Years = new List<YearModel>();
     private BudgetModel? Income = new BudgetModel();
     private BudgetModel? Savings = new BudgetModel();
     private BudgetModel? Expenses = new BudgetModel();
     private IList<IncomeModel>? FullIncome = new List<IncomeModel>();
-    private IList<DetailedBudgetModel>? Budget = new List<DetailedBudgetModel>();
+    private IList<DetailedBudgetModel?> Budget = new List<DetailedBudgetModel?>();
     private string? itemType { get; set; } = "Income";
     private string itemCategory { get; set; } = "Employment";
     private decimal itemAmount { get; set; }
     private string itemDetails { get; set; } = "";
-
-    private float itemBalance { get; set; }
+    private decimal itemBalance { get; set; }
 
     private DateTime LatestRecordDate;
 
     private List<string> messages = new List<string>();
-    private ApexChart<PieChartModel>? apexChart = new ApexChart<PieChartModel>();
-    private PieChartModel[] ExpensesPieChart = new PieChartModel[9]
-    {
-new PieChartModel { Name = "TrackedHousing", Value = 0 },
-new PieChartModel { Name = "TrackedGroceries", Value = 0},
-new PieChartModel { Name = "TrackedUtilities", Value = 0},
-new PieChartModel { Name = "TrackedVacation", Value = 0 },
-new PieChartModel{ Name = "TrackedTransportation", Value = 0 },
-new PieChartModel { Name = "TrackedMedicine", Value = 0 },
-new PieChartModel { Name = "TrackedClothing", Value = 0 },
-new PieChartModel { Name = "TrackedMedia", Value = 0 },
-new PieChartModel { Name = "TrackedInsuranses", Value = 0 }
-    };
-    private ApexChartOptions<PieChartModel> options { get; set; } = new();
     private enum Action
     {
         AddTrackedCategory,
@@ -277,7 +247,6 @@ new PieChartModel { Name = "TrackedInsuranses", Value = 0 }
 
     protected override async Task OnInitializedAsync()
     {
-        options = chart.SetOptionsForBarChart(options);
         Dates = await dateApiClient.GetLatestDateAsync();
         GetLatestRecordDate();
         Years = await yearsApiClient.GetYearsAsync();
@@ -285,8 +254,7 @@ new PieChartModel { Name = "TrackedInsuranses", Value = 0 }
         Income = await incomeApiClient.GetLatestIncomeAsync();
         Savings = await savingsApiClient.GetLatestSavingsAsync();
         Expenses = await expensesApiClient.GetLatestExpensesAsync();
-        Budget = await detailedBudgetApiClient.GetBudgetAsync();
-        ExpensesPieChart = chart.SetExpensesPieChart(Expenses!);
+        Budget = await detailedBudgetApiClient.GetBudgetByMonthIdAsync(Months!.Select(m => m.Id).LastOrDefault()!);
         datePicker.SetMinAndMaxYearPeriodForCalendar(Years!);
         datePicker.SetDashboardIntervals(selectedPeriod);
     }
@@ -296,7 +264,7 @@ new PieChartModel { Name = "TrackedInsuranses", Value = 0 }
         await GetIncomeByMonthIdAsync(monthId);
         await GetExpensesByMonthIdAsync(monthId);
         await GetSavingsByMonthIdAsync(monthId);
-        await UpdateChartsAsync();
+        await GetBudgetByMonthIdAsync();
         datePicker.SetDashboardIntervals(selectedPeriod);
     }
 
@@ -316,23 +284,13 @@ new PieChartModel { Name = "TrackedInsuranses", Value = 0 }
         StateHasChanged();
     }
 
-    private async Task UpdateChartsAsync()
-    {
-        var groupResult = chart.SetExpensesPieChart(Expenses!);
-        Array.Copy(groupResult, ExpensesPieChart, 9);
-
-        if (apexChart == null)
-            return;
-
-        await apexChart.UpdateSeriesAsync();
-    }
-
     private void GetLatestRecordDate() => LatestRecordDate = Dates!.Select(date =>
     date.LatestDate).FirstOrDefault();
 
-    private async Task GetBudgetAsync()
+    private async Task GetBudgetByMonthIdAsync()
     {
-        Budget = await detailedBudgetApiClient.GetBudgetAsync();
+        int monthId = datePicker.FindMonthId(selectedPeriod, Years!, Months!);
+        Budget = await detailedBudgetApiClient.GetBudgetByMonthIdAsync(monthId);
         StateHasChanged();
     }
 
@@ -341,10 +299,10 @@ new PieChartModel { Name = "TrackedInsuranses", Value = 0 }
 
     private async Task PostBudgetAsync()
     {
-        DateTime selectedDate = datePicker.GetDate();
+        int monthId = datePicker.FindMonthId(selectedPeriod, Years!, Months!);
         var DetailedBudgetModel = new DetailedBudgetModel
             {
-                Date = selectedDate,
+                Date = selectedPeriod!.Value,
                 Type = itemType!,
                 Category = itemCategory,
                 Details = itemDetails,
@@ -355,14 +313,36 @@ new PieChartModel { Name = "TrackedInsuranses", Value = 0 }
 
         await detailedBudgetApiClient.InsertBudgetAsync(DetailedBudgetModel);
         await UpdateTrackedCategoryOnBudgetAdd();
-        await GetBudgetAsync();
+        await GetBudgetByMonthIdAsync();
     }
 
+    private void SetBalanceOnBudgetCategoryAdd()
+    {
+        decimal agregateAmount = Budget.Where(budget => budget!.Type.Equals("Income")).Select(budget =>
+        budget!.Amount).Sum();
+
+        if (itemType!.Equals("Income") == false)
+        {
+            itemBalance = agregateAmount + itemAmount;
+        }
+        itemBalance = agregateAmount - itemAmount;
+    }
+
+    private void CountBalanceOnRemove()
+    {
+        if (itemType!.Equals("Income") == false)
+        {
+            itemBalance += itemAmount;
+        }
+    }
     private async Task DeleteBudgetAsync(DetailedBudgetModel item)
     {
         await detailedBudgetApiClient.DeleteBudgetAsync(item.Id);
+        await GetIncomeByMonthIdAsync(item.MonthId);
+        await GetSavingsByMonthIdAsync(item.MonthId);
+        await GetExpensesByMonthIdAsync(item.MonthId);
         await UpdateTrackedCategoryOnBudgetRemove(item);
-        await GetBudgetAsync();
+        await GetBudgetByMonthIdAsync();
     }
 
     private async Task UpdateTrackedCategoryOnBudgetAdd()

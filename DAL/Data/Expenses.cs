@@ -104,8 +104,10 @@ public class Expenses : IExpenses
 
     public async Task DeleteExpenses(int id)
     {
-        string sql = @"delete 
-                       from expenses
+        string sql = @"with delete_expenses as(
+                         delete from budget
+                       where monthid = (select monthid from expenses where id = @id) AND type='Expenses')
+                       delete from expenses
                        where id = @id;
                     update months
                     set expensesid = 0

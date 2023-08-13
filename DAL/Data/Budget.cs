@@ -204,7 +204,7 @@ public class Budget : IBudget
             return result;
         }
     }
-    public async Task<BudgetModel?> GetSavingsByMonthId(int id)
+    public async Task<BudgetModel> GetSavingsByMonthId(int id)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
@@ -222,7 +222,7 @@ public class Budget : IBudget
                 return month;
             }, new { MonthId = id });
 
-            return result.FirstOrDefault();
+            return result.FirstOrDefault()!;
         }
     }
     public async Task<IEnumerable<BudgetModel?>> GetExpensesByYearId(int id)
@@ -250,7 +250,7 @@ public class Budget : IBudget
             return result;
         }
     }
-    public async Task<BudgetModel?> GetExpensesByMonthId(int id)
+    public async Task<BudgetModel> GetExpensesByMonthId(int id)
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {
@@ -272,7 +272,7 @@ public class Budget : IBudget
                 return month;
             }, new { MonthId = id });
 
-            return result.FirstOrDefault();
+            return result.FirstOrDefault()!;
         }
     }
 

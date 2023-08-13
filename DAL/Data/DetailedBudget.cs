@@ -26,6 +26,19 @@ public class DetailedBudget : IDetailedBudget
             return result;
         }
     }
+    public async Task<IEnumerable<DetailedBudgetModel>> GetBudgetByMonthId(int id)
+    {
+
+        using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
+        {
+            string sql = @"select * from budget
+                            where monthid = @id
+                            order by date desc;";
+
+            var result = await connection.QueryAsync<DetailedBudgetModel>(sql, new { id });
+            return result;
+        }
+    }
 
     public async Task InsertBudget(DetailedBudgetModel budget)
     {

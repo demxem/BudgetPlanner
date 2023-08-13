@@ -9,7 +9,7 @@ public static class DetailedBudgetModule
     {
         //endpoints
         endpoints.MapGet("/years/months/budget/", GetBudget);
-        // endpoints.MapGet("/years/months/budget/{id}", GetbudgetById);
+        endpoints.MapGet("/years/months/budget/{id}", GetBudgetByMonthId);
         endpoints.MapPost("/years/months/budget/", InsertBudget);
         endpoints.MapPut("/years/months/budget/{id}", UpdateBudget);
         endpoints.MapDelete("/years/months/budget/{id}", DeleteBudget);
@@ -26,20 +26,21 @@ public static class DetailedBudgetModule
         }
     }
 
-    // private static async Task<IResult> GetbudgetById(int id, Ibudget data)
-    // {
-    //     try
-    //     {
-    //         var results = await data.GetbudgetById(id);
-    //         if (results == null) return Results.NotFound();
-    //         return Results.Ok(results);
-    //     }
+    private static async Task<IResult> GetBudgetByMonthId(int id, IDetailedBudget data)
+    {
+        try
+        {
+            var results = await data.GetBudgetByMonthId(id);
+            if (results == null)
+                return Results.NotFound();
+            return Results.Ok(results);
+        }
 
-    //     catch (Exception ex)
-    //     {
-    //         return Results.Problem(ex.Message);
-    //     }
-    // }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
 
     private static async Task<IResult> InsertBudget(DetailedBudgetModel budget, IDetailedBudget data)
     {

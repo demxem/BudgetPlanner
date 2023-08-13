@@ -14,7 +14,7 @@ public class Years : IYears
         _config = config;
     }
 
-    public async Task<IEnumerable<YearModel?>> GetYears()
+    public async Task<IEnumerable<YearModel>> GetYears()
     {
         using (var connection = new NpgsqlConnection(_config.GetConnectionString("Default")))
         {

@@ -28,7 +28,7 @@ public class PieChart : IPieChart
                 string propertyName = property.Name;
                 if (propertyName.Equals("Employment") || propertyName.Equals("SideHustle") || propertyName.Equals("Dividends"))
                 {
-                    decimal propertyValue = (decimal)property.GetValue(item, null);
+                    decimal propertyValue = (decimal)property.GetValue(item, null)!;
                     Pie.Add(new PieChartModel { Name = propertyName, Value = propertyValue });
                 }
             }
