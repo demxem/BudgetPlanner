@@ -5,4 +5,5 @@
   <p>PostgreSql and database Design</p>
   <p>Blazor/MudBlazor framework</p>
   <p>Razor Components</>
+  <p>Events</p>
 
