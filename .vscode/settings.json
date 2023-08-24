@@ -29,7 +29,7 @@
         }
     ],
     "dotnet.defaultSolution": "BudgetPlanner.sln",
-    "workbench.colorTheme": "Just Black",
+    "workbench.colorTheme": "Just Black + Comments",
     "files.exclude": {
         "": true
     }
