@@ -1,0 +1,56 @@
+@namespace Client.Components
+
+@inject Client.Services.YearApiClient yearsApiClient
+@inject IMessageService MessageService
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField T="string" Label="Name" @bind-Value="@inputYearName"></MudTextField>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="MudBlazor.Color.Primary" OnClick="@SubmitAsync">Ok
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private string inputYearName = "";
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+
+    public async Task PostYearAsync()
+    {
+        YearModel inputYear = new YearModel
+            {
+                Name = inputYearName
+            };
+
+        await yearsApiClient.PostYearAsync(inputYear);
+    }
+
+    async Task SubmitAsync()
+    {
+        await PostYearAsync();
+        SendMessage();
+        MudDialog?.Close(DialogResult.Ok(true));
+    }
+
+    private void SendMessage()
+    {
+        MessageService.SendMessage("YearPosted");
+    }
+
+    private void ClearMessages()
+    {
+        MessageService.ClearMessages();
+    }
+    void Cancel() => MudDialog?.Cancel();
+}
+
+
+
+
+
+
+
+

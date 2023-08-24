@@ -1,6 +1,5 @@
-using DAL.ComplexData;
-using DAL.Data;
-using DAL.Models;
+using DataBase.Data;
+using DataBase.Models;
 
 namespace Api.Modules
 {
@@ -8,29 +7,33 @@ namespace Api.Modules
     {
         public static void RegisterBudgetEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            //endpoints
-            endpoints.MapGet("/months/income/{id}", GetIncomeByMonthId);
-            endpoints.MapGet("/years/months/total/{id}", GetAllByMonthId);
-            endpoints.MapGet("/years/months/income", GetIncomeByMonth);
-            endpoints.MapGet("/years/months/savings", GetSavingsByMonth);
-            endpoints.MapGet("/years/months/expenses", GetExpensesByMonth);
-            endpoints.MapGet("/years/months/income/{id}", GetIncomeByYearId);
-            endpoints.MapGet("/years/months/income/month/{id}", GetIncomeByMonthId);
-            endpoints.MapGet("/years/months/savings/month/{id}", GetSavingsByMonthId);
-            endpoints.MapGet("/years/months/expenses/month/{id}", GetExpensesByMonthId);
-            endpoints.MapGet("/years/months/expenses/{id}", GetExpensesByYearId);
-            endpoints.MapGet("/years/months/savings/{id}", GetSavingsByYearId);
-            endpoints.MapGet("/years/months/{id}", GetMonthByYearId);
-            endpoints.MapGet("/years/months", GetMonths);
-            endpoints.MapPost("/years/months", InsertMonth);
+            //Income
+            endpoints.MapGet("/budget/income/{id}", GetBudgetIncomeByMonthIdAsync);
+            endpoints.MapGet("/budget/income", GetBudgetIncomeAsync);
+            endpoints.MapGet("/budget/years/income/{id}", GetBudgetIncomeByYearIdAsync);
+            endpoints.MapGet("/budget/years/months/income/{id}", GetBudgetIncomeByMonthIdAsync);
+            //Savings
+            endpoints.MapGet("/budget/savings", GetBudgetSavingsAsync);
+            endpoints.MapGet("/budget/years/savings/{id}", GetBudgetSavingsByYearIdAsync);
+            endpoints.MapGet("/budget/years/months/savings/{id}", GetBudgetSavingsByMonthIdAsync);
+            //Expenses
+            endpoints.MapGet("/budget/expenses", GetBudgetExpensesAsync);
+            endpoints.MapGet("/budget/years/expenses/{id}", GetBudGetBudgetExpensesByYearIdAsync);
+            endpoints.MapGet("/budget/years/months/expenses/{id}", GetBudGetBudgetExpensesByMonthIdAsync);
+            //Budget
+            endpoints.MapGet("/budget", GetBudgetAsync);
+            endpoints.MapGet("/years/months/budget/{id}", GetBudgetByMonthIdAsync);
+            endpoints.MapGet("/years/budget/{id}", GetBudgetByYearIdAsync);
+            //Months
+            endpoints.MapGet("/years/months/{id}", GetMonthByYearIdAsync);
+            endpoints.MapGet("/years/months", GetMonthsAsync);
+            endpoints.MapPost("/years/months", AddMonth);
             endpoints.MapPut("/years/months/{id}", UpdateMonth);
-            endpoints.MapPost("/years/months/incomeByYearId/", InsertIncomeByYearId);
-            endpoints.MapDelete("/years/months/{id}", DeleteMonthById);
-            endpoints.MapGet("/months/budget", GetBudget);
-            endpoints.MapGet("/months/PieChart", GetPieChartIncome);
+            
+            endpoints.MapDelete("/years/months/{id}", DeleteMonthByIdAsync);
         }
 
-        private static async Task<IResult> GetMonthByYearId(IBudget data, int id)
+        private static async Task<IResult> GetMonthByYearIdAsync(IBudget data, int id)
         {
             try
             {
@@ -42,11 +45,11 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> GetMonths(IBudget data)
+        private static async Task<IResult> GetMonthsAsync(IBudget data)
         {
             try
             {
-                return Results.Ok(await data.GetAllMonths());
+                return Results.Ok(await data.GetMonths());
             }
             catch (Exception ex)
             {
@@ -54,11 +57,11 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> GetIncomeByMonth(IBudget data)
+        private static async Task<IResult> GetBudgetIncomeAsync(IBudget data)
         {
             try
             {
-                return Results.Ok(await data.GetIncomeByMonth());
+                return Results.Ok(await data.GetIncome());
             }
             catch (Exception ex)
             {
@@ -66,11 +69,11 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> GetSavingsByMonth(IBudget data)
+        private static async Task<IResult> GetBudgetSavingsAsync(IBudget data)
         {
             try
             {
-                return Results.Ok(await data.GetSavingsByMonth());
+                return Results.Ok(await data.GetSavings());
             }
             catch (Exception ex)
             {
@@ -78,22 +81,22 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> GetExpensesByMonth(IBudget data)
+        private static async Task<IResult> GetBudgetExpensesAsync(IBudget data)
         {
             try
             {
-                return Results.Ok(await data.GetExpensesByMonth());
+                return Results.Ok(await data.GetExpenses());
             }
             catch (Exception ex)
             {
                 return Results.Problem(ex.Message);
             }
         }
-        private static async Task<IResult> GetBudget(IBudget data)
+        private static async Task<IResult> GetBudgetAsync(IBudget data)
         {
             try
             {
-                return Results.Ok(await data.GetBudget());
+                return Results.Ok(await data.Get());
             }
             catch (Exception ex)
             {
@@ -101,7 +104,7 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> GetIncomeByMonthId(IBudget data, int id)
+        private static async Task<IResult> GetBudgetIncomeByMonthIdAsync(IBudget data, int id)
         {
             try
             {
@@ -112,7 +115,7 @@ namespace Api.Modules
                 return Results.Problem(ex.Message);
             }
         }
-        private static async Task<IResult> GetIncomeByYearId(IBudget data, int id)
+        private static async Task<IResult> GetBudgetIncomeByYearIdAsync(IBudget data, int id)
         {
             try
             {
@@ -123,7 +126,7 @@ namespace Api.Modules
                 return Results.Problem(ex.Message);
             }
         }
-        private static async Task<IResult> GetSavingsByYearId(IBudget data, int id)
+        private static async Task<IResult> GetBudgetSavingsByYearIdAsync(IBudget data, int id)
         {
             try
             {
@@ -134,7 +137,7 @@ namespace Api.Modules
                 return Results.Problem(ex.Message);
             }
         }
-        private static async Task<IResult> GetSavingsByMonthId(IBudget data, int id)
+        private static async Task<IResult> GetBudgetSavingsByMonthIdAsync(IBudget data, int id)
         {
             try
             {
@@ -145,18 +148,18 @@ namespace Api.Modules
                 return Results.Problem(ex.Message);
             }
         }
-        private static async Task<IResult> GetExpensesByYearId(IBudget data, int id)
+        private static async Task<IResult> GetBudGetBudgetExpensesByYearIdAsync(IBudget data, int id)
         {
             try
             {
-                return Results.Ok(await data.GetExpensesByYearId(id));
+                return Results.Ok(await data.GetBudgetExpensesByYearId(id));
             }
             catch (Exception ex)
             {
                 return Results.Problem(ex.Message);
             }
         }
-        private static async Task<IResult> GetExpensesByMonthId(IBudget data, int id)
+        private static async Task<IResult> GetBudGetBudgetExpensesByMonthIdAsync(IBudget data, int id)
         {
             try
             {
@@ -168,11 +171,22 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> GetAllByMonthId(IBudget data, int id)
+        private static async Task<IResult> GetBudgetByMonthIdAsync(IBudget data, int id)
         {
             try
             {
-                return Results.Ok(await data.GetAllByMonthId(id));
+                return Results.Ok(await data.GetByMonthId(id));
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        }
+        private static async Task<IResult> GetBudgetByYearIdAsync(IBudget data, int id)
+        {
+            try
+            {
+                return Results.Ok(await data.GetByYearId(id));
             }
             catch (Exception ex)
             {
@@ -180,23 +194,11 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> InsertMonth(IBudget data, BudgetModel BudgetModel)
+        private static async Task<IResult> AddMonth(IBudget data, BudgetModel BudgetModel)
         {
             try
             {
-                await data.InsertMonth(BudgetModel);
-                return Results.Ok();
-            }
-            catch (Exception ex)
-            {
-                return Results.Problem(ex.Message);
-            }
-        }
-        private static async Task<IResult> InsertIncomeByYearId(IBudget data, BudgetModel BudgetModel)
-        {
-            try
-            {
-                await data.InsertIncomeByYearId(BudgetModel);
+                await data.AddMonth(BudgetModel);
                 return Results.Ok();
             }
             catch (Exception ex)
@@ -217,23 +219,12 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> DeleteMonthById(IBudget data, int id)
+        private static async Task<IResult> DeleteMonthByIdAsync(IBudget data, int id)
         {
             try
             {
                 await data.DeleteMonthById(id);
                 return Results.Ok();
-            }
-            catch (Exception ex)
-            {
-                return Results.Problem(ex.Message);
-            }
-        }
-        private static async Task<IResult> GetPieChartIncome(IPieChart data)
-        {
-            try
-            {
-                return Results.Ok(await data.GetPieChartIncome());
             }
             catch (Exception ex)
             {

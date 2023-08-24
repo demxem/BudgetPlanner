@@ -1,4 +1,4 @@
-using DAL.Data;
+using DataBase.Data;
 
 namespace Api.Modules
 {
@@ -7,15 +7,14 @@ namespace Api.Modules
         public static void RegisterDateEndpoints(this IEndpointRouteBuilder endpoints)
         {
             //endpoints
-            endpoints.MapGet("/years/months/date", GetLatestDate);
-
+            endpoints.MapGet("/years/months/date", GetAsync);
         }
 
-        private static async Task<IResult> GetLatestDate(IDate data)
+        private static async Task<IResult> GetAsync(IDate data)
         {
             try
             {
-                return Results.Ok(await data.GetLatestDate());
+                return Results.Ok(await data.Get());
             }
             catch (Exception ex)
             {

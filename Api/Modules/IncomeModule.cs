@@ -1,5 +1,5 @@
-using DAL.Data;
-using DAL.Models;
+using DataBase.Data;
+using DataBase.Models;
 
 namespace Api.Modules;
 
@@ -9,16 +9,16 @@ public static class IncomeModule
     {
         //endpoints
         endpoints.MapGet("/income", GetIncome);
-        // endpoints.MapGet("/years/months/income/{id}", GetIncomeById);
-        endpoints.MapPost("/years/months/income/", InsertIncome);
-        endpoints.MapPut("/years/months/income/{id}", UpdateIncome);
-        endpoints.MapDelete("/years/months/income/{id}", DeleteIncome);
+        endpoints.MapPost("/years/months/income/", AddAsync);
+        endpoints.MapPut("/years/months/income/{id}", UpdateAsync);
+        endpoints.MapDelete("/years/months/income/{id}", DeleteAsync);
     }
+
     private static async Task<IResult> GetIncome(IIncome data)
     {
         try
         {
-            return Results.Ok(await data.GetIncome());
+            return Results.Ok(await data.Get());
         }
         catch (Exception ex)
         {
@@ -26,26 +26,11 @@ public static class IncomeModule
         }
     }
 
-    // private static async Task<IResult> GetIncomeById(int id, IIncome data)
-    // {
-    //     try
-    //     {
-    //         var results = await data.GetIncomeById(id);
-    //         if (results == null) return Results.NotFound();
-    //         return Results.Ok(results);
-    //     }
-
-    //     catch (Exception ex)
-    //     {
-    //         return Results.Problem(ex.Message);
-    //     }
-    // }
-
-    private static async Task<IResult> InsertIncome(IncomeModel Income, IIncome data)
+    private static async Task<IResult> AddAsync(IncomeModel Income, IIncome data)
     {
         try
         {
-            await data.InsertIncome(Income);
+            await data.Add(Income);
             return Results.Ok();
         }
         catch (Exception ex)
@@ -54,11 +39,11 @@ public static class IncomeModule
         }
     }
 
-    private static async Task<IResult> UpdateIncome(IncomeModel income, IIncome data)
+    private static async Task<IResult> UpdateAsync(IncomeModel income, IIncome data)
     {
         try
         {
-            await data.UpdateIncome(income);
+            await data.Update(income);
             return Results.Ok();
         }
         catch (Exception ex)
@@ -67,11 +52,11 @@ public static class IncomeModule
         }
     }
 
-    private static async Task<IResult> DeleteIncome(IIncome data, int id)
+    private static async Task<IResult> DeleteAsync(IIncome data, int id)
     {
         try
         {
-            await data.DeleteIncomeById(id);
+            await data.Delete(id);
             return Results.Ok();
         }
         catch (Exception ex)

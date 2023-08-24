@@ -9,53 +9,53 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = browser
 build_property.RootNamespace = Client
 build_property.RootNamespace = Client
-build_property.ProjectDir = /Volumes/Mac/Projects/BudgetPlanner/Client/
+build_property.ProjectDir = /Volumes/Mac/BudgetPlanner/Client/
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = /Volumes/Mac/Projects/BudgetPlanner/Client
+build_property.MSBuildProjectDirectory = /Volumes/Mac/BudgetPlanner/Client
 build_property._RazorSourceGeneratorDebug = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/App.razor]
+[/Volumes/Mac/BudgetPlanner/Client/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetDashboard.razor]
+[/Volumes/Mac/BudgetPlanner/Client/Components/YearDeleteDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9ZZWFyRGVsZXRlRGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Volumes/Mac/BudgetPlanner/Client/Components/YearSubmitDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9ZZWFyU3VibWl0RGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Volumes/Mac/BudgetPlanner/Client/Pages/BudgetDashboard.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQnVkZ2V0RGFzaGJvYXJkLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetPlanning.razor]
+[/Volumes/Mac/BudgetPlanner/Client/Pages/BudgetPlanning.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQnVkZ2V0UGxhbm5pbmcucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/BudgetTracking.razor]
+[/Volumes/Mac/BudgetPlanner/Client/Pages/BudgetTracking.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQnVkZ2V0VHJhY2tpbmcucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/YearDeleteForm.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvWWVhckRlbGV0ZUZvcm0ucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Pages/YearSubmitForm.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvWWVhclN1Ym1pdEZvcm0ucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Shared/MyNavMenu.razor]
+[/Volumes/Mac/BudgetPlanner/Client/Shared/MyNavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL015TmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Shared/SurveyPrompt.razor]
+[/Volumes/Mac/BudgetPlanner/Client/Shared/SurveyPrompt.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL1N1cnZleVByb21wdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/_Imports.razor]
+[/Volumes/Mac/BudgetPlanner/Client/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Shared/MainLayout.razor]
+[/Volumes/Mac/BudgetPlanner/Client/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL01haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-ue12j0c5j8
 
-[/Volumes/Mac/Projects/BudgetPlanner/Client/Shared/NavMenu.razor]
+[/Volumes/Mac/BudgetPlanner/Client/Shared/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL05hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-dwvujiiut8

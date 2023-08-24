@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Volumes/Mac/Projects/BudgetPlanner/Tests/Tests.csproj": {}
+    "/Volumes/Mac/pl/Tests/Tests.csproj": {}
   },
   "projects": {
-    "/Volumes/Mac/Projects/BudgetPlanner/Client/Client.csproj": {
+    "/Volumes/Mac/pl/Client/Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Volumes/Mac/Projects/BudgetPlanner/Client/Client.csproj",
+        "projectUniqueName": "/Volumes/Mac/pl/Client/Client.csproj",
         "projectName": "Client",
-        "projectPath": "/Volumes/Mac/Projects/BudgetPlanner/Client/Client.csproj",
+        "projectPath": "/Volumes/Mac/pl/Client/Client.csproj",
         "packagesPath": "/Users/dmitryterentyev/.nuget/packages/",
-        "outputPath": "/Volumes/Mac/Projects/BudgetPlanner/Client/obj/",
+        "outputPath": "/Volumes/Mac/pl/Client/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/dmitryterentyev/.nuget/NuGet/NuGet.Config"
@@ -44,16 +44,16 @@
             },
             "Microsoft.AspNetCore.Components.WebAssembly": {
               "target": "Package",
-              "version": "[7.0.8, )"
+              "version": "[7.0.10, )"
             },
             "Microsoft.AspNetCore.Components.WebAssembly.DevServer": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.8, )"
+              "version": "[7.0.10, )"
             },
             "MudBlazor": {
               "target": "Package",
-              "version": "[6.5.0, )"
+              "version": "[6.9.0, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
@@ -74,7 +74,7 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-              "version": "[7.0.9, 7.0.9]"
+              "version": "[7.0.10, 7.0.10]"
             }
           ],
           "frameworkReferences": {
@@ -82,7 +82,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.306/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.400/RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
@@ -91,14 +91,14 @@
         }
       }
     },
-    "/Volumes/Mac/Projects/BudgetPlanner/Tests/Tests.csproj": {
+    "/Volumes/Mac/pl/Tests/Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Volumes/Mac/Projects/BudgetPlanner/Tests/Tests.csproj",
+        "projectUniqueName": "/Volumes/Mac/pl/Tests/Tests.csproj",
         "projectName": "Tests",
-        "projectPath": "/Volumes/Mac/Projects/BudgetPlanner/Tests/Tests.csproj",
+        "projectPath": "/Volumes/Mac/pl/Tests/Tests.csproj",
         "packagesPath": "/Users/dmitryterentyev/.nuget/packages/",
-        "outputPath": "/Volumes/Mac/Projects/BudgetPlanner/Tests/obj/",
+        "outputPath": "/Volumes/Mac/pl/Tests/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/dmitryterentyev/.nuget/NuGet/NuGet.Config"
@@ -113,8 +113,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "/Volumes/Mac/Projects/BudgetPlanner/Client/Client.csproj": {
-                "projectPath": "/Volumes/Mac/Projects/BudgetPlanner/Client/Client.csproj"
+              "/Volumes/Mac/pl/Client/Client.csproj": {
+                "projectPath": "/Volumes/Mac/pl/Client/Client.csproj"
               }
             }
           }
@@ -131,23 +131,23 @@
           "dependencies": {
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
-              "version": "[17.5.0, )"
+              "version": "[17.7.1, )"
             },
             "coverlet.collector": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.2.0, )"
+              "version": "[6.0.0, )"
             },
             "xunit": {
               "target": "Package",
-              "version": "[2.4.2, )"
+              "version": "[2.5.0, )"
             },
             "xunit.runner.visualstudio": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[2.4.5, )"
+              "version": "[2.5.0, )"
             }
           },
           "imports": [
@@ -166,7 +166,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.306/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.400/RuntimeIdentifierGraph.json"
         }
       }
     }

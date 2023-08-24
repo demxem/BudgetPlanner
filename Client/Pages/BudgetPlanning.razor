@@ -1,9 +1,13 @@
+@namespace Client.Pages
+
 @page "/budgetPlanning"
+@using Client.Components
 @inject Client.Services.YearApiClient yearApiClient
-@inject Client.Services.MonthsApiClient monthsApiClient
+@inject Client.Services.BudgetApiClient budgetApiClient
 @inject Client.Services.IncomeApiClient incomeApiClient
 @inject Client.Services.SavingsApiClient savingsApiClient
 @inject Client.Services.ExpensesApiClient expensesApiClient
+
 @inject Client.Services.DatePicker datePicker
 
 @inject IDialogService DialogService
@@ -86,8 +90,8 @@
     <p>
     <div class="incline-block">
         <div class="d-flex" style="max-width:100px;">
-            <MudDatePicker Label="Budget Year" @bind-Date="selectedPeriod" MinDate="@datePicker.MinimalPeriodInterval"
-                MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync" />
+            <MudDatePicker Label="Budget Year" @bind-Date="_selectedPeriod" MinDate="@datePicker.MinPeriodInterval"
+                MaxDate="@datePicker.MaxPeriodInteval" PickerClosed="@GetDataByYearIdAsync" />
         </div>
     </div>
     </p>
@@ -101,39 +105,39 @@
     <table>
         <tr>
             <th scope="income-row">Income</th>
-            @foreach (var month in Income!)
+            @foreach (var month in _income!)
             {
                 <th scope="income-row">@month.Name</th>
             }
         </tr>
         <tr>
             <td scope="income-col">Employment</td>
-            @foreach (var category in Income)
+            @foreach (var category in _income)
             {
                 <td scope="income-col"><input type="number" value="@category!.Income!.Employment"
-                    @onchange="@(e => EditIncome(e, category.Income, "Employment"))"></td>
+                    @onchange="@(e => EditIncomeAsync(e, category.Income, "Employment"))"></td>
             }
         </tr>
         <tr>
             <td scope="income-col">SideHustle</td>
-            @foreach (var category in Income)
+            @foreach (var category in _income)
             {
                 <td scope="income-col"><input type="number" value="@category!.Income!.SideHustle"
-                    @onchange="@(e => EditIncome(e, category.Income, "SideHustle"))"></td>
+                    @onchange="@(e => EditIncomeAsync(e, category.Income, "SideHustle"))"></td>
             }
         </tr>
         <tr>
             <td scope="income-col">Dividends</td>
-            @foreach (var category in Income)
+            @foreach (var category in _income)
             {
                 <td scope="income-col"><input type="number" value="@category!.Income!.Dividends"
-                    @onchange="@(e => EditIncome(e, category.Income, "Dividends"))"></td>
+                    @onchange="@(e => EditIncomeAsync(e, category.Income, "Dividends"))"></td>
             }
         </tr>
     </table>
     <div>
         <MudButton Variant="Variant.Filled" @onclick=@AddIncome>Add</MudButton>
-        <MudButton Variant="Variant.Filled" @onclick="@RemoveIncome">Rem</MudButton>
+        <MudButton Variant="Variant.Filled" @onclick="@RemoveIncomeAsync">Rem</MudButton>
     </div>
 </div>
 
@@ -141,47 +145,47 @@
     <table>
         <tr>
             <th scope="savings-row">Savings</th>
-            @foreach (var month in Savings!)
+            @foreach (var month in _savings!)
             {
                 <th scope="savings-row">@month.Name</th>
             }
         </tr>
         <tr>
             <td scope="savings-col">EmergencyFund</td>
-            @foreach (var category in Savings)
+            @foreach (var category in _savings)
             {
                 <td scope="savings-col"><input type="number" value="@category!.Savings!.EmergencyFund"
-                    @onchange="@(e => EditSavings(e, category.Savings, "EmergencyFund"))"></td>
+                    @onchange="@(e => EditSavingsAsync(e, category.Savings, "EmergencyFund"))"></td>
             }
         </tr>
         <tr>
             <td scope="savings-col">RetirementAccount</td>
-            @foreach (var category in Savings)
+            @foreach (var category in _savings)
             {
                 <td scope="savings-col"><input type="number" value="@category!.Savings!.RetirementAccount"
-                    @onchange="@(e => EditSavings(e, category.Savings, "RetirementAccount"))"></td>
+                    @onchange="@(e => EditSavingsAsync(e, category.Savings, "RetirementAccount"))"></td>
             }
         </tr>
         <tr>
             <td scope="savings-col">Vacation</td>
-            @foreach (var category in Savings)
+            @foreach (var category in _savings)
             {
                 <td scope="savings-col"><input type="number" value="@category!.Savings!.Vacation"
-                    @onchange="@(e => EditSavings(e, category.Savings, "Vacation"))"></td>
+                    @onchange="@(e => EditSavingsAsync(e, category.Savings, "Vacation"))"></td>
             }
         </tr>
         <tr>
             <td scope="savings-col">HealthNeeds</td>
-            @foreach (var category in Savings)
+            @foreach (var category in _savings)
             {
                 <td scope="savings-col"><input type="number" value="@category!.Savings!.HealthNeeds"
-                    @onchange="@(e => EditSavings(e, category.Savings, "HealthNeeds"))"></td>
+                    @onchange="@(e => EditSavingsAsync(e, category.Savings, "HealthNeeds"))"></td>
             }
         </tr>
     </table>
     <div>
         <MudButton Variant="Variant.Filled" @onclick=@AddSavings>Add</MudButton>
-        <MudButton Variant="Variant.Filled" @onclick="@RemoveSavings">Rem</MudButton>
+        <MudButton Variant="Variant.Filled" @onclick="@RemoveSavingsAsync">Rem</MudButton>
     </div>
 </div>
 
@@ -189,111 +193,112 @@
     <table>
         <tr>
             <th scope="expenses-row">Expenses</th>
-            @foreach (var month in Expenses!)
+            @foreach (var month in _expenses!)
             {
                 <th scope="expenses-row">@month.Name</th>
             }
         </tr>
         <tr>
             <td scope="expenses-col">Housing</td>
-            @foreach (var category in Expenses)
+            @foreach (var category in _expenses)
             {
                 <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Housing"
-                    @onchange="@(e => EditExpenses(e, category.Expenses, "Housing"))"></td>
+                    @onchange="@(e => EditExpensesAsync(e, category.Expenses, "Housing"))"></td>
             }
         </tr>
         <tr>
             <td scope="expenses-col">Groceries</td>
-            @foreach (var category in Expenses)
+            @foreach (var category in _expenses)
             {
                 <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Groceries"
-                    @onchange="@(e => EditExpenses(e, category.Expenses, "Groceries"))"></td>
+                    @onchange="@(e => EditExpensesAsync(e, category.Expenses, "Groceries"))"></td>
             }
         </tr>
         <tr>
             <td scope="expenses-col">Utilities</td>
-            @foreach (var category in Expenses)
+            @foreach (var category in _expenses)
             {
                 <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Utilities"
-                    @onchange="@(e => EditExpenses(e, category.Expenses, "Utilities"))"></td>
+                    @onchange="@(e => EditExpensesAsync(e, category.Expenses, "Utilities"))"></td>
             }
         </tr>
         <tr>
             <td scope="expenses-col">Vacation</td>
-            @foreach (var category in Expenses)
+            @foreach (var category in _expenses)
             {
                 <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Vacation"
-                    @onchange="@(e => EditExpenses(e, category.Expenses, "Vacation"))"></td>
+                    @onchange="@(e => EditExpensesAsync(e, category.Expenses, "Vacation"))"></td>
             }
         </tr>
         <tr>
             <td scope="expenses-col">Transportation</td>
-            @foreach (var category in Expenses)
+            @foreach (var category in _expenses)
             {
                 <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Transportation"
-                    @onchange="@(e => EditExpenses(e, category.Expenses, "Transportation"))"></td>
+                    @onchange="@(e => EditExpensesAsync(e, category.Expenses, "Transportation"))"></td>
             }
         </tr>
         <tr>
             <td scope="expenses-col">Medicine</td>
-            @foreach (var category in Expenses)
+            @foreach (var category in _expenses)
             {
                 <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Medicine"
-                    @onchange="@(e => EditExpenses(e, category.Expenses, "Medicine"))"></td>
+                    @onchange="@(e => EditExpensesAsync(e, category.Expenses, "Medicine"))"></td>
             }
         </tr>
         <tr>
             <td scope="expenses-col">Clothing</td>
-            @foreach (var category in Expenses)
+            @foreach (var category in _expenses)
             {
                 <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Clothing"
-                    @onchange="@(e => EditExpenses(e, category.Expenses, "Clothing"))"></td>
+                    @onchange="@(e => EditExpensesAsync(e, category.Expenses, "Clothing"))"></td>
             }
         </tr>
         <tr>
             <td scope="expenses-col">Media</td>
-            @foreach (var category in Expenses)
+            @foreach (var category in _expenses)
             {
                 <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Media"
-                    @onchange="@(e => EditExpenses(e, category.Expenses, "Media"))"></td>
+                    @onchange="@(e => EditExpensesAsync(e, category.Expenses, "Media"))"></td>
             }
         </tr>
         <tr>
             <td scope="expenses-col">Insuranses</td>
-            @foreach (var category in Expenses)
+            @foreach (var category in _expenses)
             {
                 <td scope="expenses-col"><input type="number" value="@category!.Expenses!.Insuranses"
-                    @onchange="@(e => EditExpenses(e, category.Expenses, "Insuranses"))"></td>
+                    @onchange="@(e => EditExpensesAsync(e, category.Expenses, "Insuranses"))"></td>
             }
         </tr>
     </table>
     <div>
         <MudButton Variant="Variant.Filled" @onclick=@AddExpenses>Add</MudButton>
-        <MudButton Variant="Variant.Filled" @onclick="@RemoveExpenses">Rem</MudButton>
+        <MudButton Variant="Variant.Filled" @onclick="@RemoveExpensesAsync">Rem</MudButton>
     </div>
 </div>
 
 @code {
-    private int yearId;
-    private IEnumerable<YearModel>? Years = new List<YearModel>();
-    private IEnumerable<BudgetModel>? Months = new List<BudgetModel>();
-    private IEnumerable<BudgetModel>? Income = new List<BudgetModel>();
-    private IEnumerable<BudgetModel>? Savings = new List<BudgetModel>();
-    private IEnumerable<BudgetModel>? Expenses = new List<BudgetModel>();
-    private DateTime? selectedPeriod = DateTime.Now;
-    private List<string?> messages = new List<string?>();
+    private int _yearId = 0;
+    private IEnumerable<YearModel>? _years = new List<YearModel>();
+    private IEnumerable<BudgetModel>? _months = new List<BudgetModel>();
+    private IEnumerable<BudgetModel>? _income = new List<BudgetModel>();
+    private IEnumerable<BudgetModel>? _savings = new List<BudgetModel>();
+    private IEnumerable<BudgetModel>? _expenses = new List<BudgetModel>();
+    private DateTime? _selectedPeriod = DateTime.Now;
+    private List<string?> _messages = new List<string?>();
 
     protected override async Task OnInitializedAsync()
     {
-        Years = await yearApiClient.GetYearsAsync();
-        Months = await monthsApiClient.GetMonthsAsync();
-        Income = await incomeApiClient.GetIncomeByEachMonthAsync();
-        Savings = await savingsApiClient.GetSavingByEachMonthAsync();
-        Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
-        datePicker.SetMinAndMaxYearPeriodForCalendar(Years!);
-        yearId = Years!.Select(year => year.Id).LastOrDefault();
+        _years = await yearApiClient.GetYearsAsync();
+        _months = await budgetApiClient.GetMonthsAsync();
+        _income = await budgetApiClient.GetIncomeAsync();
+        _savings = await budgetApiClient.GetSavingAsync();
+        _expenses = await budgetApiClient.GetExpensesAsync();
+        _yearId = _years!.Select(year => year.Id).LastOrDefault();
+        datePicker.SetMinAndMaxYearPeriodForCalendar(_years!);
         MessageService.OnMessage += MessageHandler!;
     }
+
     public void Dispose()
     {
         MessageService.OnMessage -= MessageHandler!;
@@ -302,202 +307,255 @@
     private async void MessageHandler(string message)
     {
         if (message != null)
-            messages.Add(message);
+            _messages.Add(message);
         else
-            messages.Clear();
+            _messages.Clear();
         StateHasChanged();
         if (message!.Equals("YearPosted") || message.Equals("yearDeleted"))
         {
-            Years = await yearApiClient.GetYearsAsync();
+            _years = await yearApiClient.GetYearsAsync();
         }
     }
 
-    public async Task GetDataByMonthIdAsync()
+    public async Task GetDataByYearIdAsync()
     {
-        yearId = datePicker.FindYearId(selectedPeriod, Years!, Months!);
-        await GetExpensesByYearIdAsync(yearId);
-        await GetIncomeByYearIdAsync(yearId);
-        await GetSavingsByYearIdAsync(yearId);
+        _yearId = datePicker.GetYearId(_selectedPeriod, _years!, _months!);
+        await GetExpensesByYearIdAsync(_yearId);
+        await GetIncomeByYearIdAsync(_yearId);
+        await GetSavingsByYearIdAsync(_yearId);
     }
 
     public async Task GetSavingsByYearIdAsync(int yearId)
     {
-        Savings = await savingsApiClient.GetSavingsByYearId(yearId);
+        _savings = await budgetApiClient.GetSavingsByYearIdAsync(yearId);
         StateHasChanged();
     }
+
     public async Task GetIncomeByYearIdAsync(int yearId)
     {
-        Income = await incomeApiClient.GetIncomeByYearId(yearId);
+        _income = await budgetApiClient.GetIncomeByYearIdAsync(yearId);
         StateHasChanged();
     }
+
     public async Task GetExpensesByYearIdAsync(int yearId)
     {
-        Expenses = await expensesApiClient.GetExpensesByYearId(yearId);
+        _expenses = await budgetApiClient.GetExpensesByYearIdAsync(yearId);
         StateHasChanged();
     }
 
-    public async Task EditIncome(ChangeEventArgs e, IncomeModel model, string propertyName)
+    public async Task EditIncomeAsync(ChangeEventArgs e, IncomeModel model, string propertyName)
     {
-        string? value = e?.Value?.ToString();
-        decimal selectedValue;
-        Decimal.TryParse(value, out selectedValue);
-
-        foreach (var category in model.GetType().GetProperties())
-        {
-            if (category.Name.Equals(propertyName))
-            {
-                category.SetValue(model, selectedValue);
-            }
-        }
-
-        await incomeApiClient.UpdateIncomeAsync(model);
-        Income = await incomeApiClient.GetIncomeByEachMonthAsync();
+        var incomeModel = SetValueOnEdit(e, model, propertyName);
+        await incomeApiClient.UpdateAsync(incomeModel);
+        _income = await budgetApiClient.GetIncomeAsync();
     }
 
-    public async Task EditSavings(ChangeEventArgs e, SavingsModel model, string propertyName)
+    public async Task EditSavingsAsync(ChangeEventArgs e, SavingsModel model, string propertyName)
     {
-        string? value = e?.Value?.ToString();
-        decimal selectedValue;
-        Decimal.TryParse(value, out selectedValue);
-
-        foreach (var category in model.GetType().GetProperties())
-        {
-            if (category.Name.Equals(propertyName))
-            {
-                category.SetValue(model, selectedValue);
-            }
-        }
-
-        await savingsApiClient.UpdateSavingsAsync(model);
-        Savings = await savingsApiClient.GetSavingByEachMonthAsync();
+        var savingsModel = SetValueOnEdit(e, model, propertyName);
+        await savingsApiClient.UpdateAsync(savingsModel);
+        _savings = await budgetApiClient.GetSavingAsync();
     }
 
-    public async Task EditExpenses(ChangeEventArgs e, ExpensesModel model, string propertyName)
+    public async Task EditExpensesAsync(ChangeEventArgs e, ExpensesModel model, string propertyName)
+    {
+        var expensesModel = SetValueOnEdit(e, model, propertyName);
+        await expensesApiClient.UpdateAsync(model);
+        _expenses = await budgetApiClient.GetExpensesAsync();
+    }
+
+    public T SetValueOnEdit<T>(ChangeEventArgs e, T model, string propertyName)
     {
         string? value = e?.Value?.ToString();
         decimal selectedValue;
         Decimal.TryParse(value, out selectedValue);
 
-        foreach (var category in model.GetType().GetProperties())
+        foreach (var category in model!.GetType().GetProperties())
         {
             if (category.Name.Equals(propertyName))
             {
                 category.SetValue(model, selectedValue);
             }
         }
-
-        await expensesApiClient.UpdateExpensesAsync(model);
-        Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
+        return model;
     }
 
     public async Task AddIncome()
     {
-        int monthId = Months!.Where(m => m.YearId == yearId && m.IncomeId == 0).Select(m => m.Id).FirstOrDefault();
-        if (Months!.Where(m => m.Name!.Contains("December")).Select(m => m.IncomeId != 0).First())
+        if (IncomeYearBudgetPlanComplete())
             return;
+ 
         IncomeModel IncomeModel = new IncomeModel
-            {
-                YearId = yearId,
-                MonthId = monthId
-            };
-        await incomeApiClient.PostIncomeAsync(IncomeModel);
-        Income = await incomeApiClient.GetIncomeByEachMonthAsync();
+        {
+            YearId = _yearId,
+            MonthId = _months!
+                            .Where(m => m.YearId == _yearId && m.IncomeId == 0)
+                            .Select(m => m.Id)
+                            .FirstOrDefault()
+        };
+
+        await incomeApiClient.AddAsync(IncomeModel);
+        _income = await budgetApiClient.GetIncomeAsync();
         await UpdateMonthOnIncomePostAsync();
     }
 
     public async Task AddSavings()
     {
-        int monthId = Months!.Where(m => m.YearId == yearId && m.SavingsId == 0).Select(m => m.Id).FirstOrDefault();
-        if (Months!.Where(m => m.Name!.Contains("December")).Select(m => m.SavingsId != 0).First())
+        if (SavingsYearBudgetPlanComplete())
             return;
+
         SavingsModel SavingsModel = new SavingsModel
-            {
-                YearId = yearId,
-                MonthId = monthId
-            };
-        await savingsApiClient.PostSavingsAsync(SavingsModel);
-        Savings = await savingsApiClient.GetSavingByEachMonthAsync();
+        {
+            YearId = _yearId,
+            MonthId = _months!
+                        .Where(m => m.YearId == _yearId && m.SavingsId == 0)
+                        .Select(m => m.Id)
+                        .FirstOrDefault()
+        };
+
+        await savingsApiClient.AddAsync(SavingsModel);
+        _savings = await budgetApiClient.GetSavingAsync();
         await UpdateMonthOnSavingsPostAsync();
     }
 
     public async Task AddExpenses()
     {
-        int monthId = Months!.Where(m => m.YearId == yearId && m.ExpensesId == 0).Select(m => m.Id).FirstOrDefault();
-        if (Months!.Where(m => m.Name!.Contains("December")).Select(m => m.ExpensesId != 0).First())
+        if (ExpensesYearBudgetPlanComplete()) 
             return;
+
         ExpensesModel ExpensesModel = new ExpensesModel
-            {
-                YearId = yearId,
-                MonthId = monthId
-            };
-        await expensesApiClient.PostExpensesAsync(ExpensesModel);
-        Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
+        {
+            YearId = _yearId,
+            MonthId = _months!
+                        .Where(m => m.YearId == _yearId && m.ExpensesId == 0)
+                        .Select(m => m.Id)
+                        .FirstOrDefault()
+        };
+
+        await expensesApiClient.AddAsync(ExpensesModel);
+        _expenses = await budgetApiClient.GetExpensesAsync();
         await UpdateMonthOnExpensesPostAsync();
     }
 
-    public async Task RemoveIncome()
+    public bool ExpensesYearBudgetPlanComplete()
     {
-        List<IncomeModel>? income = await incomeApiClient.GetIncomeAsync();
-        int incomeId = income!.Select(income => income.Id).LastOrDefault();
-        await incomeApiClient.DeleteIncomeByIdAsync(incomeId);
-        Income = await incomeApiClient.GetIncomeByEachMonthAsync();
-        Months = await monthsApiClient.GetMonthsAsync();
+        return _months!
+                    .Where(m => m.Name!.Contains("December"))
+                    .Select(m => m.ExpensesId != 0)
+                    .First();
+    }
+    public bool IncomeYearBudgetPlanComplete()
+    {
+        return _months!
+                    .Where(m => m.Name!.Contains("December"))
+                    .Select(m => m.IncomeId != 0)
+                    .First();
+    }
+    public bool SavingsYearBudgetPlanComplete()
+    {
+        return _months!
+                    .Where(m => m.Name!.Contains("December"))
+                    .Select(m => m.SavingsId != 0)
+                    .First();
+    }
+
+    public async Task RemoveIncomeAsync()
+    {
+        List<IncomeModel>? incomeModel = await incomeApiClient.GetAsync();
+        
+        int incomeId = incomeModel!
+                            .Select(income => income.Id)
+                            .LastOrDefault();
+
+        await incomeApiClient.DeleteAsync(incomeId);
+        _income = await budgetApiClient.GetIncomeAsync();
+        _months = await budgetApiClient.GetMonthsAsync();
         StateHasChanged();
     }
-    public async Task RemoveSavings()
+
+    public async Task RemoveSavingsAsync()
     {
-        List<SavingsModel>? savings = await savingsApiClient.GetSavingsAsync();
-        int savingsId = savings!.Select(savings => savings.Id).LastOrDefault();
-        await savingsApiClient.DeleteSavingsByIdAsync(savingsId);
-        Savings = await savingsApiClient.GetSavingByEachMonthAsync();
-        Months = await monthsApiClient.GetMonthsAsync();
+        List<SavingsModel>? savingsModel = await savingsApiClient.GetAsync();
+
+        int savingsId = savingsModel!
+                            .Select(savings => savings.Id)
+                            .LastOrDefault();
+
+        await savingsApiClient.DeleteAsync(savingsId);
+        _savings = await budgetApiClient.GetSavingAsync();
+        _months = await budgetApiClient.GetMonthsAsync();
         StateHasChanged();
     }
-    public async Task RemoveExpenses()
+    
+    public async Task RemoveExpensesAsync()
     {
-        List<ExpensesModel>? expenses = await expensesApiClient.GetExpensesAsync();
-        int expensesId = expenses!.Select(expenses => expenses.Id).LastOrDefault();
-        await expensesApiClient.DeleteExpensesByIdAsync(expensesId);
-        Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
-        Months = await monthsApiClient.GetMonthsAsync();
+        List<ExpensesModel>? expensesModel = await expensesApiClient.GetAsync();
+
+        int expensesId = expensesModel!
+                            .Select(expenses => expenses.Id)
+                            .LastOrDefault();
+
+        await expensesApiClient.DeleteAsync(expensesId);
+        _expenses = await budgetApiClient.GetExpensesAsync();
+        _months = await budgetApiClient.GetMonthsAsync();
         StateHasChanged();
     }
 
     public async Task UpdateMonthOnIncomePostAsync()
     {
-        BudgetModel? month = Months!.Where(m => m.YearId == yearId && m.IncomeId == 0).Select(m => m).FirstOrDefault();
-        List<IncomeModel>? income = await incomeApiClient.GetIncomeAsync();
+        BudgetModel? month = _months!
+                                .Where(month => month.YearId == _yearId && month.IncomeId == 0)
+                                .Select(month => month)
+                                .FirstOrDefault();
 
-        month!.IncomeId = income!.Where(income => income.MonthId == month.Id && income.YearId ==
-        yearId).Select(income => income.Id).FirstOrDefault();
+        List<IncomeModel>? incomeModel = await incomeApiClient.GetAsync();
 
-        await monthsApiClient.UpdateMonthAsync(month);
-        Income = await incomeApiClient.GetIncomeByEachMonthAsync();
-        Months = await monthsApiClient.GetMonthsAsync();
+        month!.IncomeId = incomeModel!
+                            .Where(income => income.MonthId == month.Id && income.YearId == _yearId)
+                            .Select(income => income.Id)
+                            .FirstOrDefault();
+
+        await budgetApiClient.UpdateMonthAsync(month);
+        _income = await budgetApiClient.GetIncomeAsync();
+        _months = await budgetApiClient.GetMonthsAsync();
     }
+
     public async Task UpdateMonthOnSavingsPostAsync()
     {
-        BudgetModel? month = Months!.Where(m => m.YearId == yearId && m.SavingsId == 0).Select(m => m).FirstOrDefault();
-        List<SavingsModel>? savings = await savingsApiClient.GetSavingsAsync();
+        BudgetModel? month = _months!
+                                .Where(month => month.YearId == _yearId && month.SavingsId == 0)
+                                .Select(month => month)
+                                .FirstOrDefault();
 
-        month!.SavingsId = savings!.Where(savings => savings.MonthId == month.Id && savings.YearId ==
-        yearId).Select(savings => savings.Id).FirstOrDefault();
+        List<SavingsModel>? savingsModel = await savingsApiClient.GetAsync();
 
-        await monthsApiClient.UpdateMonthAsync(month);
-        Savings = await savingsApiClient.GetSavingByEachMonthAsync();
-        Months = await monthsApiClient.GetMonthsAsync();
+        month!.SavingsId = savingsModel!
+                                .Where(savings => savings.MonthId == month.Id && savings.YearId == _yearId)
+                                .Select(savings => savings.Id)
+                                .FirstOrDefault();
+
+        await budgetApiClient.UpdateMonthAsync(month);
+        _savings = await budgetApiClient.GetSavingAsync();
+        _months = await budgetApiClient.GetMonthsAsync();
     }
+
     public async Task UpdateMonthOnExpensesPostAsync()
     {
-        BudgetModel? month = Months!.Where(m => m.YearId == yearId && m.ExpensesId == 0).Select(m => m).FirstOrDefault();
-        List<ExpensesModel>? expenses = await expensesApiClient.GetExpensesAsync();
+        BudgetModel? month = _months!
+                                .Where(month => month.YearId == _yearId && month.ExpensesId == 0)
+                                .Select(month => month)
+                                .FirstOrDefault();
 
-        month!.ExpensesId = expenses!.Where(expenses => expenses.MonthId == month.Id && expenses.YearId ==
-        yearId).Select(expenses => expenses.Id).FirstOrDefault();
+        List<ExpensesModel>? expenses = await expensesApiClient.GetAsync();
 
-        await monthsApiClient.UpdateMonthAsync(month);
-        Expenses = await expensesApiClient.GetExpensesByEachMonthAsync();
-        Months = await monthsApiClient.GetMonthsAsync();
+        month!.ExpensesId = expenses!
+                                .Where(expenses => expenses.MonthId == month.Id && expenses.YearId ==_yearId)
+                                .Select(expenses => expenses.Id)
+                                .FirstOrDefault();
+
+        await budgetApiClient.UpdateMonthAsync(month);
+        _expenses = await budgetApiClient.GetExpensesAsync();
+        _months = await budgetApiClient.GetMonthsAsync();
     }
     private void OpenSubmitYearDialog()
     {
@@ -505,7 +563,7 @@
             {
                 CloseOnEscapeKey = true
             };
-        DialogService.Show<YearSubmitForm>("Add Year", closeOnEscapeKey);
+        DialogService.Show<YearSubmitDialog>("Add Year", closeOnEscapeKey);
     }
 
     private void OpenDeleteYearDialog()
@@ -514,6 +572,6 @@
             {
                 CloseOnEscapeKey = true
             };
-        DialogService.Show<YearDeleteForm>(@"This action will delete complete year budget plan", closeOnEscapeKey);
+        DialogService.Show<YearDeleteDialog>(@"This action will delete complete year budget plan", closeOnEscapeKey);
     }
 }

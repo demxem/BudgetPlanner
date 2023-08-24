@@ -1,5 +1,6 @@
-using DAL.Data;
-using DAL.Models;
+
+using DataBase.Data;
+using DataBase.Models;
 
 namespace Api.Modules
 {
@@ -8,17 +9,17 @@ namespace Api.Modules
         public static void RegisterYearsEndpoints(this IEndpointRouteBuilder endpoints)
         {
             //endpoints
-            endpoints.MapGet("/years/{id}", GetYearByIdAsync);
-            endpoints.MapPost("/years", InsertYearAsync);
-            endpoints.MapGet("/years", GetYearsAsync);
-            endpoints.MapDelete("/years/{id}", DeleteYearByIdAsync);
+            endpoints.MapGet("/years", GetAsync);
+            endpoints.MapGet("/years/{id}", GetByIdAsync);
+            endpoints.MapPost("/years", AddAsync);
+            endpoints.MapDelete("/years/{id}", DeleteAsync);
         }
 
-        private static async Task<IResult> GetYearsAsync(IYears data)
+        private static async Task<IResult> GetAsync(IYears data)
         {
             try
             {
-                return Results.Ok(await data.GetYears());
+                return Results.Ok(await data.Get());
             }
             catch (Exception ex)
             {
@@ -26,11 +27,11 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> GetYearByIdAsync(IYears data, int id)
+        private static async Task<IResult> GetByIdAsync(IYears data, int id)
         {
             try
             {
-                return Results.Ok(await data.GetYearById(id));
+                return Results.Ok(await data.GetById(id));
             }
             catch (Exception ex)
             {
@@ -38,11 +39,11 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> InsertYearAsync(IYears data, YearModel year)
+        private static async Task<IResult> AddAsync(IYears data, YearModel year)
         {
             try
             {
-                await data.InsertYear(year);
+                await data.Add(year);
                 return Results.Ok();
             }
             catch (Exception ex)
@@ -50,11 +51,11 @@ namespace Api.Modules
                 return Results.Problem(ex.Message);
             }
         }
-        private static async Task<IResult> DeleteYearByIdAsync(IYears Data, int id)
+        private static async Task<IResult> DeleteAsync(IYears Data, int id)
         {
             try
             {
-                await Data.DeleteYearById(id);
+                await Data.Delete(id);
                 return Results.Ok();
             }
             catch (Exception ex)

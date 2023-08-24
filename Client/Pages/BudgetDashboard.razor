@@ -1,18 +1,16 @@
+@namespace Client.Pages
+
 @page "/budgetdashboard"
 @using Client.Models
-@inject Client.Services.IncomeApiClient incomeApiClient
-@inject Client.Services.SavingsApiClient savingsApiClient
-@inject Client.Services.ExpensesApiClient expensesApiClient
+@inject Client.Services.BudgetApiClient budgetApiClient
 @inject Client.Services.YearApiClient yearsApiClient
-@inject Client.Services.CompletedBudgetApiService budgetCompletion
-@inject Client.Services.MonthsApiClient monthsApiClient
+@inject Client.Services.BudgetCompletionApiClient budgetCompletionApiClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject NavigationManager UriHelper
 @inject IMessageService MessageService
 @inject DatePicker datePicker
-@inject ChartPicker chart
-
+@inject Charts chart
 
 <style>
     td {
@@ -119,8 +117,8 @@
             <div class="start-dashboard">
                 <div class="incline-block">
                     <div class="d-flex" style="max-width:100px;">
-                        <MudDatePicker @bind-Date="selectedPeriod" MinDate="@datePicker.MinimalPeriodInterval"
-                            MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync" />
+                        <MudDatePicker @bind-Date="_selectedPeriod" MinDate="@datePicker.MinPeriodInterval"
+                            MaxDate="@datePicker.MaxPeriodInteval" PickerClosed="@GetDataByMonthIdAsync" />
                     </div>
                 </div>
                 <label id="dashMonth">
@@ -160,12 +158,10 @@
                     <td scope="dash-td">
                         Starting Balance
                     </td>
-                    @if (TrackedBudgetIncome != null)
+                    @if (_income != null)
                     {
                         <td>
-                            @(TrackedBudgetIncome!.Income!.TrackedEmployment +
-                                @TrackedBudgetIncome.Income.TrackedSideHustle +
-                                @TrackedBudgetIncome.Income.TrackedDividends)
+                            @(_income!.Income!.TrackedEmployment + @_income.Income.TrackedSideHustle + @_income.Income.TrackedDividends)
                         </td>
                     }
                 </tr>
@@ -175,14 +171,14 @@
     <MudItem xs="12" sm="4">
         <MudPaper Class="pa-16 ma-2" Outlined="true" Square="true">
             <div class="savings-chart">
-                @if (TrackedGroupBarChart != null && ActualGroupBarChart != null)
+                @if (_trackedChartPlot != null && _actualChartPlot != null)
                 {
-                    <ApexChart TItem="PieChartModel" Title="Tracked (vs Budget)" @ref="apexChart" Options=options>
-                        <ApexPointSeries TItem="PieChartModel" Items="TrackedGroupBarChart" Name="Tracked"
+                    <ApexChart TItem="PieChartModel" Title="Tracked (vs Budget)" @ref="_apexChartBar" Options=_options>
+                        <ApexPointSeries TItem="PieChartModel" Items="_trackedChartPlot" Name="Tracked"
                             XValue="@(e => e.Name)" SeriesType="SeriesType.Bar" YAggregate="@(e => e.Sum(e => e.Value))"
                             OrderByDescending="e=>e.Y" Color="#bbabe5" />
 
-                        <ApexPointSeries TItem="PieChartModel" Items="ActualGroupBarChart" Name="Planned"
+                        <ApexPointSeries TItem="PieChartModel" Items="_actualChartPlot" Name="Planned"
                             SeriesType="SeriesType.Bar" XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))"
                             OrderByDescending="e=>e.Y" Color="#fbb4c0" />
                     </ApexChart>
@@ -193,10 +189,10 @@
     <MudItem xs="12" sm="4">
         <MudPaper Class="pa-16 ma-2" Outlined="true" Square="true" Height="100%">
             <div class="tracked-group-chart">
-                @if (TrackedGroupBarChart != null)
+                @if (_trackedChartPlot != null)
                 {
-                    <ApexChart TItem="PieChartModel" Title="Breakdown" @ref="apexChartPie">
-                        <ApexPointSeries TItem="PieChartModel" Items="TrackedGroupBarChart" Name="Breakdown"
+                    <ApexChart TItem="PieChartModel" Title="Breakdown" @ref="_apexChartPie">
+                        <ApexPointSeries TItem="PieChartModel" Items="_trackedChartPlot" Name="Breakdown"
                             SeriesType="SeriesType.Pie" XValue="@(e => e.Name)" YAggregate="@(e => e.Sum(e => e.Value))"
                             OrderByDescending="e=>e.Y" PointColor="e=> chart.GetPointColor(e)" ShowDataLabels />
                      </ApexChart>
@@ -218,33 +214,33 @@
                         <th scope="income-row">Remaining</th>
                         <th scope="income-row">Excess</th>
                     </tr>
-                    @if (TrackedBudgetIncome != null)
+                    @if (_income != null)
                     {
                         <tr>
                             <td>Employment</td>
-                            <td>@TrackedBudgetIncome!.Income!.TrackedEmployment</td>
-                            <td>@TrackedBudgetIncome.Income.Employment</td>
+                            <td>@_income!.Income!.TrackedEmployment</td>
+                            <td>@_income.Income.Employment</td>
                             <td scope="progress-col">
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar"
-                                        style="width: @BudgetCompletionPercent!.IncomeCompletedEmployment%"
-                                        aria-valuenow="@BudgetCompletionPercent.IncomeCompletedEmployment" aria-valuemin="0"
-                                        aria-valuemax="100">
-                                        @Decimal.Round(BudgetCompletionPercent.IncomeCompletedEmployment, 2)%
+                                        style="width: @_budgetCompletionPercent!.IncomeCompletedEmployment%"
+                                        aria-valuenow="@_budgetCompletionPercent.IncomeCompletedEmployment"
+                                        aria-valuemin="0" aria-valuemax="100">
+                                        @Decimal.Round(_budgetCompletionPercent.IncomeCompletedEmployment, 2)%
                                     </div>
                                 </div>
                             </td>
-                            @if (@BudgetCompletion!.IncomeCompletedEmployment >= 0)
+                            @if (@_budgetCompletion!.IncomeCompletedEmployment >= 0)
                             {
-                                <td>@BudgetCompletion.IncomeCompletedEmployment</td>
+                                <td>@_budgetCompletion.IncomeCompletedEmployment</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.IncomeCompletedEmployment <= 0)
+                            @if (@_budgetCompletion.IncomeCompletedEmployment <= 0)
                             {
-                                <td>@Math.Abs(@BudgetCompletion.IncomeCompletedEmployment)</td>
+                                <td>@Math.Abs(@_budgetCompletion.IncomeCompletedEmployment)</td>
                             }
                             else
                             {
@@ -253,29 +249,29 @@
                         </tr>
                         <tr>
                         <td>SideHustle</td>
-                        <td>@TrackedBudgetIncome.Income.TrackedSideHustle</td>
-                        <td>@TrackedBudgetIncome.Income.SideHustle</td>
+                        <td>@_income.Income.TrackedSideHustle</td>
+                        <td>@_income.Income.SideHustle</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.IncomeCompletedSidehustle%"
-                                    aria-valuenow="@BudgetCompletionPercent.IncomeCompletedSidehustle" aria-valuemin="0"
-                                    aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.IncomeCompletedSidehustle, 2)%
+                                    style="width: @_budgetCompletionPercent.IncomeCompletedSidehustle%"
+                                    aria-valuenow="@_budgetCompletionPercent.IncomeCompletedSidehustle"
+                                    aria-valuemin="0" aria-valuemax="100">
+                                    @Decimal.Round(_budgetCompletionPercent.IncomeCompletedSidehustle, 2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.IncomeCompletedSidehustle >= 0)
+                        @if (@_budgetCompletion.IncomeCompletedSidehustle >= 0)
                             {
-                                <td>@BudgetCompletion.IncomeCompletedSidehustle</td>
+                                <td>@_budgetCompletion.IncomeCompletedSidehustle</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.IncomeCompletedSidehustle <= 0)
+                            @if (@_budgetCompletion.IncomeCompletedSidehustle <= 0)
                             {
-                                <td>@Math.Abs(@BudgetCompletion.IncomeCompletedSidehustle)</td>
+                                <td>@Math.Abs(@_budgetCompletion.IncomeCompletedSidehustle)</td>
                             }
                             else
                             {
@@ -284,29 +280,29 @@
                         </tr>
                         <tr>
                         <td>Dividents</td>
-                        <td>@TrackedBudgetIncome.Income.TrackedDividends</td>
-                        <td>@TrackedBudgetIncome.Income.Dividends</td>
+                        <td>@_income.Income.TrackedDividends</td>
+                        <td>@_income.Income.Dividends</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.IncomeCompletedDividends%"
-                                    aria-valuenow="@BudgetCompletionPercent.IncomeCompletedDividends" aria-valuemin="0"
+                                    style="width: @_budgetCompletionPercent.IncomeCompletedDividends%"
+                                    aria-valuenow="@_budgetCompletionPercent.IncomeCompletedDividends" aria-valuemin="0"
                                     aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.IncomeCompletedDividends, 2)%
+                                    @Decimal.Round(_budgetCompletionPercent.IncomeCompletedDividends, 2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.IncomeCompletedDividends >= 0)
+                        @if (@_budgetCompletion.IncomeCompletedDividends >= 0)
                             {
-                                <td>@BudgetCompletion.IncomeCompletedDividends</td>
+                                <td>@_budgetCompletion.IncomeCompletedDividends</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.IncomeCompletedDividends <= 0)
+                            @if (@_budgetCompletion.IncomeCompletedDividends <= 0)
                             {
-                                <td>@Math.Abs(@BudgetCompletion.IncomeCompletedDividends)</td>
+                                <td>@Math.Abs(@_budgetCompletion.IncomeCompletedDividends)</td>
                             }
                             else
                             {
@@ -315,11 +311,11 @@
                         </tr>
                         <tr>
                         <td scope="totalIncome-row">Total</td>
-                        <td scope="totalIncome-row">@TrackedBudgetIncome.TrackedMonthlyIncome</td>
-                        <td scope="totalIncome-row">@TrackedBudgetIncome.MonthlyIncome</td>
+                        <td scope="totalIncome-row">@_income.TrackedMonthlyIncome</td>
+                        <td scope="totalIncome-row">@_income.MonthlyIncome</td>
                         <td scope="totalIncome-row">%</td>
-                        <td scope="totalIncome-row">@trackedRemainingIncome</td>
-                        <td scope="totalIncome-row">@trackedExcessIncome</td>
+                        <td scope="totalIncome-row">@_trackedRemainingIncome</td>
+                        <td scope="totalIncome-row">@_trackedExcessIncome</td>
                     </tr>
                     }
                     else
@@ -342,33 +338,33 @@
                         <th scope="savings-row">Remaining</th>
                         <th scope="savings-row">Excess</th>
                     </tr>
-                    @if (TrackedBudgetSavings != null)
+                    @if (_savings != null)
                     {
                         <tr>
                             <td>EmergencyFund</td>
-                            <td>@TrackedBudgetSavings!.Savings!.TrackedEmergencyFund</td>
-                            <td>@TrackedBudgetSavings.Savings.EmergencyFund</td>
+                            <td>@_savings!.Savings!.TrackedEmergencyFund</td>
+                            <td>@_savings.Savings.EmergencyFund</td>
                             <td scope="progress-col">
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar"
-                                        style="width: @BudgetCompletionPercent!.SavingsCompletedEmergencyFund%"
-                                        aria-valuenow="@BudgetCompletionPercent.SavingsCompletedEmergencyFund"
+                                        style="width: @_budgetCompletionPercent!.SavingsCompletedEmergencyFund%"
+                                        aria-valuenow="@_budgetCompletionPercent.SavingsCompletedEmergencyFund"
                                         aria-valuemin="0" aria-valuemax="100">
-                                        @Decimal.Round(BudgetCompletionPercent.SavingsCompletedEmergencyFund, 2)%
+                                        @Decimal.Round(_budgetCompletionPercent.SavingsCompletedEmergencyFund, 2)%
                                     </div>
                                 </div>
                             </td>
-                            @if (@BudgetCompletion!.SavingsCompletedEmergencyFund >= 0)
+                            @if (@_budgetCompletion!.SavingsCompletedEmergencyFund >= 0)
                             {
-                                <td>@BudgetCompletion.SavingsCompletedEmergencyFund</td>
+                                <td>@_budgetCompletion.SavingsCompletedEmergencyFund</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.SavingsCompletedEmergencyFund <= 0)
+                            @if (@_budgetCompletion.SavingsCompletedEmergencyFund <= 0)
                             {
-                                <td>@Math.Abs(@BudgetCompletion.SavingsCompletedEmergencyFund)</td>
+                                <td>@Math.Abs(@_budgetCompletion.SavingsCompletedEmergencyFund)</td>
                             }
                             else
                             {
@@ -377,30 +373,30 @@
                         </tr>
                         <tr>
                         <td>RetirementAccount</td>
-                        <td>@TrackedBudgetSavings.Savings.TrackedRetirementAccount</td>
-                        <td>@TrackedBudgetSavings.Savings.RetirementAccount</td>
+                        <td>@_savings.Savings.TrackedRetirementAccount</td>
+                        <td>@_savings.Savings.RetirementAccount</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.SavingsCompletedRetirementAccount%"
-                                    aria-valuenow="@BudgetCompletionPercent.SavingsCompletedRetirementAccount"
+                                    style="width: @_budgetCompletionPercent.SavingsCompletedRetirementAccount%"
+                                    aria-valuenow="@_budgetCompletionPercent.SavingsCompletedRetirementAccount"
                                     aria-valuemin="0" aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.SavingsCompletedRetirementAccount,
+                                    @Decimal.Round(_budgetCompletionPercent.SavingsCompletedRetirementAccount,
                                     2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.SavingsCompletedRetirementAccount >= 0)
+                        @if (@_budgetCompletion.SavingsCompletedRetirementAccount >= 0)
                             {
-                                <td>@BudgetCompletion.SavingsCompletedRetirementAccount</td>
+                                <td>@_budgetCompletion.SavingsCompletedRetirementAccount</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.SavingsCompletedRetirementAccount <= 0)
+                            @if (@_budgetCompletion.SavingsCompletedRetirementAccount <= 0)
                             {
-                                <td>@Math.Abs(@BudgetCompletion.SavingsCompletedRetirementAccount)</td>
+                                <td>@Math.Abs(@_budgetCompletion.SavingsCompletedRetirementAccount)</td>
                             }
                             else
                             {
@@ -409,29 +405,29 @@
                         </tr>
                         <tr>
                         <td>Vacation</td>
-                        <td>@TrackedBudgetSavings.Savings.TrackedVacation</td>
-                        <td>@TrackedBudgetSavings.Savings.Vacation</td>
+                        <td>@_savings.Savings.TrackedVacation</td>
+                        <td>@_savings.Savings.Vacation</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.SavingsCompletedVacation%" aria-valuemin="0"
-                                    aria-valuenow="@BudgetCompletionPercent.SavingsCompletedVacation"
+                                    style="width: @_budgetCompletionPercent.SavingsCompletedVacation%" aria-valuemin="0"
+                                    aria-valuenow="@_budgetCompletionPercent.SavingsCompletedVacation"
                                     aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.SavingsCompletedVacation, 2)%
+                                    @Decimal.Round(_budgetCompletionPercent.SavingsCompletedVacation, 2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.SavingsCompletedVacation >= 0)
+                        @if (@_budgetCompletion.SavingsCompletedVacation >= 0)
                             {
-                                <td>@BudgetCompletion.SavingsCompletedVacation</td>
+                                <td>@_budgetCompletion.SavingsCompletedVacation</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.SavingsCompletedVacation <= 0)
+                            @if (@_budgetCompletion.SavingsCompletedVacation <= 0)
                             {
-                                <td>@Math.Abs(@BudgetCompletion.SavingsCompletedVacation)</td>
+                                <td>@Math.Abs(@_budgetCompletion.SavingsCompletedVacation)</td>
                             }
                             else
                             {
@@ -440,29 +436,29 @@
                         </tr>
                         <tr>
                         <td>HealthNeeds</td>
-                        <td>@TrackedBudgetSavings.Savings.TrackedHealthNeeds</td>
-                        <td>@TrackedBudgetSavings.Savings.HealthNeeds</td>
+                        <td>@_savings.Savings.TrackedHealthNeeds</td>
+                        <td>@_savings.Savings.HealthNeeds</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.SavingsCompletedHealthNeeds%"
-                                    aria-valuenow="@BudgetCompletionPercent.SavingsCompletedHealthNeeds"
+                                    style="width: @_budgetCompletionPercent.SavingsCompletedHealthNeeds%"
+                                    aria-valuenow="@_budgetCompletionPercent.SavingsCompletedHealthNeeds"
                                     aria-valuemin="0" aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.SavingsCompletedHealthNeeds, 2)%
+                                    @Decimal.Round(_budgetCompletionPercent.SavingsCompletedHealthNeeds, 2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.SavingsCompletedHealthNeeds >= 0)
+                        @if (@_budgetCompletion.SavingsCompletedHealthNeeds >= 0)
                             {
-                                <td>@BudgetCompletion.SavingsCompletedHealthNeeds</td>
+                                <td>@_budgetCompletion.SavingsCompletedHealthNeeds</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.SavingsCompletedHealthNeeds <= 0)
+                            @if (@_budgetCompletion.SavingsCompletedHealthNeeds <= 0)
                             {
-                                <td>@Math.Abs(@BudgetCompletion.SavingsCompletedHealthNeeds)</td>
+                                <td>@Math.Abs(@_budgetCompletion.SavingsCompletedHealthNeeds)</td>
                             }
                             else
                             {
@@ -471,11 +467,11 @@
                         </tr>
                         <tr>
                         <td scope="totalSavings-row">Total</td>
-                        <td scope="totalSavings-row">@TrackedBudgetSavings.TrackedMonthlySavings</td>
-                        <td scope="totalSavings-row">@TrackedBudgetSavings.MonthlySavings</td>
+                        <td scope="totalSavings-row">@_savings.TrackedMonthlySavings</td>
+                        <td scope="totalSavings-row">@_savings.MonthlySavings</td>
                         <td scope="totalSavings-row">%</td>
-                        <td scope="totalSavings-row">@trackedRemainingSavings</td>
-                        <td scope="totalSavings-row">@trackedExcessSavings</td>
+                        <td scope="totalSavings-row">@_trackedRemainingSavings</td>
+                        <td scope="totalSavings-row">@_trackedExcessSavings</td>
                     </tr>
                     }
                     else
@@ -499,33 +495,33 @@
                         <th scope="expenses-row">Remaining</th>
                         <th scope="expenses-row">Excess</th>
                     </tr>
-                    @if (TrackedBudgetExpenses != null)
+                    @if (_expenses != null)
                     {
                         <tr>
                             <td>Housing</td>
-                            <td>@TrackedBudgetExpenses!.Expenses!.TrackedHousing</td>
-                            <td>@TrackedBudgetExpenses.Expenses.Housing</td>
+                            <td>@_expenses!.Expenses!.TrackedHousing</td>
+                            <td>@_expenses.Expenses.Housing</td>
                             <td scope="progress-col">
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar"
-                                        style="width: @BudgetCompletionPercent!.ExpensesCompletedHousing%"
-                                        aria-valuenow="@BudgetCompletionPercent.ExpensesCompletedHousing" aria-valuemin="0"
+                                        style="width: @_budgetCompletionPercent!.ExpensesCompletedHousing%"
+                                        aria-valuenow="@_budgetCompletionPercent.ExpensesCompletedHousing" aria-valuemin="0"
                                         aria-valuemax="100">
-                                        @Decimal.Round(BudgetCompletionPercent.ExpensesCompletedHousing, 2)%
+                                        @Decimal.Round(_budgetCompletionPercent.ExpensesCompletedHousing, 2)%
                                     </div>
                                 </div>
                             </td>
-                            @if (@BudgetCompletion!.ExpensesCompletedHousing >= 0)
+                            @if (@_budgetCompletion!.ExpensesCompletedHousing >= 0)
                             {
-                                <td>@BudgetCompletion.ExpensesCompletedHousing</td>
+                                <td>@_budgetCompletion.ExpensesCompletedHousing</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.ExpensesCompletedHousing <= 0)
+                            @if (@_budgetCompletion.ExpensesCompletedHousing <= 0)
                             {
-                                <td>@Math.Abs(@BudgetCompletion.ExpensesCompletedHousing)</td>
+                                <td>@Math.Abs(@_budgetCompletion.ExpensesCompletedHousing)</td>
                             }
                             else
                             {
@@ -534,29 +530,29 @@
                         </tr>
                         <tr>
                         <td>Groceries</td>
-                        <td>@TrackedBudgetExpenses.Expenses.TrackedGroceries</td>
-                        <td>@TrackedBudgetExpenses.Expenses.Groceries</td>
+                        <td>@_expenses.Expenses.TrackedGroceries</td>
+                        <td>@_expenses.Expenses.Groceries</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.ExpensesCompletedGroceries%"
-                                    aria-valuenow="@BudgetCompletionPercent.ExpensesCompletedGroceries"
+                                    style="width: @_budgetCompletionPercent.ExpensesCompletedGroceries%"
+                                    aria-valuenow="@_budgetCompletionPercent.ExpensesCompletedGroceries"
                                     aria-valuemin="0" aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.ExpensesCompletedGroceries, 2)%
+                                    @Decimal.Round(_budgetCompletionPercent.ExpensesCompletedGroceries, 2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.ExpensesCompletedGroceries >= 0)
+                        @if (@_budgetCompletion.ExpensesCompletedGroceries >= 0)
                             {
-                                <td>@BudgetCompletion.ExpensesCompletedGroceries</td>
+                                <td>@_budgetCompletion.ExpensesCompletedGroceries</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.ExpensesCompletedGroceries <= 0)
+                            @if (@_budgetCompletion.ExpensesCompletedGroceries <= 0)
                             {
-                                <td>@Math.Abs(BudgetCompletion.ExpensesCompletedGroceries)</td>
+                                <td>@Math.Abs(_budgetCompletion.ExpensesCompletedGroceries)</td>
                             }
                             else
                             {
@@ -565,29 +561,29 @@
                         </tr>
                         <tr>
                         <td>Utilities</td>
-                        <td>@TrackedBudgetExpenses.Expenses.TrackedUtilities</td>
-                        <td>@TrackedBudgetExpenses.Expenses.Utilities</td>
+                        <td>@_expenses.Expenses.TrackedUtilities</td>
+                        <td>@_expenses.Expenses.Utilities</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.ExpensesCompletedUtilities%"
-                                    aria-valuenow="@BudgetCompletionPercent.ExpensesCompletedUtilities"
+                                    style="width: @_budgetCompletionPercent.ExpensesCompletedUtilities%"
+                                    aria-valuenow="@_budgetCompletionPercent.ExpensesCompletedUtilities"
                                     aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.ExpensesCompletedUtilities, 2)%
+                                    @Decimal.Round(_budgetCompletionPercent.ExpensesCompletedUtilities, 2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.ExpensesCompletedUtilities >= 0)
+                        @if (@_budgetCompletion.ExpensesCompletedUtilities >= 0)
                             {
-                                <td>@BudgetCompletion.ExpensesCompletedUtilities</td>
+                                <td>@_budgetCompletion.ExpensesCompletedUtilities</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.ExpensesCompletedUtilities <= 0)
+                            @if (@_budgetCompletion.ExpensesCompletedUtilities <= 0)
                             {
-                                <td>@Math.Abs(BudgetCompletion.ExpensesCompletedUtilities)</td>
+                                <td>@Math.Abs(_budgetCompletion.ExpensesCompletedUtilities)</td>
                             }
                             else
                             {
@@ -596,29 +592,29 @@
                         </tr>
                         <tr>
                         <td>Vacation</td>
-                        <td>@TrackedBudgetExpenses.Expenses.TrackedVacation</td>
-                        <td>@TrackedBudgetExpenses.Expenses.Vacation</td>
+                        <td>@_expenses.Expenses.TrackedVacation</td>
+                        <td>@_expenses.Expenses.Vacation</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.ExpensesCompletedVacation%"
-                                    aria-valuenow="@BudgetCompletionPercent.ExpensesCompletedVacation" aria-valuemin="0"
-                                    aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.ExpensesCompletedVacation, 2)%
+                                    style="width: @_budgetCompletionPercent.ExpensesCompletedVacation%"
+                                    aria-valuenow="@_budgetCompletionPercent.ExpensesCompletedVacation"
+                                    aria-valuemin="0" aria-valuemax="100">
+                                    @Decimal.Round(_budgetCompletionPercent.ExpensesCompletedVacation, 2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.ExpensesCompletedVacation >= 0)
+                        @if (@_budgetCompletion.ExpensesCompletedVacation >= 0)
                             {
-                                <td>@BudgetCompletion.ExpensesCompletedVacation</td>
+                                <td>@_budgetCompletion.ExpensesCompletedVacation</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.ExpensesCompletedVacation <= 0)
+                            @if (@_budgetCompletion.ExpensesCompletedVacation <= 0)
                             {
-                                <td>@Math.Abs(BudgetCompletion.ExpensesCompletedVacation)</td>
+                                <td>@Math.Abs(_budgetCompletion.ExpensesCompletedVacation)</td>
                             }
                             else
                             {
@@ -627,29 +623,29 @@
                         </tr>
                         <tr>
                         <td>Transportation</td>
-                        <td>@TrackedBudgetExpenses.Expenses.TrackedTransportation</td>
-                        <td>@TrackedBudgetExpenses.Expenses.Transportation</td>
+                        <td>@_expenses.Expenses.TrackedTransportation</td>
+                        <td>@_expenses.Expenses.Transportation</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.ExpensesCompletedTransportation%"
-                                    aria-valuenow="@BudgetCompletionPercent.ExpensesCompletedTransportation"
+                                    style="width: @_budgetCompletionPercent.ExpensesCompletedTransportation%"
+                                    aria-valuenow="@_budgetCompletionPercent.ExpensesCompletedTransportation"
                                     aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.ExpensesCompletedTransportation, 2)%
+                                    @Decimal.Round(_budgetCompletionPercent.ExpensesCompletedTransportation, 2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.ExpensesCompletedTransportation >= 0)
+                        @if (@_budgetCompletion.ExpensesCompletedTransportation >= 0)
                             {
-                                <td>@BudgetCompletion.ExpensesCompletedTransportation</td>
+                                <td>@_budgetCompletion.ExpensesCompletedTransportation</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.ExpensesCompletedTransportation <= 0)
+                            @if (@_budgetCompletion.ExpensesCompletedTransportation <= 0)
                             {
-                                <td>@Math.Abs(BudgetCompletion.ExpensesCompletedTransportation)</td>
+                                <td>@Math.Abs(_budgetCompletion.ExpensesCompletedTransportation)</td>
                             }
                             else
                             {
@@ -658,29 +654,29 @@
                         </tr>
                         <tr>
                         <td>Medicine</td>
-                        <td>@TrackedBudgetExpenses.Expenses.TrackedMedicine</td>
-                        <td>@TrackedBudgetExpenses.Expenses.Medicine</td>
+                        <td>@_expenses.Expenses.TrackedMedicine</td>
+                        <td>@_expenses.Expenses.Medicine</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.ExpensesCompletedMedicine%"
-                                    aria-valuenow="@BudgetCompletionPercent.ExpensesCompletedMedicine" aria-valuemin="0"
-                                    aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.ExpensesCompletedMedicine, 2)%
+                                    style="width: @_budgetCompletionPercent.ExpensesCompletedMedicine%"
+                                    aria-valuenow="@_budgetCompletionPercent.ExpensesCompletedMedicine"
+                                    aria-valuemin="0" aria-valuemax="100">
+                                    @Decimal.Round(_budgetCompletionPercent.ExpensesCompletedMedicine, 2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.ExpensesCompletedMedicine >= 0)
+                        @if (@_budgetCompletion.ExpensesCompletedMedicine >= 0)
                             {
-                                <td>@BudgetCompletion.ExpensesCompletedMedicine</td>
+                                <td>@_budgetCompletion.ExpensesCompletedMedicine</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.ExpensesCompletedMedicine <= 0)
+                            @if (@_budgetCompletion.ExpensesCompletedMedicine <= 0)
                             {
-                                <td>@Math.Abs(BudgetCompletion.ExpensesCompletedMedicine)</td>
+                                <td>@Math.Abs(_budgetCompletion.ExpensesCompletedMedicine)</td>
                             }
                             else
                             {
@@ -689,29 +685,29 @@
                         </tr>
                         <tr>
                         <td>Clothing</td>
-                        <td>@TrackedBudgetExpenses.Expenses.TrackedClothing</td>
-                        <td>@TrackedBudgetExpenses.Expenses.Clothing</td>
+                        <td>@_expenses.Expenses.TrackedClothing</td>
+                        <td>@_expenses.Expenses.Clothing</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.ExpensesCompletedClothing%"
-                                    aria-valuenow="@BudgetCompletionPercent.ExpensesCompletedClothing"
+                                    style="width: @_budgetCompletionPercent.ExpensesCompletedClothing%"
+                                    aria-valuenow="@_budgetCompletionPercent.ExpensesCompletedClothing"
                                     aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.ExpensesCompletedClothing, 2)%
+                                    @Decimal.Round(_budgetCompletionPercent.ExpensesCompletedClothing, 2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.ExpensesCompletedClothing >= 0)
+                        @if (@_budgetCompletion.ExpensesCompletedClothing >= 0)
                             {
-                                <td>@BudgetCompletion.ExpensesCompletedClothing</td>
+                                <td>@_budgetCompletion.ExpensesCompletedClothing</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.ExpensesCompletedClothing <= 0)
+                            @if (@_budgetCompletion.ExpensesCompletedClothing <= 0)
                             {
-                                <td>@Math.Abs(BudgetCompletion.ExpensesCompletedClothing)</td>
+                                <td>@Math.Abs(_budgetCompletion.ExpensesCompletedClothing)</td>
                             }
                             else
                             {
@@ -720,28 +716,29 @@
                         </tr>
                         <tr>
                         <td>Media</td>
-                        <td>@TrackedBudgetExpenses.Expenses.TrackedMedia</td>
-                        <td>@TrackedBudgetExpenses.Expenses.Media</td>
+                        <td>@_expenses.Expenses.TrackedMedia</td>
+                        <td>@_expenses.Expenses.Media</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.ExpensesCompletedMedia%"
-                                    aria-valuenow="@BudgetCompletionPercent.ExpensesCompletedMedia" aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.ExpensesCompletedMedia, 2)%
+                                    style="width: @_budgetCompletionPercent.ExpensesCompletedMedia%"
+                                    aria-valuenow="@_budgetCompletionPercent.ExpensesCompletedMedia"
+                                    aria-valuemax="100">
+                                    @Decimal.Round(_budgetCompletionPercent.ExpensesCompletedMedia, 2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.ExpensesCompletedMedia >= 0)
+                        @if (@_budgetCompletion.ExpensesCompletedMedia >= 0)
                             {
-                                <td>@BudgetCompletion.ExpensesCompletedMedia</td>
+                                <td>@_budgetCompletion.ExpensesCompletedMedia</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.ExpensesCompletedMedia <= 0)
+                            @if (@_budgetCompletion.ExpensesCompletedMedia <= 0)
                             {
-                                <td>@Math.Abs(BudgetCompletion.ExpensesCompletedMedia)</td>
+                                <td>@Math.Abs(_budgetCompletion.ExpensesCompletedMedia)</td>
                             }
                             else
                             {
@@ -750,29 +747,29 @@
                         </tr>
                         <tr>
                         <td>Insuranses</td>
-                        <td>@TrackedBudgetExpenses.Expenses.TrackedInsuranses</td>
-                        <td>@TrackedBudgetExpenses.Expenses.Insuranses</td>
+                        <td>@_expenses.Expenses.TrackedInsuranses</td>
+                        <td>@_expenses.Expenses.Insuranses</td>
                         <td scope="progress-col">
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: @BudgetCompletionPercent.ExpensesCompletedInsuranses%"
-                                    aria-valuenow="@BudgetCompletionPercent.ExpensesCompletedInsuranses"
+                                    style="width: @_budgetCompletionPercent.ExpensesCompletedInsuranses%"
+                                    aria-valuenow="@_budgetCompletionPercent.ExpensesCompletedInsuranses"
                                     aria-valuemin="0" aria-valuemax="100">
-                                    @Decimal.Round(BudgetCompletionPercent.ExpensesCompletedInsuranses, 2)%
+                                    @Decimal.Round(_budgetCompletionPercent.ExpensesCompletedInsuranses, 2)%
                                 </div>
                             </div>
                         </td>
-                        @if (@BudgetCompletion.ExpensesCompletedInsuranses >= 0)
+                        @if (@_budgetCompletion.ExpensesCompletedInsuranses >= 0)
                             {
-                                <td>@BudgetCompletion.ExpensesCompletedInsuranses</td>
+                                <td>@_budgetCompletion.ExpensesCompletedInsuranses</td>
                             }
                             else
                             {
                                 <td>0.00</td>
                             }
-                            @if (@BudgetCompletion.ExpensesCompletedInsuranses <= 0)
+                            @if (@_budgetCompletion.ExpensesCompletedInsuranses <= 0)
                             {
-                                <td>@Math.Abs(BudgetCompletion.ExpensesCompletedInsuranses)</td>
+                                <td>@Math.Abs(_budgetCompletion.ExpensesCompletedInsuranses)</td>
                             }
                             else
                             {
@@ -781,11 +778,11 @@
                         </tr>
                         <tr>
                         <td scope="totalExpenses-row">Total</td>
-                        <td scope="totalExpenses-row">@TrackedBudgetExpenses?.TrackedMonthlyExpenses</td>
-                        <td scope="totalExpenses-row">@TrackedBudgetExpenses?.MonthlyExpenses</td>
+                        <td scope="totalExpenses-row">@_expenses?.TrackedMonthlyExpenses</td>
+                        <td scope="totalExpenses-row">@_expenses?.MonthlyExpenses</td>
                         <td scope="totalExpenses-row">%</td>
-                        <td scope="totalExpenses-row">@trackedRemainingExpenses</td>
-                        <td scope="totalExpenses-row">@trackedExcessExpenses</td>
+                        <td scope="totalExpenses-row">@_trackedRemainingExpenses</td>
+                        <td scope="totalExpenses-row">@_trackedExcessExpenses</td>
                     </tr>
                     }
                     else
@@ -800,151 +797,158 @@
 
 @code
 {
-    private decimal trackedRemainingIncome = 0;
-    private decimal trackedRemainingSavings = 0;
-    private decimal trackedRemainingExpenses = 0;
-    private decimal trackedExcessIncome = 0;
-    private decimal trackedExcessSavings = 0;
-    private decimal trackedExcessExpenses = 0;
-
-    private BudgetModel? TrackedBudgetIncome { get; set; }
-    private BudgetModel? TrackedBudgetSavings { get; set; }
-    private BudgetModel? TrackedBudgetExpenses { get; set; }
-    private List<PieChartModel>? TrackedIncomePieChart { get; set; }
-    private List<PieChartModel>? TrackedSavingsPieChart { get; set; }
-    private List<PieChartModel>? TrackedExpensesPieChart { get; set; }
-
-    private PieChartModel[]? TrackedGroupBarChart = new PieChartModel[3]
+    private decimal _trackedRemainingIncome = 0;
+    private decimal _trackedRemainingSavings = 0;
+    private decimal _trackedRemainingExpenses = 0;
+    private decimal _trackedExcessIncome = 0;
+    private decimal _trackedExcessSavings = 0;
+    private decimal _trackedExcessExpenses = 0;
+    private PieChartModel[]? _trackedChartPlot = new PieChartModel[3]
     {
-new PieChartModel { Name = "Income", Value = 0 },
-new PieChartModel { Name = "Expenses", Value = 0 },
-new PieChartModel { Name = "Savings", Value = 0 }
+        new PieChartModel { Name = "Income", Value = 0 },
+        new PieChartModel { Name = "Expenses", Value = 0 },
+        new PieChartModel { Name = "Savings", Value = 0 }
     };
-    private PieChartModel[]? ActualGroupBarChart = new PieChartModel[3]{
-new PieChartModel { Name = "Income", Value = 0 },
-new PieChartModel { Name = "Expenses", Value = 0 },
-new PieChartModel { Name = "Savings", Value = 0 }
-};
-    private ApexChartOptions<PieChartModel>? options;
-    private IEnumerable<BudgetModel>? Expenses = new List<BudgetModel>();
-    private IEnumerable<BudgetModel>? Savings = new List<BudgetModel>();
-    public IEnumerable<BudgetModel>? Income = new List<BudgetModel>();
-    private IEnumerable<YearModel>? Years = new List<YearModel>();
-    private IEnumerable<BudgetModel>? Months = new List<BudgetModel>();
-    private BudgetCompletionModel? BudgetCompletion = new BudgetCompletionModel();
-    private BudgetCompletionModel? BudgetCompletionPercent = new BudgetCompletionModel();
-    private ApexChart<PieChartModel>? apexChart;
-    private ApexChart<PieChartModel>? apexChartPie;
-    private DateTime? selectedPeriod = DateTime.Today;
+    private PieChartModel[]? _actualChartPlot = new PieChartModel[3]
+    {
+        new PieChartModel { Name = "Income", Value = 0 },
+        new PieChartModel { Name = "Expenses", Value = 0 },
+        new PieChartModel { Name = "Savings", Value = 0 }
+    };
+    private BudgetModel? _income { get; set; }
+    private BudgetModel? _savings { get; set; }
+    private BudgetModel? _expenses { get; set; }
+    private ApexChartOptions<PieChartModel>? _options;
+    private IEnumerable<YearModel>? _years = new List<YearModel>();
+    private IEnumerable<BudgetModel>? _months = new List<BudgetModel>();
+    private BudgetCompletionModel? _budgetCompletion = new BudgetCompletionModel();
+    private BudgetCompletionModel? _budgetCompletionPercent = new BudgetCompletionModel();
+    private ApexChart<PieChartModel>? _apexChartBar;
+    private ApexChart<PieChartModel>? _apexChartPie;
+    private DateTime? _selectedPeriod = DateTime.Today;
 
     protected override async Task OnInitializedAsync()
     {
-        options = chart.SetOptionsForBarChart(options!);
-        Years = await yearsApiClient.GetYearsAsync();
-        Months = await monthsApiClient.GetMonthsAsync();
-        TrackedBudgetIncome = await incomeApiClient.GetLatestIncomeAsync();
-        TrackedBudgetSavings = await savingsApiClient.GetLatestSavingsAsync();
-        TrackedBudgetExpenses = await expensesApiClient.GetLatestExpensesAsync();
-        BudgetCompletion = await budgetCompletion.GetBudgetCompletionByMonthIdAsync(Months!.Select(month =>
-        month.Id).LastOrDefault());
-        BudgetCompletionPercent = await budgetCompletion.GetBudgetCompletionByMonthIdInPercentAsync(Months!.Select(month =>
-        month.Id).LastOrDefault());
-        CountTotalRemainingAndExcessBudget();
-        datePicker.SetMinAndMaxYearPeriodForCalendar(Years!);
-        datePicker.SetDashboardIntervals(selectedPeriod);
+        _options = chart.MakeBarChartHorizontal(_options!);
+        _years = await yearsApiClient.GetYearsAsync();
+        _months = await budgetApiClient.GetMonthsAsync();
+        _income = await budgetApiClient.GetIncomeByMonthIdAsync(GetLastMonth());
+        _savings = await budgetApiClient.GetSavingsByMonthIdAsync(GetLastMonth());
+        _expenses = await budgetApiClient.GetExpensesByMonthIdAsync(GetLastMonth());
+        _budgetCompletion = await budgetCompletionApiClient.GetByMonthIdAsync(GetLastMonth());
+        _budgetCompletionPercent = await budgetCompletionApiClient.GetPercentByMonthIdAsync(GetLastMonth());
+        EvaluateTotalRemainingAndExcessBudget();
+        datePicker.SetMinAndMaxYearPeriodForCalendar(_years!);
+        datePicker.SetInterval(_selectedPeriod);
+    }
+
+    public int GetLastMonth()
+    {
+        int monthId = _months!
+                            .Select(month => month.Id)
+                            .LastOrDefault();
+        return monthId;
     }
 
     public async Task GetDataByMonthIdAsync()
     {
-        int monthId = datePicker.FindMonthId(selectedPeriod, Years!, Months!);
-        BudgetCompletion = await budgetCompletion.GetBudgetCompletionByMonthIdAsync(monthId);
-        BudgetCompletionPercent = await budgetCompletion.GetBudgetCompletionByMonthIdInPercentAsync(monthId);
+        int monthId = datePicker.GetMonthId(_selectedPeriod, _years!, _months!);
+        _budgetCompletion = await budgetCompletionApiClient.GetByMonthIdAsync(monthId);
+        _budgetCompletionPercent = await budgetCompletionApiClient.GetPercentByMonthIdAsync(monthId);
         await GetIncomeByMonthIdAsync(monthId);
         await GetExpensesByMonthIdAsync(monthId);
         await GetSavingsByMonthIdAsync(monthId);
         await UpdateChartsAsync();
-        CountTotalRemainingAndExcessBudget();
-        datePicker.SetDashboardIntervals(selectedPeriod);
+        EvaluateTotalRemainingAndExcessBudget();
+        datePicker.SetInterval(_selectedPeriod);
     }
 
     public async Task GetSavingsByMonthIdAsync(int monthId)
     {
-        TrackedBudgetSavings = await savingsApiClient.GetSavingsByMonthIdAsync(monthId);
+        _savings = await budgetApiClient.GetSavingsByMonthIdAsync(monthId);
         StateHasChanged();
     }
     public async Task GetIncomeByMonthIdAsync(int monthId)
     {
-        TrackedBudgetIncome = await incomeApiClient.GetIncomeByMonthIdAsync(monthId);
+        _income = await budgetApiClient.GetIncomeByMonthIdAsync(monthId);
         StateHasChanged();
     }
     public async Task GetExpensesByMonthIdAsync(int monthId)
     {
-        TrackedBudgetExpenses = await expensesApiClient.GetExpensesByMonthIdAsync(monthId);
+        _expenses = await budgetApiClient.GetExpensesByMonthIdAsync(monthId);
         StateHasChanged();
     }
 
     private async Task UpdateChartsAsync()
     {
-        var trackedResult = chart.SetTrackedGroupBarChart(TrackedBudgetIncome!, TrackedBudgetSavings!, TrackedBudgetExpenses!);
-        Array.Copy(trackedResult, TrackedGroupBarChart!, 3);
-        var groupResult = chart.SetActualGroupBarChart(TrackedBudgetIncome!, TrackedBudgetSavings!, TrackedBudgetExpenses!);
-        Array.Copy(groupResult, ActualGroupBarChart!, 3);
+        var resultTracked = chart.SetTrackedBudgetForGroupBarChart(_income!, _savings!, _expenses!);
+        Array.Copy(resultTracked, _trackedChartPlot!, 3);
 
-        if (apexChart == null || apexChartPie == null)
+        var resultActual = chart.SetActualBudgetForGroupBarChart(_income!, _savings!, _expenses!);
+        Array.Copy(resultActual, _actualChartPlot!, 3);
+
+        if (_apexChartBar == null || _apexChartPie == null)
             return;
 
-        await apexChart.UpdateSeriesAsync();
-        await apexChartPie.UpdateSeriesAsync();
+        await _apexChartBar.UpdateSeriesAsync();
+        await _apexChartPie.UpdateSeriesAsync();
     }
 
-    public void CountTotalRemainingAndExcessBudget()
+    public void EvaluateTotalRemainingAndExcessBudget()
     {
-        trackedRemainingIncome = 0;
-        trackedRemainingSavings = 0;
-        trackedRemainingExpenses = 0;
-        trackedExcessIncome = 0;
-        trackedExcessSavings = 0;
-        trackedExcessExpenses = 0;
+        _trackedRemainingIncome = 0;
+        _trackedRemainingSavings = 0;
+        _trackedRemainingExpenses = 0;
+        _trackedExcessIncome = 0;
+        _trackedExcessSavings = 0;
+        _trackedExcessExpenses = 0;
 
-        foreach (var item in BudgetCompletion!.GetType().GetProperties())
+        foreach (var item in _budgetCompletion!.GetType().GetProperties())
         {
-            decimal category = (decimal)item.GetValue(BudgetCompletion, null)!;
+            decimal category = (decimal)item.GetValue(_budgetCompletion, null)!;
 
-            if (item.Name.Contains("Income"))
+            switch (item.Name)
             {
-                if (category >= 0)
-                {
-                    trackedRemainingIncome += category;
-                }
-                else if (category <= 0)
-                {
-                    trackedExcessIncome += Math.Abs(category);
-                }
-            }
-            if (item.Name.Contains("Savings"))
-            {
-                if
-                (category >= 0)
-                {
-                    trackedRemainingSavings += category;
-                }
-                else if (category <= 0)
-                {
-                    trackedExcessSavings += Math.Abs(category);
-                }
-            }
-            if (item.Name.Contains("Expenses"))
-            {
-                if
-                (category >= 0)
-                {
-                    trackedRemainingExpenses += category;
-                }
-                else if (category <= 0)
-                {
-                    trackedExcessExpenses += Math.Abs(category);
-                }
+                case string name when name.Contains("Income"):
+                    EvaluateRemainingAndExcessIncome(category);
+                    break;
+                case string name when name.Contains("Savings"):
+                    EvaluateRemainingAndExcessSavings(category);
+                    break;
+                case string name when name.Contains("Expenses"):
+                    EvaluateRemainingAndExcessExpenses(category);
+                    break;
             }
         }
+    }
+
+    private void EvaluateRemainingAndExcessIncome(decimal category)
+    {
+        if (category >= 0)
+        {
+            _trackedRemainingIncome += category;
+            return;
+        }
+        _trackedExcessIncome += Math.Abs(category);
+    }
+    
+    private void EvaluateRemainingAndExcessSavings(decimal category)
+    {
+        if (category >= 0)
+        {
+            _trackedRemainingSavings += category;
+            return;
+        }
+        _trackedExcessSavings += Math.Abs(category);
+    }
+
+    private void EvaluateRemainingAndExcessExpenses(decimal category)
+    {
+        if (category >= 0)
+        {
+            _trackedRemainingExpenses += category;
+            return;
+        }
+        _trackedExcessExpenses += Math.Abs(category);
     }
 }

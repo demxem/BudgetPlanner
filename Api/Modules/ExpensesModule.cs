@@ -1,5 +1,5 @@
-using DAL.Models;
-using DAL.Data;
+using DataBase.Models;
+using DataBase.Data;
 
 namespace Api.Modules
 {
@@ -8,18 +8,17 @@ namespace Api.Modules
         public static void RegisterExpensesEndpoints(this IEndpointRouteBuilder endpoints)
         {
             //endpoints
-            endpoints.MapGet("/expenses", GetExpenses);
-            // endpoints.MapGet("/years/months/expenses/{id}", GetExpensesById);
-            endpoints.MapPost("/years/months/expenses/", InsertExpenses);
-            endpoints.MapPut("/years/months/expenses/{id}", UpdateExpenses);
-            endpoints.MapDelete("/years/months/expenses/{id}", DeleteExpenses);
+            endpoints.MapGet("/expenses", GetAsync);
+            endpoints.MapPost("/years/months/expenses/", AddAsync);
+            endpoints.MapPut("/years/months/expenses/{id}", UpdateAsync);
+            endpoints.MapDelete("/years/months/expenses/{id}", DeleteAsync);
         }
 
-        private static async Task<IResult> GetExpenses(IExpenses data)
+        private static async Task<IResult> GetAsync(IExpenses data)
         {
             try
             {
-                return Results.Ok(await data.GetExpenses());
+                return Results.Ok(await data.Get());
             }
             catch (Exception ex)
             {
@@ -28,11 +27,11 @@ namespace Api.Modules
         }
 
 
-        private static async Task<IResult> GetExpensesById(int id, IExpenses data)
+        private static async Task<IResult> GetByIdAsync(int id, IExpenses data)
         {
             try
             {
-                var results = await data.GetExpensesById(id);
+                var results = await data.GetById(id);
                 if (results == null) return Results.NotFound();
                 return Results.Ok(results);
             }
@@ -44,11 +43,11 @@ namespace Api.Modules
         }
 
 
-        private static async Task<IResult> InsertExpenses(ExpensesModel expenses, IExpenses data)
+        private static async Task<IResult> AddAsync(ExpensesModel expenses, IExpenses data)
         {
             try
             {
-                await data.InsertExpenses(expenses);
+                await data.Add(expenses);
                 return Results.Ok();
             }
             catch (Exception ex)
@@ -57,11 +56,11 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> UpdateExpenses(ExpensesModel expenses, IExpenses data)
+        private static async Task<IResult> UpdateAsync(ExpensesModel expenses, IExpenses data)
         {
             try
             {
-                await data.UpdateExpenses(expenses);
+                await data.Update(expenses);
                 return Results.Ok();
             }
             catch (Exception ex)
@@ -70,11 +69,11 @@ namespace Api.Modules
             }
         }
 
-        private static async Task<IResult> DeleteExpenses(IExpenses data, int id)
+        private static async Task<IResult> DeleteAsync(IExpenses data, int id)
         {
             try
             {
-                await data.DeleteExpenses(id);
+                await data.Delete(id);
                 return Results.Ok();
             }
             catch (Exception ex)

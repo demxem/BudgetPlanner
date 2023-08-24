@@ -1,0 +1,12 @@
+/Volumes/Mac/Projects/BudgetPlanner/DataBase/bin/Debug/net7.0/DataBase.deps.json
+/Volumes/Mac/Projects/BudgetPlanner/DataBase/bin/Debug/net7.0/DataBase.dll
+/Volumes/Mac/Projects/BudgetPlanner/DataBase/bin/Debug/net7.0/DataBase.pdb
+/Volumes/Mac/Projects/BudgetPlanner/DataBase/obj/Debug/net7.0/DataBase.csproj.AssemblyReference.cache
+/Volumes/Mac/Projects/BudgetPlanner/DataBase/obj/Debug/net7.0/DataBase.GeneratedMSBuildEditorConfig.editorconfig
+/Volumes/Mac/Projects/BudgetPlanner/DataBase/obj/Debug/net7.0/DataBase.AssemblyInfoInputs.cache
+/Volumes/Mac/Projects/BudgetPlanner/DataBase/obj/Debug/net7.0/DataBase.AssemblyInfo.cs
+/Volumes/Mac/Projects/BudgetPlanner/DataBase/obj/Debug/net7.0/DataBase.csproj.CoreCompileInputs.cache
+/Volumes/Mac/Projects/BudgetPlanner/DataBase/obj/Debug/net7.0/DataBase.dll
+/Volumes/Mac/Projects/BudgetPlanner/DataBase/obj/Debug/net7.0/refint/DataBase.dll
+/Volumes/Mac/Projects/BudgetPlanner/DataBase/obj/Debug/net7.0/DataBase.pdb
+/Volumes/Mac/Projects/BudgetPlanner/DataBase/obj/Debug/net7.0/ref/DataBase.dll

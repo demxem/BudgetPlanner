@@ -1,17 +1,19 @@
+@namespace Client.Pages
+
 @page "/budgetTracking"
-@inject Client.Services.IncomeApiClient incomeApiClient
-@inject Client.Services.SavingsApiClient savingsApiClient
-@inject Client.Services.ExpensesApiClient expensesApiClient
 @inject Client.Services.YearApiClient yearsApiClient
 @inject Client.Services.DateApiClient dateApiClient
-@inject Client.Services.MonthsApiClient monthsApiClient
-@inject Client.Services.DetailedBudgetApiClient detailedBudgetApiClient
+@inject Client.Services.TrackedBudgetApiClient trackedBudgetApiClient
+@inject Client.Services.IncomeApiClient incomeApiClient
+@inject Client.Services.ExpensesApiClient expensesApiClient
+@inject Client.Services.SavingsApiClient savingsApiClient
+@inject Client.Services.BudgetApiClient budgetApiClient
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject Client.Services.SharedState state
 @inject IMessageService MessageService
 @inject DatePicker datePicker
-@inject ChartPicker chart
+@inject Charts chart
 
 <style>
     td {
@@ -84,8 +86,8 @@
         <MudCard Outlined="true">
             <div class="incline-block">
                 <div class="d-flex" style="max-width:100px;">
-                    <MudDatePicker @bind-Date="selectedPeriod" MinDate="@datePicker.MinimalPeriodInterval"
-                        MaxDate="@datePicker.MaximumPeriodInteval" PickerClosed="@GetDataByMonthIdAsync" />
+                    <MudDatePicker @bind-Date="_selectedPeriod" MinDate="@datePicker.MinPeriodInterval"
+                        MaxDate="@datePicker.MaxPeriodInteval" PickerClosed="@GetDataByMonthIdAsync" />
                 </div>
             </div>
         </MudCard>
@@ -94,7 +96,7 @@
         <MudCard Outlined="true">
             <MudCardContent>
                 <MudText>Date Of Today</MudText>
-                <MudText Typo="Typo.body2">@DateOfToday</MudText>
+                <MudText Typo="Typo.body2">@_dateOfToday</MudText>
             </MudCardContent>
             <MudCardActions>
                 <MudMenu Label="Plan Your Budget" Variant="Variant.Filled" Color="MudBlazor.Color.Transparent">
@@ -109,7 +111,7 @@
         <MudCard Outlined="true">
             <MudCardContent>
                 <MudText>Date Of Last Record</MudText>
-                <MudText Typo="Typo.body2">@LatestRecordDate</MudText>
+                <MudText Typo="Typo.body2">@_latestRecordDate</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -117,7 +119,7 @@
         <MudCard Outlined="true">
             <MudCardContent>
                 <MudText>Left To Budget</MudText>
-                <MudText Typo="Typo.body2">@GetLatestTrackedUndistributedIncome()</MudText>
+                <MudText Typo="Typo.body2">@CountLatestTrackedUndistributedIncome()</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -136,37 +138,36 @@
                                 <th scope="budget-header">Category</th>
                                 <th scope="budget-header">Details</th>
                                 <th scope="budget-header">Amount</th>
-                                <th scope="budget-header">Balance</th>
-                                <th scope="budget-header">Submit</th>
+                                <th scope="budget-header">Add/Rem</th>
                             </tr>
                         </thead>
                         <tr>
-                            <td id="date-col">@selectedPeriod!.Value.ToString("MMMM dd, yyyy")</td>
+                            <td id="date-col">@_selectedPeriod!.Value.ToString("MMMM dd, yyyy")</td>
                             <td>
-                                <select class="form-select form-select-sm" aria-label=".form-select-sm example"
-                                @onchange="((ChangeEventArgs e) => itemType = e?.Value?.ToString())">
+                                <select class="form-select form-select-sm" aria-label="form-select-sm example"
+                                @onchange="((ChangeEventArgs e) => _itemType = e?.Value?.ToString())">
                                     <option selected>Income</option>
                                     <option value="Savings">Savings</option>
                                     <option value="Expenses">Expenses</option>
                                 </select>
                             </td>
                             <td>
-                                <select class="form-select form-select-sm" aria-label=".form-select-sm example"
-                                @onchange="((ChangeEventArgs e) => itemCategory = e?.Value?.ToString()!)">
-                                    @if (itemType!.Equals("Income"))
+                                <select class="form-select form-select-sm" aria-label="form-select-sm example"
+                                @onchange="((ChangeEventArgs e) => _itemCategory = e?.Value?.ToString()!)">
+                                    @if (_itemType!.Equals("Income"))
                                     {
                                         <option value="Employment">Employment</option>
                                         <option value="SideHustle">SideHustle</option>
                                         <option value="Dividends">Dividends</option>
                                     }
-                                    else if (itemType.Equals("Savings"))
+                                    else if (_itemType.Equals("Savings"))
                                     {
                                         <option value="EmergencyFund">EmergencyFund</option>
                                         <option value="RetirementAccount">RetirementAccount</option>
                                         <option value="Vacation">Vacation</option>
                                         <option value="HealthNeeds">HealthNeeds</option>
                                     }
-                                    else if (itemType.Equals("Expenses"))
+                                    else if (_itemType.Equals("Expenses"))
                                     {
                                         <option value="Housing">Housing</option>
                                         <option value="Groceries">Groceries</option>
@@ -180,15 +181,14 @@
                                     }
                                 </select>
                             </td>
-                            <td><input id="details-input" type="text" required="true" @bind-value="@itemDetails"></td>
-                            <td><input type="number" required="true" @bind-value="@itemAmount"></td>
-                            <td>@itemBalance</td>
+                            <td><input id="details-input" type="text" required="true" @bind-value="@_itemDetails"></td>
+                            <td><input type="number" required="true" @bind-value="@_itemAmount"></td>
                             <td>
                                 <MudButton Variant="Variant.Filled" Size="Size.Small" @onclick=@PostBudgetAsync>Add
                                 </MudButton>
                             </td>
                         </tr>
-                        @foreach (var item in Budget!)
+                        @foreach (var item in _budget!)
                         {
                             <tr>
                                 <td>@item!.Date.ToString("MMMM dd, yyyy")</td>
@@ -196,11 +196,8 @@
                                 <td>@item.Category</td>
                                 <td>@item.Details</td>
                                 <td>@item.Amount</td>
-                                <td>@item.Balance</td>
                                 <td>
-                                    <MudButton Variant="Variant.Filled" Size="Size.Small"
-                                    @onclick="() => DeleteBudgetAsync(item)">Rem
-                                    </MudButton>
+                                    <MudButton Variant="Variant.Filled" Size="Size.Small" @onclick="() => DeleteBudgetAsync(item)">Rem</MudButton>
                                 </td>
                             </tr>
                         }
@@ -213,242 +210,179 @@
 
 
 @code {
-    private DateTime? selectedPeriod = DateTime.Now;
-    private DateTime DateOfToday = DateTime.Now;
-    private List<DateModel>? Dates = new List<DateModel>();
-    private List<BudgetModel>? Months = new List<BudgetModel>();
-    private List<YearModel>? Years = new List<YearModel>();
-    private BudgetModel? Income = new BudgetModel();
-    private BudgetModel? Savings = new BudgetModel();
-    private BudgetModel? Expenses = new BudgetModel();
-    private IList<IncomeModel>? FullIncome = new List<IncomeModel>();
-    private IList<DetailedBudgetModel?> Budget = new List<DetailedBudgetModel?>();
-    private string? itemType { get; set; } = "Income";
-    private string itemCategory { get; set; } = "Employment";
-    private decimal itemAmount { get; set; }
-    private string itemDetails { get; set; } = "";
-    private decimal itemBalance { get; set; }
+    private DateTime? _selectedPeriod = DateTime.Now;
+    private DateTime _dateOfToday = DateTime.Now;
+    private List<DateModel>? _dates = new List<DateModel>();
+    private List<BudgetModel>? _months = new List<BudgetModel>();
+    private List<YearModel>? _years = new List<YearModel>();
+    private BudgetModel? _income = new BudgetModel();
+    private BudgetModel? _savings = new BudgetModel();
+    private BudgetModel? _expenses = new BudgetModel();
+    private IList<BudgetTrackedModel?> _budget = new List<BudgetTrackedModel?>();
+    private string? _itemType { get; set; } = "Income";
+    private string _itemCategory { get; set; } = "Employment";
+    private decimal _itemAmount { get; set; }
+    private string _itemDetails { get; set; } = "";
+    private decimal _itemBalance { get; set; }
 
-    private DateTime LatestRecordDate;
+    private DateTime _latestRecordDate;
 
-    private List<string> messages = new List<string>();
-    private enum Action
-    {
-        AddTrackedCategory,
-        RemoveTrackedCategory
-    }
-
-    private enum Type
-    {
-        Income,
-        Savings,
-        Expenses
-    }
+    private List<string> _messages = new List<string>();
+    Client.Infrastracture.Income Income = new();
+    Client.Infrastracture.Savings Savings = new();
+    Client.Infrastracture.Expenses Expenses = new();
 
     protected override async Task OnInitializedAsync()
     {
-        Dates = await dateApiClient.GetLatestDateAsync();
+        _dates = await dateApiClient.GetAsync();
         GetLatestRecordDate();
-        Years = await yearsApiClient.GetYearsAsync();
-        Months = await monthsApiClient.GetMonthsAsync();
-        Income = await incomeApiClient.GetLatestIncomeAsync();
-        Savings = await savingsApiClient.GetLatestSavingsAsync();
-        Expenses = await expensesApiClient.GetLatestExpensesAsync();
-        Budget = await detailedBudgetApiClient.GetBudgetByMonthIdAsync(Months!.Select(m => m.Id).LastOrDefault()!);
-        datePicker.SetMinAndMaxYearPeriodForCalendar(Years!);
-        datePicker.SetDashboardIntervals(selectedPeriod);
+        _years = await yearsApiClient.GetYearsAsync();
+        _months = await budgetApiClient.GetMonthsAsync();
+        _income  = Income.Budget = await budgetApiClient.GetIncomeByMonthIdAsync(GetLastMonth());
+        _savings = Savings.Budget = await budgetApiClient.GetSavingsByMonthIdAsync(GetLastMonth());
+        _expenses = Expenses.Budget = await budgetApiClient.GetExpensesByMonthIdAsync(GetLastMonth());
+        _budget = await trackedBudgetApiClient.GetByMonthIdAsync(GetLastMonth());
+        datePicker.SetMinAndMaxYearPeriodForCalendar(_years!);
+        datePicker.SetInterval(_selectedPeriod);
+    }
+    public int GetLastMonth()
+    {
+        int monthId = _months!
+                            .Select(month => month.Id)
+                            .LastOrDefault();
+        return monthId;
     }
     public async Task GetDataByMonthIdAsync()
     {
-        int monthId = datePicker.FindMonthId(selectedPeriod, Years!, Months!);
+        int monthId = datePicker.GetMonthId(_selectedPeriod, _years!, _months!);
         await GetIncomeByMonthIdAsync(monthId);
         await GetExpensesByMonthIdAsync(monthId);
         await GetSavingsByMonthIdAsync(monthId);
         await GetBudgetByMonthIdAsync();
-        datePicker.SetDashboardIntervals(selectedPeriod);
+        datePicker.SetInterval(_selectedPeriod);
     }
 
     public async Task GetSavingsByMonthIdAsync(int monthId)
     {
-        Savings = await savingsApiClient.GetSavingsByMonthIdAsync(monthId);
+        _savings = Savings.Budget = await budgetApiClient.GetSavingsByMonthIdAsync(monthId);
         StateHasChanged();
     }
     public async Task GetIncomeByMonthIdAsync(int monthId)
     {
-        Income = await incomeApiClient.GetIncomeByMonthIdAsync(monthId);
+        _income = Income.Budget = await budgetApiClient.GetIncomeByMonthIdAsync(monthId);
         StateHasChanged();
     }
     public async Task GetExpensesByMonthIdAsync(int monthId)
     {
-        Expenses = await expensesApiClient.GetExpensesByMonthIdAsync(monthId);
+        _expenses = Expenses.Budget = await budgetApiClient.GetExpensesByMonthIdAsync(monthId);
         StateHasChanged();
     }
 
-    private void GetLatestRecordDate() => LatestRecordDate = Dates!.Select(date =>
-    date.LatestDate).FirstOrDefault();
+    private void GetLatestRecordDate()
+    {
+        _latestRecordDate = _dates!
+                                .Select(date => date.LatestDate)
+                                .FirstOrDefault();
+    }
 
     private async Task GetBudgetByMonthIdAsync()
     {
-        int monthId = datePicker.FindMonthId(selectedPeriod, Years!, Months!);
-        Budget = await detailedBudgetApiClient.GetBudgetByMonthIdAsync(monthId);
+        int monthId = datePicker.GetMonthId(_selectedPeriod, _years!, _months!);
+        _budget = await trackedBudgetApiClient.GetByMonthIdAsync(monthId);
         StateHasChanged();
     }
 
-    private void OnClick(MouseEventArgs args) => Snackbar.Add("Redirecting");
-    private void OnTouch(TouchEventArgs args) => Snackbar.Add("Redirecting");
-
     private async Task PostBudgetAsync()
     {
-        int monthId = datePicker.FindMonthId(selectedPeriod, Years!, Months!);
-        var DetailedBudgetModel = new DetailedBudgetModel
+        int monthId = datePicker.GetMonthId(_selectedPeriod, _years!, _months!);
+        
+        var BudgetTrackedModel = new BudgetTrackedModel
             {
-                Date = selectedPeriod!.Value,
-                Type = itemType!,
-                Category = itemCategory,
-                Details = itemDetails,
-                Amount = (decimal)Math.Round(itemAmount, 2),
-                MonthId = Income!.Income!.MonthId,
-                YearId = Income.Income.YearId,
+                Date = _selectedPeriod!.Value,
+                Type = _itemType!,
+                Category = _itemCategory,
+                Details = _itemDetails,
+                Amount = (decimal)Math.Round(_itemAmount, 2),
+                MonthId = _income!.Income!.MonthId,
+                YearId = _income.Income.YearId,
             };
 
-        await detailedBudgetApiClient.InsertBudgetAsync(DetailedBudgetModel);
-        await UpdateTrackedCategoryOnBudgetAdd();
+        await trackedBudgetApiClient.AddAsync(BudgetTrackedModel);
+        await UpdateTrackedCategoryOnBudgetAddAsync();
         await GetBudgetByMonthIdAsync();
     }
 
-    private void SetBalanceOnBudgetCategoryAdd()
+    private async Task DeleteBudgetAsync(BudgetTrackedModel item)
     {
-        decimal agregateAmount = Budget.Where(budget => budget!.Type.Equals("Income")).Select(budget =>
-        budget!.Amount).Sum();
-
-        if (itemType!.Equals("Income") == false)
-        {
-            itemBalance = agregateAmount + itemAmount;
-        }
-        itemBalance = agregateAmount - itemAmount;
-    }
-
-    private void CountBalanceOnRemove()
-    {
-        if (itemType!.Equals("Income") == false)
-        {
-            itemBalance += itemAmount;
-        }
-    }
-    private async Task DeleteBudgetAsync(DetailedBudgetModel item)
-    {
-        await detailedBudgetApiClient.DeleteBudgetAsync(item.Id);
+        await trackedBudgetApiClient.DeleteAsync(item.Id);
         await GetIncomeByMonthIdAsync(item.MonthId);
         await GetSavingsByMonthIdAsync(item.MonthId);
         await GetExpensesByMonthIdAsync(item.MonthId);
-        await UpdateTrackedCategoryOnBudgetRemove(item);
+        await UpdateTrackedCategoryOnBudgetRemoveAsync(item);
         await GetBudgetByMonthIdAsync();
     }
 
-    private async Task UpdateTrackedCategoryOnBudgetAdd()
+    private async Task UpdateTrackedCategoryOnBudgetAddAsync()
     {
-
-        if (itemType!.Equals("Income"))
+        switch (_itemType)
         {
-            IncomeModel selected = (IncomeModel)SetTrackedCategoryOnBudgetAdd(Action.AddTrackedCategory);
-            await UpdateTrackedIncomeCategory(selected);
-        }
-        else if (itemType.Equals("Savings"))
-        {
-            SavingsModel selected = (SavingsModel)SetTrackedCategoryOnBudgetAdd(Action.AddTrackedCategory);
-            await UpdateTrackedSavingsCategory(selected);
-        }
-        else
-        {
-            ExpensesModel selected = (ExpensesModel)SetTrackedCategoryOnBudgetAdd(Action.AddTrackedCategory);
-            await UpdateTrackedExpensesCategory(selected);
-        }
-    }
-    private async Task UpdateTrackedCategoryOnBudgetRemove(DetailedBudgetModel item)
-    {
-        if (item.Type.Equals("Income"))
-        {
-            IncomeModel selected = (IncomeModel)SetTrackedCategoryOnBudgetRemove(item);
-            await UpdateTrackedIncomeCategory(selected);
-        }
-        else if (item.Type.Equals("Savings"))
-        {
-            SavingsModel selected = (SavingsModel)SetTrackedCategoryOnBudgetRemove(item);
-            await UpdateTrackedSavingsCategory(selected);
-        }
-        else
-        {
-            ExpensesModel selected = (ExpensesModel)SetTrackedCategoryOnBudgetRemove(item);
-            await UpdateTrackedExpensesCategory(selected);
+            case "Income":
+                {
+                    IncomeModel selected = Income.SetTrackedCategoryOnBudgetAdd(_itemCategory, _itemAmount);
+                    await UpdateTrackedIncomeCategoryAsync(selected);
+                    break;
+                }
+            case "Savings":
+                {
+                    SavingsModel selected = Savings.SetTrackedCategoryOnBudgetAdd(_itemCategory, _itemAmount);
+                    await UpdateTrackedSavingsCategoryAsync(selected);
+                    break;
+                }
+            case "Expenses":
+                {
+                    ExpensesModel selected = Expenses.SetTrackedCategoryOnBudgetAdd(_itemCategory, _itemAmount);
+                    await UpdateTrackedExpensesCategoryAsync(selected);
+                    break;
+                }
         }
     }
 
-    private object SetTrackedCategoryOnBudgetAdd(Action method)
+    private async Task UpdateTrackedCategoryOnBudgetRemoveAsync(BudgetTrackedModel item)
     {
-        object selected;
-        string trackedCategory = $"Tracked{itemCategory}";
-
-        if (itemType!.Equals("Income"))
+        switch (item.Type)
         {
-            selected = Income!.Income!;
+            case "Income":
+                {
+                    IncomeModel selected = Income.SetTrackedCategoryOnBudgetRemove(item);
+                    await UpdateTrackedIncomeCategoryAsync(selected);
+                    break;
+                }
+            case "Savings":
+                {
+                    SavingsModel selected = Savings.SetTrackedCategoryOnBudgetRemove(item);
+                    await UpdateTrackedSavingsCategoryAsync(selected);
+                    break;
+                }
+            case "Expenses":
+                {
+                    ExpensesModel selected = Expenses.SetTrackedCategoryOnBudgetRemove(item);
+                    await UpdateTrackedExpensesCategoryAsync(selected);
+                    break;
+                }
         }
-        else if (itemType.Equals("Savings"))
-        {
-            selected = Savings!.Savings!;
-        }
-        else
-        {
-            selected = Expenses!.Expenses!;
-        }
-
-        foreach (var category in selected.GetType().GetProperties())
-        {
-            if (category.Name.Equals(trackedCategory))
-            {
-                itemAmount += (decimal)category.GetValue(selected, null)!;
-                category.SetValue(selected, itemAmount);
-            }
-        }
-        return selected;
     }
-    private object SetTrackedCategoryOnBudgetRemove(DetailedBudgetModel model)
+
+    private decimal CountLatestTrackedUndistributedIncome()
     {
-        object selected;
-        string trackedCategory = $"Tracked{model.Category}";
-        if (model.Type.Equals("Income"))
-        {
-            selected = Income!.Income!;
-        }
-        else if (model.Type.Equals("Savings"))
-        {
-            selected = Savings!.Savings!;
-        }
-        else
-        {
-            selected = Expenses!.Expenses!;
-        }
-        foreach (var category in selected!.GetType().GetProperties())
-        {
-            if (category.Name.Equals(trackedCategory))
-            {
-                var itemAmount = (decimal)category.GetValue(selected, null)!;
-                itemAmount -= model.Amount;
-                category.SetValue(selected, itemAmount);
-            }
-        }
-        return selected;
-    }
-    private decimal GetLatestTrackedUndistributedIncome()
-    {
-        decimal latestIncome = Income!.MonthlyIncome;
-        decimal latestSavings = Savings!.MonthlySavings;
-        decimal latestExpenses = Expenses!.MonthlyExpenses;
+        decimal latestIncome = _income!.MonthlyIncome;
+        decimal latestSavings = _savings!.MonthlySavings;
+        decimal latestExpenses = _expenses!.MonthlyExpenses;
 
         var remainingIncome = latestIncome - (latestExpenses + latestSavings);
         return remainingIncome;
     }
 
-    private async Task UpdateTrackedIncomeCategory(IncomeModel selected)
+    private async Task UpdateTrackedIncomeCategoryAsync(IncomeModel selected)
     {
         var IncomeModel = new IncomeModel
             {
@@ -464,9 +398,9 @@
                 YearId = selected.YearId
             };
 
-        await incomeApiClient.UpdateIncomeAsync(IncomeModel);
+        await incomeApiClient.UpdateAsync(IncomeModel);
     }
-    private async Task UpdateTrackedSavingsCategory(SavingsModel selected)
+    private async Task UpdateTrackedSavingsCategoryAsync(SavingsModel selected)
     {
         var SavingsModel = new SavingsModel
             {
@@ -483,9 +417,9 @@
                 MonthId = selected.MonthId,
                 YearId = selected.YearId
             };
-        await savingsApiClient.UpdateSavingsAsync(SavingsModel);
+        await savingsApiClient.UpdateAsync(SavingsModel);
     }
-    private async Task UpdateTrackedExpensesCategory(ExpensesModel selected)
+    private async Task UpdateTrackedExpensesCategoryAsync(ExpensesModel selected)
     {
         var ExpensesModel = new ExpensesModel
             {
@@ -512,6 +446,16 @@
                 MonthId = selected.MonthId,
                 YearId = selected.YearId
             };
-        await expensesApiClient.UpdateExpensesAsync(ExpensesModel);
+        await expensesApiClient.UpdateAsync(ExpensesModel);
+    }
+
+    private void OnClick(MouseEventArgs args)
+    {
+        Snackbar.Add("Redirecting");
+    }
+
+    private void OnTouch(TouchEventArgs args)
+    {
+        Snackbar.Add("Redirecting");
     }
 }

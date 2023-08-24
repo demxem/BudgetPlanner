@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Volumes/Mac/Projects/BudgetPlanner/Client/Client.csproj": {}
+    "/Volumes/Mac/pl/Client/Client.csproj": {}
   },
   "projects": {
-    "/Volumes/Mac/Projects/BudgetPlanner/Client/Client.csproj": {
+    "/Volumes/Mac/pl/Client/Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Volumes/Mac/Projects/BudgetPlanner/Client/Client.csproj",
+        "projectUniqueName": "/Volumes/Mac/pl/Client/Client.csproj",
         "projectName": "Client",
-        "projectPath": "/Volumes/Mac/Projects/BudgetPlanner/Client/Client.csproj",
+        "projectPath": "/Volumes/Mac/pl/Client/Client.csproj",
         "packagesPath": "/Users/dmitryterentyev/.nuget/packages/",
-        "outputPath": "/Volumes/Mac/Projects/BudgetPlanner/Client/obj/",
+        "outputPath": "/Volumes/Mac/pl/Client/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/dmitryterentyev/.nuget/NuGet/NuGet.Config"
@@ -44,16 +44,16 @@
             },
             "Microsoft.AspNetCore.Components.WebAssembly": {
               "target": "Package",
-              "version": "[7.0.8, )"
+              "version": "[7.0.10, )"
             },
             "Microsoft.AspNetCore.Components.WebAssembly.DevServer": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.8, )"
+              "version": "[7.0.10, )"
             },
             "MudBlazor": {
               "target": "Package",
-              "version": "[6.5.0, )"
+              "version": "[6.9.0, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
@@ -74,7 +74,7 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-              "version": "[7.0.9, 7.0.9]"
+              "version": "[7.0.10, 7.0.10]"
             }
           ],
           "frameworkReferences": {
@@ -82,7 +82,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.306/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.400/RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

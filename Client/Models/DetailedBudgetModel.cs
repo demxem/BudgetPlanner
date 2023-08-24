@@ -1,6 +1,6 @@
 namespace Client.Models
 {
-    public class DetailedBudgetModel
+    public class BudgetTrackedModel
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }

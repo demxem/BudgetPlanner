@@ -1,5 +1,5 @@
-﻿using DAL.Data;
-using DAL.Models;
+﻿using DataBase.Data;
+using DataBase.Models;
 
 namespace Api.Modules;
 
@@ -8,18 +8,17 @@ public static class SavingsModule
     public static void RegisterSavingsEndpoints(this IEndpointRouteBuilder endpoints)
     {
         //endpoints
-        endpoints.MapGet("/savings", GetSavings);
-        // endpoints.MapGet("/years/months/savings/{id}", GetSavingsById);
-        endpoints.MapPost("/years/months/savings/", InsertSavings);
-        endpoints.MapPut("/years/months/savings/{id}", UpdateSavings);
-        endpoints.MapDelete("/years/months/savings/{id}", DeleteSavings);
+        endpoints.MapGet("/savings", GetAsync);
+        endpoints.MapPost("/years/months/savings/", AddAsync);
+        endpoints.MapPut("/years/months/savings/{id}", UpdateAsync);
+        endpoints.MapDelete("/years/months/savings/{id}", DeleteAsync);
     }
 
-    private static async Task<IResult> GetSavings(ISavings data)
+    private static async Task<IResult> GetAsync(ISavings data)
     {
         try
         {
-            return Results.Ok(await data.GetSavings());
+            return Results.Ok(await data.Get());
         }
         catch (Exception ex)
         {
@@ -27,11 +26,11 @@ public static class SavingsModule
         }
     }
 
-    private static async Task<IResult> GetSavingsById(int id, ISavings data)
+    private static async Task<IResult> GetByIdAsync(int id, ISavings data)
     {
         try
         {
-            var results = await data.GetSavingsById(id);
+            var results = await data.GetById(id);
             if (results == null) return Results.NotFound();
             return Results.Ok(results);
         }
@@ -43,11 +42,11 @@ public static class SavingsModule
     }
 
 
-    private static async Task<IResult> InsertSavings(SavingsModel savings, ISavings data)
+    private static async Task<IResult> AddAsync(SavingsModel savings, ISavings data)
     {
         try
         {
-            await data.InsertSavings(savings);
+            await data.Add(savings);
             return Results.Ok();
         }
         catch (Exception ex)
@@ -56,11 +55,11 @@ public static class SavingsModule
         }
     }
 
-    private static async Task<IResult> UpdateSavings(SavingsModel savings, ISavings data)
+    private static async Task<IResult> UpdateAsync(SavingsModel savings, ISavings data)
     {
         try
         {
-            await data.UpdateSavings(savings);
+            await data.Update(savings);
             return Results.Ok();
         }
         catch (Exception ex)
@@ -69,11 +68,11 @@ public static class SavingsModule
         }
     }
 
-    private static async Task<IResult> DeleteSavings(ISavings data, int id)
+    private static async Task<IResult> DeleteAsync(ISavings data, int id)
     {
         try
         {
-            await data.DeleteSavings(id);
+            await data.Delete(id);
             return Results.Ok();
         }
         catch (Exception ex)

@@ -1,176 +1,71 @@
 using System.Net.Http.Json;
 using Client.Models;
-namespace Client.Services
+
+namespace Client.Services;
+
+public class ExpensesApiClient
 {
-    public class ExpensesApiClient
+    private readonly HttpClient _httpClient;
+
+    public ExpensesApiClient(HttpClient httpClient)
     {
-        private readonly HttpClient httpClient;
+        _httpClient = httpClient;
+    }
 
-        public ExpensesApiClient(HttpClient httpClient)
+    public async Task<List<ExpensesModel>?> GetAsync()
+    {
+        try
         {
-            this.httpClient = httpClient;
+            var response = await _httpClient.GetAsync("/expenses");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var expenses = await response.Content.ReadFromJsonAsync<List<ExpensesModel>>();
+
+                return expenses;
+            }
+
         }
-
-        public async Task<List<ExpensesModel>?> GetExpensesAsync()
+        catch (Exception ex)
         {
-            try
-            {
-                var response = await httpClient.GetAsync("/expenses");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var expenses = await response.Content.ReadFromJsonAsync<List<ExpensesModel>>();
-
-                    return expenses;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-            return new List<ExpensesModel>();
+            Console.WriteLine(ex.Message.ToString());
         }
+        return new List<ExpensesModel>();
+    }
 
-        public async Task<List<BudgetModel>?> GetExpensesByEachMonthAsync()
+    public async Task UpdateAsync(ExpensesModel? item)
+    {
+        try
         {
-            try
-            {
-                var response = await httpClient.GetAsync("years/months/expenses");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var expenses = await response.Content.ReadFromJsonAsync<List<BudgetModel>>();
-
-                    return expenses;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-            return new List<BudgetModel>();
+            await _httpClient.PutAsJsonAsync($"/years/months/expenses/{item?.Id}", item);
         }
-
-        public async Task<BudgetModel?> GetLatestExpensesAsync()
+        catch (Exception ex)
         {
-            try
-            {
-                var response = await httpClient.GetAsync("years/months/expenses");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var expenses = await response.Content.ReadFromJsonAsync<List<BudgetModel>>();
-                    var latestExpenses = expenses?.LastOrDefault();
-
-                    return latestExpenses;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-            return new BudgetModel();
+            Console.WriteLine(ex.Message.ToString());
         }
+    }
 
-        public async Task<List<BudgetModel>?> GetExpensesByYearId(int id)
+    public async Task DeleteAsync(int Id)
+    {
+        try
         {
-            try
-            {
-                var response = await httpClient.GetAsync($"/years/months/expenses/{id}");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var expenses = await response.Content.ReadFromJsonAsync<List<BudgetModel>>();
-
-                    return expenses;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-            return new List<BudgetModel>();
+            await _httpClient.DeleteAsync($"/years/months/expenses/{Id}");
         }
-        public async Task<BudgetModel?> GetExpensesByMonthIdAsync(int id)
+        catch (Exception ex)
         {
-            try
-            {
-                var response = await httpClient.GetAsync($"/years/months/expenses/month/{id}");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var expenses = await response.Content.ReadFromJsonAsync<BudgetModel>();
-
-                    return expenses;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-
-            return new BudgetModel()
-            {
-                Expenses = new ExpensesModel()
-            };
+            Console.WriteLine(ex.Message.ToString());
         }
+    }
 
-        public async Task UpdateExpensesAsync(ExpensesModel? item)
+    public async Task AddAsync(ExpensesModel expenses)
+    {
+        try
         {
-            await httpClient.PutAsJsonAsync($"/years/months/expenses/{item?.Id}", item);
+            await _httpClient.PostAsJsonAsync($"/years/months/expenses/", expenses);
         }
-
-        public async Task DeleteExpensesByIdAsync(int Id)
+        catch (Exception ex)
         {
-            await httpClient.DeleteAsync($"/years/months/expenses/{Id}");
-        }
-
-        public async Task PostExpensesAsync(ExpensesModel expenses)
-        {
-            await httpClient.PostAsJsonAsync($"/years/months/expenses/", expenses);
-        }
-
-        public async Task<float> GetMonthlyExpenses(int id)
-        {
-            try
-            {
-                var response = await httpClient.GetAsync($"/months/income/monthlyExpenses/{id}");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var monthlyIncome = await response.Content.ReadFromJsonAsync<float>();
-
-                    return monthlyIncome;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-            return 0;
-        }
-
-        public async Task<float> GetYearlyExpenses(int id)
-        {
-            try
-            {
-                var response = await httpClient.GetAsync($"/months/expenses/totalExpenses/{id}");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var yearlyExpenses = await response.Content.ReadFromJsonAsync<float>();
-
-                    return yearlyExpenses;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-            return 0;
+            Console.WriteLine(ex.Message.ToString());
         }
     }
 }

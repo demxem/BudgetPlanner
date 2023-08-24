@@ -28,5 +28,9 @@
             "username": "postgres"
         }
     ],
-    "dotnet.defaultSolution": "BudgetPlanner.sln"
+    "dotnet.defaultSolution": "BudgetPlanner.sln",
+    "workbench.colorTheme": "Just Black",
+    "files.exclude": {
+        "": true
+    }
 }

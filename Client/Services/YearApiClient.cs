@@ -1,46 +1,45 @@
 using System.Net.Http.Json;
 using Client.Models;
-namespace Client.Services
+
+namespace Client.Services;
+
+public class YearApiClient
 {
-    public class YearApiClient
+    private readonly HttpClient _httpClient;
+
+    public YearApiClient(HttpClient httpClient)
     {
-        private readonly HttpClient httpClient;
+        _httpClient = httpClient;
+    }
 
-        public YearApiClient(HttpClient httpClient)
+    public async Task<List<YearModel>?> GetYearsAsync()
+    {
+        try
         {
-            this.httpClient = httpClient;
-        }
+            var response = await _httpClient.GetAsync("/years");
 
-        public async Task<List<YearModel>?> GetYearsAsync()
-        {
-            try
+            if (response.IsSuccessStatusCode)
             {
-                var response = await httpClient.GetAsync("/years");
+                var years = await response.Content.ReadFromJsonAsync<List<YearModel>>();
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var years = await response.Content.ReadFromJsonAsync<List<YearModel>>();
-
-                    return years;
-                }
-
+                return years;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-            return new List<YearModel>();
-        }
 
-        public async Task DeleteYearByIdAsync(int id)
+        }
+        catch (Exception ex)
         {
-            await httpClient.DeleteAsync($"/years/{id}");
+            Console.WriteLine(ex.Message.ToString());
         }
+        return new List<YearModel>();
+    }
 
-        public async Task PostYearAsync(YearModel year)
-        {
-            await httpClient.PostAsJsonAsync($"/years", year);
-        }
+    public async Task DeleteYearByIdAsync(int id)
+    {
+        await _httpClient.DeleteAsync($"/years/{id}");
+    }
 
+    public async Task PostYearAsync(YearModel year)
+    {
+        await _httpClient.PostAsJsonAsync($"/years", year);
     }
 }
